@@ -58,10 +58,8 @@ class DriveTeleopCommand(commands2.Command):
         sde = copysign(sde**2,sde)
         rot = copysign(rot**2,rot)
         rot = self.headingController.calulateRotationRate(rot*self._max_angular_rate)
-        print("B",rot)             
         if rot<-self._max_angular_rate: rot=-self._max_angular_rate
         elif  rot>self._max_angular_rate: rot=self._max_angular_rate
-        print("C",rot)             
         self.drivetrain.set_control(
                 self.requestFC.
                 with_velocity_x(forw*self._max_speed*.3).

@@ -23,14 +23,6 @@ from Commands.find_wheel_base import FindWheelBase
 from Commands.find_ks import FindkS
 
 
-#from Auto.auto_generator import AutoGenerator #!!!
-#from pathplannerlib.auto import AutoBuilder #!!!
-#from Commands.drive_path_generator import DrivePathGenerator #!!!
-
-
-
-
-
 class RobotContainer:
 
     def __init__(self) -> None:
@@ -49,8 +41,6 @@ class RobotContainer:
         self.limelightSytem = LLsystem.getInstance()  #OK
         self._joystick = CommandXboxController(0)
         
-#        if wpilib.RobotBase.isSimulation():
-##            self.visionSim = PVisionSim()        
 
         self._logger = Telemetry(TunerConstants.speed_at_12_volts)
         DataLogManager.start()
@@ -139,7 +129,7 @@ class RobotContainer:
         self.constants.update_constants()
         # update limelight, autobuilder, and heading controller constants  
         self.limelightSytem.configfureLimelights()
-#        self.autoGenerator.configAutoBuilder()
+        self.autoGenerator.configAutoBuilder()
         self.headingController.setup()
         DrivetrainGenerator.updateGains()
         DrivetrainGenerator.apply_teleop_gains()
@@ -154,7 +144,7 @@ class RobotContainer:
         from Commands.drive_path_generator import DrivePathGenerator #!!!
         print("CCCCCCCCCCCCCCCCCC")        
         self.autoGenerator = AutoGenerator()
-        self.autoChooser = AutoBuilder.buildAutoChooser("Auto1")
+        self.autoChooser = AutoBuilder.buildAutoChooser("NoAction")
         SmartDashboard.putData("Auto Chooser", self.autoChooser)
         self.drive_path = DrivePathGenerator(
                  lambda: self.drivetrain.get_state().pose)
