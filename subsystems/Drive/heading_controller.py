@@ -49,7 +49,6 @@ class HeadingController(Subsystem):
                 self.targetRotationPrev=self.targetRotation
                 self.setTargetRotation(self.targetRotation)               
             stick_rot = self.headingController.calculate(self.rotation)
-            print("D",stick_rot)
 
             if self.headingController.atSetpoint(): 
                 stick_rot = 0.0
