@@ -105,6 +105,9 @@ class RobotContainer:
 #            commands2.DeferredCommand(lambda:self.drive_path.drive_path_to_tag(16,-1,0)).finallyDo
 #            (self.headingController.setTargetRotationInt))
             
+#        self._joystick.button(7).whileTrue(FindkS())
+
+
 #        self._joystick.button(8).whileTrue(
 #            commands2.DeferredCommand(lambda:self.drive_path.drive_path_to_tag(17,-1,0)).finallyDo
 #           (self.headingController.setTargetRotationInt))
