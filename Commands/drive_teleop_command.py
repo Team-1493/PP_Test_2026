@@ -62,7 +62,7 @@ class DriveTeleopCommand(commands2.Command):
         elif  rot>self._max_angular_rate: rot=self._max_angular_rate
         self.drivetrain.set_control(
                 self.requestFC.
-                with_velocity_x(forw*self._max_speed*.3).
+                with_velocity_x(f   ).
                 with_velocity_y(sde*self._max_speed*.3).
                 with_rotational_rate(rot*0.3))
 

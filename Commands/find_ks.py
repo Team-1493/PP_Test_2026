@@ -42,6 +42,7 @@ class FindkS(commands2.Command):
 
         if not self.haskS:
             SmartDashboard.putNumber("Drive kS - measured",self.voltage)
+            SmartDashboard.putNumber("Slip Current- measured",self.drivetrain.get_module(0).drive_motor.get_stator_current().value_as_double)            
 
     @override
     def end(self, interrupted: bool) :

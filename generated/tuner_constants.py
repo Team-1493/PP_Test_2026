@@ -78,11 +78,11 @@ class TunerConstants:
 
     # Every 1 rotation of the azimuth results in _couple_ratio drive motor turns;
     # This may need to be tuned to your individual robot
-    _couple_ratio = 3.5714285714285716
+    _couple_ratio = 3.5405   #default 3.5714285714285716
 
     _drive_gear_ratio = 8.14
     _steer_gear_ratio = 12.8
-    _wheel_radius: units.meter = 0.04128
+    _wheel_radius: units.meter = 0.048325
 
     _invert_left_side = False
     _invert_right_side = True
