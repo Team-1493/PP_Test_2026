@@ -5,11 +5,13 @@
 #
 
 from commands2 import DeferredCommand, InstantCommand
+import commands2
 from commands2.button import CommandXboxController, Trigger
 from commands2.sysid import SysIdRoutine
 from wpimath.geometry import Pose2d
 from wpilib import DataLogManager, SmartDashboard, Timer
 
+from Commands.drive_while_shooting import DriveWhileShooting
 from Constants1 import ConstantValues
 from generated.tuner_constants import TunerConstants
 from subsystems.Drive.drivetrain_generator import DrivetrainGenerator 
