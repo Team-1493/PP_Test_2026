@@ -51,7 +51,7 @@ class RobotContainer:
                 lambda: -self._joystick.getRawAxis(1),
                 lambda: -self._joystick.getRawAxis(0),
                 lambda: -self._joystick.getRawAxis(4))
-        self.createPPStuff()
+#        self.createPPStuff()
         self.configureButtonBindings()
 
 
@@ -109,11 +109,11 @@ class RobotContainer:
 #            commands2.DeferredCommand(lambda:self.drive_path.drive_path_to_tag(17,-1,0)).finallyDo
 #           (self.headingController.setTargetRotationInt))
 
-        self._joystick.button(8).whileTrue(
-            AutoPilotCommand(17,-1,0,0 ).finallyDo((self.headingController.setTargetRotationInt)))
+#        self._joystick.button(8).whileTrue(
+#            AutoPilotCommand(17,-1,0,0 ).finallyDo((self.headingController.setTargetRotationInt)))
  
-        self._joystick.button(9).onTrue(
-              InstantCommand(lambda:self.update_constants()))
+#        self._joystick.button(9).onTrue(
+#              InstantCommand(lambda:self.update_constants()))
 
 
     def getAutonomousCommand(self):

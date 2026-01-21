@@ -186,6 +186,7 @@ class Autopilot:
         print(round(goal.X(),3),round(goal.Y(),3),round(current.X(),3),
             round(current.Y(),3), round(xyErr,3),round(goal.rotation().radians(),3),
             round(current.rotation().radians(),3),round(thetaErr,3))
+        
         return okXY and okTheta
 
         """"
