@@ -9,7 +9,8 @@ from wpimath.units import rotationsToRadians
 from wpilib import SmartDashboard
 from  subsystems.Drive.command_swerve_drivetrain import CommandSwerveDrivetrain
 
-class DriveTeleopCommand(commands2.Command):
+
+class DriveTeleopCommand(commands2.Command):    
     def __init__(
         self,
         _drivetrain: CommandSwerveDrivetrain,
@@ -18,6 +19,8 @@ class DriveTeleopCommand(commands2.Command):
         rotate: typing.Callable[[], float],
     ) -> None:
         super().__init__()
+        self.scale_factor = 1
+        self.requested_velocity = 0
         self.forward = forward
         self.side = side
         self.rotate = rotate
@@ -60,10 +63,13 @@ class DriveTeleopCommand(commands2.Command):
         rot = self.headingController.calulateRotationRate(rot*self._max_angular_rate)
         if rot<-self._max_angular_rate: rot=-self._max_angular_rate
         elif  rot>self._max_angular_rate: rot=self._max_angular_rate
+        
+        self.requested_velocity=forw*self._max_speed*self.scale_factor
+        SmartDashboard.putNumber("requested velocity", self.requested_velocity)
         self.drivetrain.set_control(
                 self.requestFC.
-                with_velocity_x(f   ).
-                with_velocity_y(sde*self._max_speed*.3).
-                with_rotational_rate(rot*0.3))
+                with_velocity_x(forw*self._max_speed*self.scale_factor).
+                with_velocity_y(sde*self._max_speed*self.scale_factor).
+                with_rotational_rate(rot*self.scale_factor))
 
         

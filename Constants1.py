@@ -19,14 +19,14 @@ class ConstantValues():
     
     class DriveConstants():
         
-        TELEOP_kP = 0.2#TunerConstants._drive_gains.k_p
+        TELEOP_kP = 3.45#TunerConstants._drive_gains.k_p
         TELEOP_kS = 0.0 #TunerConstants._drive_gains.k_s
-        TELEOP_kV = .124# TunerConstants._drive_gains.k_v
+        TELEOP_kV = 0# TunerConstants._drive_gains.k_v
         TELEOP_kA =  0.0# TunerConstants._drive_gains.k_a
 
-        AUTO_kP = 0.1
+        AUTO_kP = 3.45
         AUTO_kS = 0
-        AUTO_kV = 0.124
+        AUTO_kV = 0
         AUTO_kA = 0       
         
 
