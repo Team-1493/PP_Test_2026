@@ -15,7 +15,8 @@ class FindkS(commands2.Command):
         self.addRequirements(self.drivetrain)
         self.timer = Timer()
         self.voltageRate = 0.01  #ramp rate volts per second
-    
+        self.driveKS = swerve.requests.SysIdSwerveTranslation()
+        
     @override
     def initialize(self):
         self.timeCurrent = 0
@@ -32,6 +33,11 @@ class FindkS(commands2.Command):
         SmartDashboard.putNumber("Torqe Current- measured (module 1)",0)
         SmartDashboard.putNumber("Torqe Current- measured (module 2)",0)
         SmartDashboard.putNumber("Torqe Current- measured (module 3)",0)
+
+        SmartDashboard.putNumber("Voltage- measured (module 0)",0)
+        SmartDashboard.putNumber("Voltage- measured (module 1)",0)
+        SmartDashboard.putNumber("Voltage- measured (module 2)",0)
+        SmartDashboard.putNumber("Voltage- measured (module 3)",0)        
         self.haskS = False
 
     def execute(self) -> None:
@@ -42,24 +48,22 @@ class FindkS(commands2.Command):
 
         self.drivetrain.set_control(self.driveKS.with_volts(self.voltage))
         chassisSpeed = self.drivetrain.get_state().speeds
-        spd = math.sqrt(chassisSpeed.vx**2+chassisSpeed.vy**2)
+        self.spd = math.sqrt(chassisSpeed.vx**2+chassisSpeed.vy**2)
         if spd>.00125:
             self.haskS = True
 
-        if True : #not self.haskS:
-            def get_voltage(module):
-                return abs(self.drivetrain.get_module(module).drive_motor.get_motor_voltage().value_as_double)
-            def get_torque_current(module):
-                return abs(self.drivetrain.get_module(module).drive_motor.get_torque_current().value_as_double)
-            mod0 = get_torque_current(0)
-            mod1 = get_torque_current(1)
-            mod2 = get_torque_current(2)
-            mod3 = get_torque_current(3)
+        if not self.haskS:
+            mod0 = self.get_torque_current(0)
+            mod1 = self.get_torque_current(1)
+            mod2 = self.get_torque_current(2)
+            mod3 = self.get_torque_current(3)
             
-            volt0 = get_voltage(0)
-            volt1 = get_voltage(1)
-            volt2 = get_voltage(2)
-            volt3 = get_voltage(3)
+            volt0 = self.get_voltage(0)
+            volt1 = self.get_voltage(1)
+            volt2 = self.get_voltage(2)
+            volt3 = self.get_voltage(3)
+
+            self.avgVolt=(volt0+volt1+volt2+volt3)/4
             self.avgTorqueCurrnet = (mod0+mod1+mod2+mod3)/4
             SmartDashboard.putNumber("Drive kS - measured",self.voltage)
             SmartDashboard.putNumber("Torqe Current- measured (module 0)",mod0)
@@ -72,7 +76,6 @@ class FindkS(commands2.Command):
             SmartDashboard.putNumber("Voltage- measured (module 1)",volt1)
             SmartDashboard.putNumber("Voltage- measured (module 2)",volt2)
             SmartDashboard.putNumber("Voltage- measured (module 3)",volt3)
-            self.avgVolt=(volt0+volt1+volt2+volt3)/4
             SmartDashboard.putNumber("Average Voltage", self.avgVolt)       
 
     @override
@@ -81,7 +84,12 @@ class FindkS(commands2.Command):
 
     @override
     def isFinished(self):
-        return False
+        return self.spd>0.5
     
 
         
+    def get_voltage(self,module):
+        return abs(self.drivetrain.get_module(module).drive_motor.get_motor_voltage().value_as_double)
+    
+    def get_torque_current(self,module):
+        return abs(self.drivetrain.get_module(module).drive_motor.get_torque_current().value_as_double)
