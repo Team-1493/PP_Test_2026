@@ -1,8 +1,10 @@
+from robotpy_apriltag import AprilTagFieldLayout
+
 from commands2 import Subsystem
 from phoenix6  import utils
 from ntcore import NetworkTable, NetworkTableEntry, NetworkTableInstance, DoubleArrayEntry
 import photonlibpy 
-from photonlibpy import EstimatedRobotPose, PhotonPoseEstimator, PoseStrategy
+from photonlibpy import EstimatedRobotPose, PhotonPoseEstimator
 
 from photonlibpy.photonCamera import PhotonCamera
 from photonlibpy.simulation import VisionSystemSim, PhotonCameraSim,SimCameraProperties
@@ -23,7 +25,12 @@ class PVisionSim(Subsystem):
 
  #    if RobotBase.isSimulation():
     
-            self.layout = ConstantValues.VisionConstants.field_layout
+#            self.layout = ConstantValues.VisionConstants.field_layout
+
+
+# Load the field layout
+ 
+
             self.robotState = RobotState.getInstance() 
             self.driveTrain = DrivetrainGenerator.getInstance()
             self.visionSim = VisionSystemSim("PVsim")
@@ -39,11 +46,11 @@ class PVisionSim(Subsystem):
             cameraProp.setLatencyStdDev(.005)
             
 
-            self.cameraSim = PhotonCameraSim(self.dummyCam, cameraProp)
+            self.cameraSim = PhotonCameraSim(self.dummyCam, cameraProp,self.layout,0,4)
        #     self.cameraSim.enableRawStream(True)
 #            self.cameraSim.enableProcessedStream(True)
             
-            robotToCameraTrl = Translation3d(0, 0, 0)  
+            robotToCameraTrl = Translation3d(0, 0, 1)  
             robotToCameraRot = Rotation3d(0, radians(0), 0) #pitched 15 degrees up
             robotToCamera =  Transform3d(robotToCameraTrl, robotToCameraRot)
 
@@ -53,10 +60,9 @@ class PVisionSim(Subsystem):
             self.llLeftName = ConstantValues.LimelightConstants.CAMERA_NAME_L
 
 
-            self.photonEstimator = PhotonPoseEstimator(self.layout, 
-                 PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, self.dummyCam,robotToCamera)
+            self.photonEstimator = PhotonPoseEstimator(self.layout, robotToCamera)
             
-            self.photonEstimator.multiTagFallbackStrategy=PoseStrategy.LOWEST_AMBIGUITY
+#            self.photonEstimator.multiTagFallbackStrategy=PoseStrategy.LOWEST_AMBIGUITY
             # is there a visible target in the currently read results, set to zero if no new result!           
             self.targetVisible = False   
             # does the camera see a target, value doesn't change if no new result !            
@@ -104,7 +110,7 @@ class PVisionSim(Subsystem):
                     avg_area=avg_area/length
             
             if self.targetVisible:
-                estimatedRobotPose = self.photonEstimator.update(result)
+                estimatedRobotPose = self.photonEstimator.estimateCoprocMultiTagPose(result)
             
             SmartDashboard.putNumber("PV hasTarget",self.hasTarget)
             LimelightHelpers.set_tv(self.llLeftName, self.hasTarget)

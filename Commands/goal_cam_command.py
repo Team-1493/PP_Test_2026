@@ -42,7 +42,7 @@ class GoalCamCommand(commands2.Command):
 
     @override
     def initialize(self):
-        self.id = 0
+ #       self.id = 0
         # reset controllers
         self.controllerRot.reset() 
         self.controllerFor.reset()
@@ -51,11 +51,12 @@ class GoalCamCommand(commands2.Command):
         #  If no tag ID sent, use the closest visible ID  
         if self.id == 0:
             self.id = int(self.llh.get_fiducial_id(self.leftCamName))
-
+            print("AAAAAA  ",self.id)
         # if we have a valid tag ID, use that tag's rotation as the target rotation
         # if not, use the current robot rotatation as the target (maintain current rotation)
         if self.id >0:
             self.goalRot = self.constantsVision.tags_list[self.id-1].pose.toPose2d().rotation().radians()-pi
+            print("BBBBBB  ",self.goalRot)
         else: 
             pose = self.driveTrain.get_state().pose
             self.goalRot = pose.rotation().radians()

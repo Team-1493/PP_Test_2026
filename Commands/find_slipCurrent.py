@@ -7,7 +7,7 @@ from subsystems.Drive.drivetrain_generator import DrivetrainGenerator
 from phoenix6 import swerve
 from  subsystems.Drive.command_swerve_drivetrain import CommandSwerveDrivetrain
 
-class FindkS(commands2.Command):
+class FindSlipCurrent(commands2.Command):
     def __init__(self):
         self.drivetrain = DrivetrainGenerator.getInstance()
 
@@ -15,6 +15,7 @@ class FindkS(commands2.Command):
         self.addRequirements(self.drivetrain)
         self.timer = Timer()
         self.voltageRate = 0.01  #ramp rate volts per second
+        self.driveKS = swerve.requests.SysIdSwerveTranslation()
     
     @override
     def initialize(self):

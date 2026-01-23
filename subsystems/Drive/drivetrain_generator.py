@@ -52,9 +52,7 @@ class DrivetrainGenerator():
         DrivetrainGenerator.instance.get_module(0).drive_motor.configurator.apply(DrivetrainGenerator.slot0_teleop)
         DrivetrainGenerator.instance.get_module(1).drive_motor.configurator.apply(DrivetrainGenerator.slot0_teleop)
         DrivetrainGenerator.instance.get_module(2).drive_motor.configurator.apply(DrivetrainGenerator.slot0_teleop)
-        DrivetrainGenerator.instance.get_module(3).drive_motor.configurator.apply(DrivetrainGenerator.slot0_teleop)
-        
-        
+        DrivetrainGenerator.instance.get_module(3).drive_motor.configurator.apply(DrivetrainGenerator.slot0_teleop)    
     @staticmethod
     def apply_auto_gains():
         DrivetrainGenerator.instance.get_module(0).drive_motor.configurator.apply(DrivetrainGenerator.slot0_auto)

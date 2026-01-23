@@ -47,7 +47,7 @@ class ConstantValues():
         THETA_Y_OFFSET_L = 0 # pitch
         THETA_Z_OFFSET_L = 0 # yaw
 
-        STD_DEV_COEFF_XY = 0.1 #0.05
+        STD_DEV_COEFF_XY = .5 #0.05
         STD_DEV_COEFF_THETA = 999 #0.04 or self,max_value
 
         CAMERA_CUTOFF_DISTANCE = 3 # meters, above this distance std's set to max        
@@ -183,7 +183,10 @@ class ConstantValues():
         field_width_meters = 8.11 # Example field dimensions
         field_layout = AprilTagFieldLayout(tags_list, field_length_meters, field_width_meters)
 
-        
+
+        field_layout = AprilTagFieldLayout("deploy/apriltags/2026_field.json")
+        tags_list=field_layout.getTags()
+
     
     @staticmethod
     def update_constants():

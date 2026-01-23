@@ -116,7 +116,7 @@ class DrivePathGenerator():
 # Provide april Tag numnber, optoinal offset perpendicular to tag, offset parallel to tag
 
     def drive_path_to_tag(self,i:int, x_offset = 0, y_offset = 0):
-        goalPose1 = HelperMethods.calculate_pose_goal_from_tag(i,x_offset-.5,y_offset) 
+        goalPose1 = HelperMethods.calculate_pose_goal_from_tag(i,x_offset,y_offset+.5) 
         goalPose = HelperMethods.calculate_pose_goal_from_tag(i,x_offset,y_offset)
 
         return (

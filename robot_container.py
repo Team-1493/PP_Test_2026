@@ -4,6 +4,7 @@
 #
 
 from commands2 import DeferredCommand, InstantCommand
+import commands2
 from commands2.button import CommandXboxController, Trigger
 from commands2.sysid import SysIdRoutine
 from wpimath.geometry import Pose2d
@@ -104,15 +105,15 @@ class RobotContainer:
 #            commands2.DeferredCommand(lambda:self.drive_path.drive_path_to_tag(16,-1,0)).finallyDo
 #            (self.headingController.setTargetRotationInt))
             
-        self._joystick.button(7).whileTrue(FindkS())
+#        self._joystick.button(7).whileTrue(FindkS())
 
 
-#        self._joystick.button(8).whileTrue(
-#            commands2.DeferredCommand(lambda:self.drive_path.drive_path_to_tag(17,-1,0)).finallyDo
+#        self._joystick.button(7).whileTrue(
+##            commands2.DeferredCommand(lambda:self.drive_path.drive_path_to_tag(27,0,-1.5)).finallyDo
 #           (self.headingController.setTargetRotationInt))
 
 #        self._joystick.button(8).whileTrue(
-#            AutoPilotCommand(17,-1,0,0 ).finallyDo((self.headingController.setTargetRotationInt)))
+#            AutoPilotCommand(24,0,1.5,0 ).finallyDo((self.headingController.setTargetRotationInt)))
  
         self._joystick.button(9).onTrue(
               InstantCommand(lambda:self.update_constants()))
