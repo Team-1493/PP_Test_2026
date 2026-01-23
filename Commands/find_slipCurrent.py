@@ -30,20 +30,9 @@ class FindSlipCurrent(commands2.Command):
         self.maxV = 0
         self.maxTC=0    
 
+        SmartDashboard.putNumber("Slip - MaxV", self.maxV) 
+        SmartDashboard.putNumber("Slip - MaxTC", self.maxTC)    
 
-        SmartDashboard.putNumber("Torqe Current- measured",0)
-        SmartDashboard.putNumber("Torqe Current- measured (module 0)",0)
-        SmartDashboard.putNumber("Torqe Current- measured (module 1)",0)
-        SmartDashboard.putNumber("Torqe Current- measured (module 2)",0)
-        SmartDashboard.putNumber("Torqe Current- measured (module 3)",0)
-
-
-
-        SmartDashboard.putNumber("Voltage- measured (module 0)",0)
-        SmartDashboard.putNumber("Voltage- measured (module 1)",0)
-        SmartDashboard.putNumber("Voltage- measured (module 2)",0)
-        SmartDashboard.putNumber("Voltage- measured (module 3)",0)        
-        self.haskS = False
 
     def execute(self) -> None:
         timeCurrent = self.timer.get()
