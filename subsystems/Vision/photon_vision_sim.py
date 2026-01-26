@@ -40,13 +40,13 @@ class PVisionSim(Subsystem):
             
             cameraProp = SimCameraProperties()
             cameraProp.setCalibrationFromFOV(960, 720, Rotation2d.fromDegrees(90))
-            cameraProp.setCalibError(.35, 0.10)#0.35,0.10 default
+            cameraProp.setCalibError(.15, 0.05)#0.35,0.10 default
             cameraProp.setFPS(50)
             cameraProp.setAvgLatency(0.035)
             cameraProp.setLatencyStdDev(.005)
             
 
-            self.cameraSim = PhotonCameraSim(self.dummyCam, cameraProp,self.layout,0,4)
+            self.cameraSim = PhotonCameraSim(self.dummyCam, cameraProp,self.layout,.5,4)
        #     self.cameraSim.enableRawStream(True)
 #            self.cameraSim.enableProcessedStream(True)
             

@@ -86,8 +86,8 @@ class LLsystem(Subsystem):
             if estimate is not None:
               if len(estimate.raw_fiducials) > 0:
                 closestID,self.closestTagDist = self.minDist(estimate.raw_fiducials)
-                stdDev = self.constants.STD_DEV_COEFF_XY * (self.closestTagDist ** 2) / estimate.tag_count
-#                stdDev = 0.02 + 0.05 * self.closestTagDist
+#                stdDev = self.constants.STD_DEV_COEFF_XY * (self.closestTagDist ** 2) / estimate.tag_count
+                stdDev = 0.02 + 0.05 * self.closestTagDist
                 headingStdDev = self.constants.STD_DEV_COEFF_THETA * (self.closestTagDist** 2) / estimate.tag_count
                 if estimate.avg_tag_dist > self.constants.CAMERA_CUTOFF_DISTANCE:
                     stdDev = self.max_value

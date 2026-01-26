@@ -185,8 +185,7 @@ class ConstantValues():
 
 
         field_layout = AprilTagFieldLayout("deploy/apriltags/2026_field.json")
-        tags_list=field_layout.getTags()
-
+        tags_list=field_layout.getTags()   
     
     @staticmethod
     def update_constants():
