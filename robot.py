@@ -45,11 +45,11 @@ class MyRobot(commands2.TimedCommandRobot):
             pass
 
     def disabledPeriodic(self) -> None:
-#        self.container.limelightSytem.zeroAndseedIMU()
+        self.container.limelightSytem.zeroAndseedIMU()
         pass
 
     def autonomousInit(self) -> None:
-        #self.container.limelightSytem.set_IMU_Mode(2)
+        self.container.limelightSytem.set_IMU_Mode(2)
         self.autonomousCommand = self.container.getAutonomousCommand()
 
         if self.autonomousCommand:
@@ -66,7 +66,7 @@ class MyRobot(commands2.TimedCommandRobot):
         if self.autonomousCommand:
             self.autonomousCommand.cancel()
         #self.container.setHeadingControlToCurrentrHeading()
-        #self.container.limelightSytem.set_IMU_Mode(2)
+        self.container.limelightSytem.set_IMU_Mode(2)
         
     def teleopPeriodic(self) -> None:
         pass

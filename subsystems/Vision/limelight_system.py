@@ -57,6 +57,11 @@ class LLsystem(Subsystem):
 
 
     def periodic(self):
+        rot =  self.robotState.getRotationDeg()
+        for i in range(self.numCams):    
+            LimelightHelpers.set_robot_orientation(
+                self.constants.CAM_NAME[i],rot, 0, 0, 0, 0, 0)
+
         self.update()
 
 
@@ -173,8 +178,6 @@ class LLsystem(Subsystem):
 
 
     def pollLL(self,id,previousEstimate: PoseEstimate): 
-        LimelightHelpers.set_robot_orientation(
-                id, self.robotState.getRotationDeg(), 0, 0, 0, 0, 0)
         if (LimelightHelpers.get_tv(id)):
             if previousEstimate is not None:
 

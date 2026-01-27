@@ -70,7 +70,8 @@ class RobotContainer:
         # reset the field-centric heading on left bumper press
         self._joystick.button(5).onTrue(
             self.drivetrain.runOnce(lambda:self.drivetrain.seed_field_centric()).
-            andThen(lambda:self.headingController.rotateToZero() ))
+#            andThen(lambda:self.headingController.rotateToZero() ))
+            andThen(lambda:self.headingController.setTargetRotationInt(True) ))        
 
         #reset pose to 0
         self._joystick.button(6).onTrue(
