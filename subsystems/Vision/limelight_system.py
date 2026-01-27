@@ -186,7 +186,7 @@ class LLsystem(Subsystem):
                 oldTimestamp = self.max_value
                 
             newEstimate = LimelightHelpers.get_botpose_estimate_wpiblue_megatag2(id)
-            print("*********************   ",newEstimate.tag_count)
+#            print("*********************   ",newEstimate.tag_count)
             
             if newEstimate is not None and newEstimate.tag_count>0:
                 if newEstimate.timestamp_seconds == oldTimestamp:
