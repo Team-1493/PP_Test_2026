@@ -42,6 +42,9 @@ class RobotContainer:
         self.headingController = HeadingController.getInstance() #OK
         self.limelightSytem = LLsystem.getInstance()  #OK
         self._joystick = CommandXboxController(0)
+        self.dws=DriveWhileShooting(self.drivetrain,
+                lambda: -self._joystick.getRawAxis(1),
+                lambda: -self._joystick.getRawAxis(0))
         
 
         self._logger = Telemetry(TunerConstants.speed_at_12_volts)
@@ -72,7 +75,8 @@ class RobotContainer:
         # reset the field-centric heading on left bumper press
         self._joystick.button(5).onTrue(
             self.drivetrain.runOnce(lambda:self.drivetrain.seed_field_centric()))
-
+        self._joystick.button(10).whileTrue(
+            self.dws)
         #reset pose to 0
         self._joystick.button(6).onTrue(
             self.drivetrain.runOnce(lambda:self.drivetrain.reset_pose(Pose2d())))
