@@ -21,7 +21,7 @@ class DriveTeleopCommand(commands2.Command):
         rotate: typing.Callable[[], float],
     ) -> None:
         super().__init__()
-        self.scale_factor = 1
+        self.scale_factor = 0.3
         self.requested_velocity = 0
         self.forward = forward
         self.side = side
@@ -95,3 +95,9 @@ class DriveTeleopCommand(commands2.Command):
                 with_target_direction(Rotation2d(target_angle) )
                 )
         
+    def update(self) -> None:
+            self.requestFC_Facing = self.requestFC_Facing.with_heading_pid(
+                ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_KP,
+                0,
+                ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_KD)    
+                

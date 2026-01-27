@@ -30,12 +30,12 @@ class RobotContainer:
         self.timer.reset()
         self.timer.start()
 
-#        while self.timer.get()<1:
-#            print("Waiting for Warmup",round(self.timer.get(),0))
+        while self.timer.get()<3:
+            print("Waiting for Warmup",round(self.timer.get(),0))
         self.constants = ConstantValues.getInstance()  #OK
         self.drivetrain = DrivetrainGenerator.getInstance()  #OK
- #       while self.timer.get()<1:
- #           print("Creating CAN Devices",round(self.timer.get(),0))
+        while self.timer.get()<6:
+            print("Creating CAN Devices",round(self.timer.get(),0))
 
         self.headingController = HeadingController.getInstance() #OK
         self.limelightSytem = LLsystem.getInstance()  #OK
@@ -69,7 +69,8 @@ class RobotContainer:
 
         # reset the field-centric heading on left bumper press
         self._joystick.button(5).onTrue(
-            self.drivetrain.runOnce(lambda:self.drivetrain.seed_field_centric()))
+            self.drivetrain.runOnce(lambda:self.drivetrain.seed_field_centric()).
+            andThen(lambda:self.headingController.rotateToZero() ))
 
         #reset pose to 0
         self._joystick.button(6).onTrue(
@@ -135,6 +136,7 @@ class RobotContainer:
         self.autoGenerator.configAutoBuilder()
         DrivetrainGenerator.updateGains()
         DrivetrainGenerator.apply_teleop_gains()
+        self.drive_teleop_command.update()
         # DriveGoal_Cam does not need to be explicitly updated, it is generated at each use
     
         

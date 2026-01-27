@@ -25,7 +25,7 @@ class LLsystem(Subsystem):
     
 
     def __init__(self):
-        self.numCams = 2   # number of cameras on robot
+        self.numCams = 1   # number of cameras on robot
 
         self.robotState = RobotState.getInstance()
         self.driveTrain = DrivetrainGenerator.getInstance()

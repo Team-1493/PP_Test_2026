@@ -39,18 +39,18 @@ class ConstantValues():
         CAM_THETA_Y_OFFSET=[None,None,None,None]
         CAM_THETA_Z_OFFSET=[None,None,None,None]
 
-        CAM_NAME[0] =  "limelight-a"
+        CAM_NAME[0] =  "limelight-b"
         CAM_X_OFFSET[0] = 0 # forward positive
         CAM_Y_OFFSET[0] = 0 # right positive
-        CAM_Z_OFFSET[0] = 1 # up positive
+        CAM_Z_OFFSET[0] = .75 # up positive
         CAM_THETA_X_OFFSET[0] = 0 # roll
         CAM_THETA_Y_OFFSET[0] = 0 # pitch
         CAM_THETA_Z_OFFSET[0] = 0 # yaw
 
-        CAM_NAME[1] =  "limelight-b"
+        CAM_NAME[1] =  "limelight-c"
         CAM_X_OFFSET[1] = 0 # forward positive
         CAM_Y_OFFSET[1] = 0 # right positive
-        CAM_Z_OFFSET[1] = 0 # up positive
+        CAM_Z_OFFSET[1] = .85 # up positive
         CAM_THETA_X_OFFSET[1] = 0 # roll
         CAM_THETA_Y_OFFSET[1] = 0 # pitch
         CAM_THETA_Z_OFFSET[1] = 0 # yaw
@@ -77,7 +77,7 @@ class ConstantValues():
 
     class HeadingControllerConstants():
         
-        HEADINGCONTROLLER_KP = 4.6
+        HEADINGCONTROLLER_KP = 2.5
         HEADINGCONTROLLER_KD = 0.0
         HEADINGCONTROLLER_VMAX = 2.0
         HEADINGCONTROLLER_AMAX = 3.0 
@@ -106,7 +106,7 @@ class ConstantValues():
 
         
     class VisionConstants():    
-        """"
+        
         tag1=AprilTag()
         tag1.ID = 1
         tag1.pose = Pose3d(Translation3d(16.697, 0.655, 0.308), Rotation3d(0.000, 0.000, 2.199))
@@ -202,10 +202,10 @@ class ConstantValues():
         field_width_meters = 8.11 # Example field dimensions
         field_layout = AprilTagFieldLayout(tags_list, field_length_meters, field_width_meters)
         
-        """
+        
 
-        field_layout = AprilTagFieldLayout("deploy/apriltags/2026_field.json")
-        tags_list=field_layout.getTags()   
+    #    field_layout = AprilTagFieldLayout("deploy/apriltags/2026_field.json")
+    #    tags_list=field_layout.getTags()   
     
     @staticmethod
     def update_constants():
