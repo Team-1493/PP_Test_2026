@@ -25,24 +25,20 @@ class LaserCAN:
         
     def get_distance_mm(self,api:int) -> int | None:
         # Read CAN frame
-
-        if RobotBase.isSimulation():
-            b = limelight_system.LLsystem.readPacketNew(api,self.packet)
-        else:
-            b = self.can.readPacketLatest(api, self.packet)
+        b = self.can.readPacketLatest(api, self.packet)
 
         if b is False:
             self.status=1
             return None
         #print("packet  ",self.packet.data[0],"  ",self.packet.data[1],"  ",self.packet.data[2],"   ",self.packet.data[3],"   ",self.packet.data[4],"  ",self.packet.data[5],"  ",self.packet.data[6],"   ",self.packet.data[7])
+        self.status = self.packet.data[0]
 
-        distance_mm = distance_mm = self.packet.data[2] | (self.packet.data[1] << 8)
+        distance_mm = self.packet.data[2] | (self.packet.data[1] << 8)
         
 
-##        ambient = self.packet.data[5] | (self.packet).data[6] << 8)
- #       strength = self.packet.data[4 ]| (self.packet.data[3] << 8)
-        self.status = self.packet.data[0]
- #       print("d = ",distance_mm,"  amb = ",ambient,"   str = ",strength,"   status = ",status)                        
+#        ambient = self.packet.data[5] | (self.packet).data[6] << 8)
+#        strength = self.packet.data[4 ]| (self.packet.data[3] << 8)
+#        print("d = ",distance_mm,"  amb = ",ambient,"   str = ",strength,"   status = ",status)                        
         return distance_mm
 
 

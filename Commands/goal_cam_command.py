@@ -20,8 +20,7 @@ class GoalCamCommand(commands2.Command):
     def __init__(self, goalFor:float, goalLat:float, id:int = 0):
         self.constants = ConstantValues.DriveToGoalCameraConstants
         self.constantsVision = ConstantValues.VisionConstants
-        self.leftCamName = ConstantValues.LimelightConstants.CAMERA_NAME_L
-        self.rightCamName = ConstantValues.LimelightConstants.CAMERA_NAME_R        
+        self.CamName = ConstantValues.LimelightConstants.CAM_NAME[0]
         self.driveTrain = DrivetrainGenerator.getInstance()        
         self.timer =Timer()
         self.angle = 0
@@ -50,7 +49,7 @@ class GoalCamCommand(commands2.Command):
 
         #  If no tag ID sent, use the closest visible ID  
         if self.id == 0:
-            self.id = int(self.llh.get_fiducial_id(self.leftCamName))
+            self.id = int(self.llh.get_fiducial_id(self.CamName))
             print("AAAAAA  ",self.id)
         # if we have a valid tag ID, use that tag's rotation as the target rotation
         # if not, use the current robot rotatation as the target (maintain current rotation)
@@ -86,8 +85,8 @@ class GoalCamCommand(commands2.Command):
 
         # get yaw and calculate vy if tag is visible, else set vy = 0
         
-        if self.llh.get_tv(self.leftCamName): 
-            self.angle = self.llh.get_tx(self.leftCamName)
+        if self.llh.get_tv(self.CamName): 
+            self.angle = self.llh.get_tx(self.CamName)
             vy = self.controllerLat.calculate(self.angle)
             vy = self.cap(vy,self.kLatVmax)
         else:
@@ -107,7 +106,7 @@ class GoalCamCommand(commands2.Command):
         omega = self.controllerRot.calculate(self.rot)
         omega = self.cap(omega,self.kRotVmax)                          
                  
-        print("tv: ",self.llh.get_tv(self.leftCamName),
+        print("tv: ",self.llh.get_tv(self.CamName),
               "   dist: ",round(self.dist,3),
               "   tx: ",round(self.angle,3),
               "   rot: ",round(self.rot,3),              
