@@ -83,7 +83,6 @@ class LLsystem(Subsystem):
             
             for i in range(self.numCams):
 
-
                 cam_label="Cam"+str(i)
                 self.closestTagDist[i] = None
                 self.avgTagDist[i] = None            
@@ -124,8 +123,8 @@ class LLsystem(Subsystem):
             
         
         
-#                   stdDev = self.constants.STD_DEV_COEFF_XY * (self.closestTagDist ** 2) / estimate.tag_count
-                    stdDev = 0.02 + 0.05 * self.minClosestTagDist
+                    stdDev = self.constants.STD_DEV_COEFF_XY * (self.minClosestTagDist ** 2) / self.estimate.tag_count
+                    #stdDev = 0.02 + 0.05 * self.minClosestTagDist
                     headingStdDev = self.constants.STD_DEV_COEFF_THETA * (self.minClosestTagDist** 2) / self.estimate.tag_count
                 
                 #  can change to avg Tag distance to use avg as cutoff criteria
@@ -134,10 +133,11 @@ class LLsystem(Subsystem):
                         headingStdDev - self.max_value
 
                 
-                    self.driveTrain.add_vision_measurement(
-                        self.estimate.pose,
-                        utils.fpga_to_current_time(self.estimate.timestamp_seconds),
-                        (stdDev, stdDev, headingStdDev))
+                #    self.driveTrain.add_vision_measurement(
+                #        self.estimate.pose,
+#                        utils.fpga_to_current_time(self.estimate.timestamp_seconds),
+                 #       self.estimate.timestamp_seconds,
+                 #       (stdDev, stdDev, headingStdDev))
             
 
 
@@ -186,7 +186,7 @@ class LLsystem(Subsystem):
                 oldTimestamp = self.max_value
                 
             newEstimate = LimelightHelpers.get_botpose_estimate_wpiblue_megatag2(id)
-#            print("*********************   ",newEstimate.tag_count)
+#            print("*********************   ",LimelightHelpers.get_tv(id),"  ",newEstimate.tag_count)
             
             if newEstimate is not None and newEstimate.tag_count>0:
                 if newEstimate.timestamp_seconds == oldTimestamp:
@@ -209,11 +209,13 @@ class LLsystem(Subsystem):
                 self.constants.CAM_THETA_X_OFFSET[i],
                 self.constants.CAM_THETA_Y_OFFSET[i],
                 self.constants.CAM_THETA_Z_OFFSET[i])
+            
+
 
     
     def zeroAndseedIMU(self,rot=None):
         if rot is None:
-            rot=self.robotState.getRotationRad()
+            rot=self.robotState.getRotationDeg()  # LLH set_robot_orientation uses degrees
 
         for i in range(self.numCams):
             # send the current robot pose to the limelight

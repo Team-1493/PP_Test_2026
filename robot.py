@@ -25,7 +25,7 @@ class MyRobot(commands2.TimedCommandRobot):
     def robotInit(self) -> None:
         self.container = RobotContainer()  
         self.robotState = RobotState.getInstance()
-        self.IMU_mode = 2
+        self.IMU_mode = 0
 
     def robotPeriodic(self) -> None:
         """This function is called every 20 ms, no matter the mode. Use this for items like diagnostics

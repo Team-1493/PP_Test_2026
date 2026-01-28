@@ -21,6 +21,7 @@ from Commands.drive_teleop_command import DriveTeleopCommand
 from Commands.auto_pilot_command import AutoPilotCommand
 from Commands.find_wheel_base import FindWheelBase
 from Commands.find_ks import FindkS
+from Commands.seed_zero import SeedZero
 
 
 class RobotContainer:
@@ -30,7 +31,7 @@ class RobotContainer:
         self.timer.reset()
         self.timer.start()
 
-        while self.timer.get()<5:
+        while self.timer.get()<4:
             print("Waiting for Warmup",round(self.timer.get(),0))
         self.constants = ConstantValues.getInstance()  #OK
         self.drivetrain = DrivetrainGenerator.getInstance()  #OK
@@ -40,6 +41,7 @@ class RobotContainer:
         self.headingController = HeadingController.getInstance() #OK
         self.limelightSytem = LLsystem.getInstance()  #OK
         self._joystick = CommandXboxController(0)
+        self.seedZero = SeedZero(self.drivetrain,self.headingController)
         
 
         self._logger = Telemetry(TunerConstants.speed_at_12_volts)
@@ -68,10 +70,7 @@ class RobotContainer:
 
 
         # reset the field-centric heading on left bumper press
-        self._joystick.button(5).onTrue(
-            self.drivetrain.runOnce(lambda:self.drivetrain.seed_field_centric()).
-#            andThen(lambda:self.headingController.rotateToZero() ))
-            andThen(lambda:self.headingController.setTargetRotationInt(True) ))        
+        self._joystick.button(5).onTrue(self.seedZero)
 
         #reset pose to 0
         self._joystick.button(6).onTrue(

@@ -67,6 +67,12 @@ class HeadingController(Subsystem):
         self.setTargetRotation(3*pi/2)
         self.state=2        
 
+    def zeroStateAngle(self):
+        self.state=0
+        self.setTargetRotation(0)
+        
+
+
     def getRotation(self) -> float:
         return self.driveTrain.get_state().pose.rotation().radians()
     
