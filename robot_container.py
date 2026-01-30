@@ -21,6 +21,7 @@ from Commands.drive_teleop_command import DriveTeleopCommand
 from Commands.auto_pilot_command import AutoPilotCommand
 from Commands.find_wheel_base import FindWheelBase
 from Commands.find_ks import FindkS
+from Commands.seed_zero import SeedZero
 
 
 class RobotContainer:
@@ -30,16 +31,17 @@ class RobotContainer:
         self.timer.reset()
         self.timer.start()
 
-#        while self.timer.get()<1:
-#            print("Waiting for Warmup",round(self.timer.get(),0))
+        while self.timer.get()<4:
+            print("Waiting for Warmup",round(self.timer.get(),0))
         self.constants = ConstantValues.getInstance()  #OK
         self.drivetrain = DrivetrainGenerator.getInstance()  #OK
- #       while self.timer.get()<1:
- #           print("Creating CAN Devices",round(self.timer.get(),0))
+        while self.timer.get()<8:
+            print("Creating CAN Devices",round(self.timer.get(),0))
 
         self.headingController = HeadingController.getInstance() #OK
         self.limelightSytem = LLsystem.getInstance()  #OK
         self._joystick = CommandXboxController(0)
+        self.seedZero = SeedZero(self.drivetrain,self.headingController)
         
 
         self._logger = Telemetry(TunerConstants.speed_at_12_volts)
@@ -68,8 +70,7 @@ class RobotContainer:
 
 
         # reset the field-centric heading on left bumper press
-        self._joystick.button(5).onTrue(
-            self.drivetrain.runOnce(lambda:self.drivetrain.seed_field_centric()))
+        self._joystick.button(5).onTrue(self.seedZero)
 
         #reset pose to 0
         self._joystick.button(6).onTrue(
@@ -133,19 +134,16 @@ class RobotContainer:
         # update limelight, autobuilder, and heading controller constants  
         self.limelightSytem.configfureLimelights()
         self.autoGenerator.configAutoBuilder()
-        self.headingController.setup()
         DrivetrainGenerator.updateGains()
         DrivetrainGenerator.apply_teleop_gains()
+        self.drive_teleop_command.update()
         # DriveGoal_Cam does not need to be explicitly updated, it is generated at each use
     
         
     def createPPStuff(self):
-        from pathplannerlib.auto import AutoBuilder #!!!
-        print("AAAAAAAAAAAA")
-        from Auto.auto_generator import AutoGenerator #!!!
-        print("BBBBBBBBBBBB")
-        from Commands.drive_path_generator import DrivePathGenerator #!!!
-        print("CCCCCCCCCCCCCCCCCC")        
+        from pathplannerlib.auto import AutoBuilder 
+        from Auto.auto_generator import AutoGenerator 
+        from Commands.drive_path_generator import DrivePathGenerator 
         self.autoGenerator = AutoGenerator()
         self.autoChooser = AutoBuilder.buildAutoChooser("NoAction")
         SmartDashboard.putData("Auto Chooser", self.autoChooser)

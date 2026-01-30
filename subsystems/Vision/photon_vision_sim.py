@@ -40,7 +40,7 @@ class PVisionSim(Subsystem):
             
             cameraProp = SimCameraProperties()
             cameraProp.setCalibrationFromFOV(960, 720, Rotation2d.fromDegrees(90))
-            cameraProp.setCalibError(.35, 0.10)#0.35,0.10 default
+            cameraProp.setCalibError(.15, 0.05)#0.35,0.10 default
             cameraProp.setFPS(50)
             cameraProp.setAvgLatency(0.035)
             cameraProp.setLatencyStdDev(.005)
@@ -57,8 +57,8 @@ class PVisionSim(Subsystem):
             self.visionSim.addCamera(self.cameraSim, robotToCamera)
             self.visionSim.getDebugField()
 
-            self.llLeftName = ConstantValues.LimelightConstants.CAMERA_NAME_L
-
+            self.camName = ConstantValues.LimelightConstants.CAM_NAME[0]
+            
 
             self.photonEstimator = PhotonPoseEstimator(self.layout, robotToCamera)
             
@@ -111,9 +111,9 @@ class PVisionSim(Subsystem):
             
             if self.targetVisible:
                 estimatedRobotPose = self.photonEstimator.estimateCoprocMultiTagPose(result)
-            
+                print("PV pose is none ",estimatedRobotPose is None)
             SmartDashboard.putNumber("PV hasTarget",self.hasTarget)
-            LimelightHelpers.set_tv(self.llLeftName, self.hasTarget)
+            LimelightHelpers.set_tv(self.camName, self.hasTarget)
 
 
             if (length>0 and not self.targetVisible) : 
@@ -147,12 +147,12 @@ class PVisionSim(Subsystem):
                     SmartDashboard.putNumber("PV pose R",estPose.rotation().radians() )                               
                     SmartDashboard.putNumber("PV Dist avg",avg_dist)    
                 
-                LimelightHelpers.set_ty(self.llLeftName, minPitch) 
-                LimelightHelpers.set_tx(self.llLeftName, minYaw)                 
-                LimelightHelpers.set_tync(self.llLeftName, minPitch) 
-                LimelightHelpers.set_txnc(self.llLeftName, minYaw)  
-                LimelightHelpers.set_fiducialid_id(self.llLeftName,minID)                               
-
+                LimelightHelpers.set_ty(self.camName, minPitch) 
+                LimelightHelpers.set_tx(self.camName, minYaw)                 
+                LimelightHelpers.set_tync(self.camName, minPitch) 
+                LimelightHelpers.set_txnc(self.camName, minYaw)  
+                LimelightHelpers.set_fiducialid_id(self.camName,minID)                               
+                print("PV ",length)
                 LimelightHelpers.set_botpose_estimate_wpiblue_megatag2(
                     estimatedRobotPose.estimatedPose.toPose2d(),
                     result.getTimestampSeconds(),
@@ -163,7 +163,7 @@ class PVisionSim(Subsystem):
                     avg_area, # avg_tag_area, 
                     rawFid,   # list of LL raw fiducials
                     True, # is_megatag_2
-                    self.llLeftName
+                    self.camName
                 )
 
             

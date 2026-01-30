@@ -31,37 +31,53 @@ class ConstantValues():
         
 
     class LimelightConstants():
-        CAMERA_NAME_R = "limelight-a"
-        X_OFFSET_R = 0 # forward positive
-        Y_OFFSET_R = 0 # right positive
-        Z_OFFSET_R = 0 # up positive
-        THETA_X_OFFSET_R = 0 # roll
-        THETA_Y_OFFSET_R = 0 # pitch
-        THETA_Z_OFFSET_R = 0 # yaw
+        CAM_NAME=[None,None,None,None]
+        CAM_X_OFFSET=[None,None,None,None]
+        CAM_Y_OFFSET=[None,None,None,None]
+        CAM_Z_OFFSET=[None,None,None,None]
+        CAM_THETA_X_OFFSET=[None,None,None,None]
+        CAM_THETA_Y_OFFSET=[None,None,None,None]
+        CAM_THETA_Z_OFFSET=[None,None,None,None]
 
-        CAMERA_NAME_L = "limelight-b"
-        X_OFFSET_L = 0 # forward positive
-        Y_OFFSET_L = 0 # right positive
-        Z_OFFSET_L = 0 # up positive
-        THETA_X_OFFSET_L = 0 # roll
-        THETA_Y_OFFSET_L = 0 # pitch
-        THETA_Z_OFFSET_L = 0 # yaw
+        CAM_NAME[0] =  "limelight-a"
+        CAM_X_OFFSET[0] = -.1615 # forward positive
+        CAM_Y_OFFSET[0] = .0889 # right positive
+        CAM_Z_OFFSET[0] = .5715 # up positive
+        CAM_THETA_X_OFFSET[0] = 0 # roll
+        CAM_THETA_Y_OFFSET[0] = 0 # pitch
+        CAM_THETA_Z_OFFSET[0] = 0 # yaw
 
-        STD_DEV_COEFF_XY = .5 #0.05
+        CAM_NAME[1] =  "limelight-c"
+        CAM_X_OFFSET[1] = 0 # forward positive
+        CAM_Y_OFFSET[1] = 0 # right positive
+        CAM_Z_OFFSET[1] = .85 # up positive
+        CAM_THETA_X_OFFSET[1] = 0 # roll
+        CAM_THETA_Y_OFFSET[1] = 0 # pitch
+        CAM_THETA_Z_OFFSET[1] = 0 # yaw
+
+        CAM_NAME[2] =  "limelight-a"
+        CAM_X_OFFSET[2] = 0 # forward positive
+        CAM_Y_OFFSET[2] = 0 # right positive
+        CAM_Z_OFFSET[2] = 0 # up positive
+        CAM_THETA_X_OFFSET[2] = 0 # roll
+        CAM_THETA_Y_OFFSET[2] = 0 # pitch
+        CAM_THETA_Z_OFFSET[2] = 0 # yaw
+
+        STD_DEV_COEFF_XY = .1 #0.05
         STD_DEV_COEFF_THETA = 999 #0.04 or self,max_value
 
         CAMERA_CUTOFF_DISTANCE = 3 # meters, above this distance std's set to max        
 
 
     class AutoBuilderConstants():
-        AUTOBUILDER_XY_kP = 4        
+        AUTOBUILDER_XY_kP = 5        
         AUTOBUILDER_XY_kD = 0
-        AUTOBUILDER_THETA_kP = 4        
+        AUTOBUILDER_THETA_kP = 5        
         AUTOBUILDER_THETA_kD = 0        
 
     class HeadingControllerConstants():
         
-        HEADINGCONTROLLER_KP = 4.6
+        HEADINGCONTROLLER_KP = 2.5
         HEADINGCONTROLLER_KD = 0.0
         HEADINGCONTROLLER_VMAX = 2.0
         HEADINGCONTROLLER_AMAX = 3.0 
@@ -90,103 +106,123 @@ class ConstantValues():
 
         
     class VisionConstants():    
-        tag1=AprilTag()
+        
+        tag1 = AprilTag()
+        tag2 = AprilTag()
+        tag3 = AprilTag()
+        tag4 = AprilTag()
+        tag5 = AprilTag()
+        tag6 = AprilTag()
+        tag7 = AprilTag()
+        tag8 = AprilTag()
+        tag9 = AprilTag()
+        tag10 = AprilTag()
+        tag11 = AprilTag()
+        tag12 = AprilTag()
+        tag13 = AprilTag()
+        tag14 = AprilTag()
+        tag15 = AprilTag()
+        tag16 = AprilTag()
+        tag17 = AprilTag()
+        tag18 = AprilTag()
+        tag19 = AprilTag()
+        tag20 = AprilTag()
+        tag21 = AprilTag()
+        tag22 = AprilTag()
+        tag23 = AprilTag()
+        tag24 = AprilTag()
+        tag25 = AprilTag()
+        tag26 = AprilTag()
+        tag27 = AprilTag()
+        tag28 = AprilTag()
+        tag29 = AprilTag()
+        tag30 = AprilTag()
+        tag31 = AprilTag()
+        tag32 = AprilTag()
+
         tag1.ID = 1
-        tag1.pose = Pose3d(Translation3d(16.697, 0.655, 0.308), Rotation3d(0.000, 0.000, 2.199))
-
-        tag2=AprilTag()
         tag2.ID = 2
-        tag2.pose = Pose3d(Translation3d(16.697, 7.396, 0.308),Rotation3d(0.000, 0.000, 4.084))
-
-        tag3=AprilTag()
         tag3.ID = 3
-        tag3.pose = Pose3d(Translation3d(11.561, 8.056, 0.308), Rotation3d(0.000, 0.000, 4.712))
-
-        tag4=AprilTag()
         tag4.ID = 4
-        tag4.pose = Pose3d(Translation3d(9.276, 6.138,	0.3088), Rotation3d(0.000,	0.524, 0.000))
-
-        tag5=AprilTag()
         tag5.ID = 5
-        tag5.pose = Pose3d(Translation3d(9.276, 1.915,	0.308), Rotation3d(0.000,	0.524, 0.000))
-
-        tag6=AprilTag()
         tag6.ID = 6
-        tag6.pose = Pose3d(Translation3d(13.474, 3.306, 0.308), Rotation3d(0.000, 0, 5.236))
-
-        tag7=AprilTag()
         tag7.ID = 7
-        tag7.pose = Pose3d(Translation3d(13.891, 4.026, 0.308), Rotation3d(0.000, 0.000, 0.000))
-
-        tag8=AprilTag()
         tag8.ID = 8
-        tag8.pose = Pose3d(Translation3d(13.474, 4.745, 0.308), Rotation3d(0.000, 0.000, 1.047))
-
-        tag9=AprilTag()
         tag9.ID = 9
-        tag9.pose = Pose3d(Translation3d(12.643, 4.745, 0.308), Rotation3d(0.000, 0.000, 2.094))
-
-        tag10=AprilTag()
         tag10.ID = 10
-        tag10.pose = Pose3d(Translation3d(12.227, 4.026, 0.308), Rotation3d(0.000, 0.000, 3.142))
-
-        tag11=AprilTag()
         tag11.ID = 11
-        tag11.pose = Pose3d(Translation3d(12.643, 3.306, 0.308), Rotation3d(0.000, 0.000, 4.189))
-
-        tag12=AprilTag()
         tag12.ID = 12
-        tag12.pose = Pose3d(Translation3d(0.851, 0.655, 0.308),  Rotation3d(0.000, 0.000, 0.942))
-
-        tag13=AprilTag()
         tag13.ID = 13
-        tag13.pose = Pose3d(Translation3d(0.851, 7.396, 0.308), Rotation3d(0.000, 0, 5.341))
-
-        tag14=AprilTag()
         tag14.ID = 14
-        tag14.pose = Pose3d(Translation3d(8.272, 6.138, 0.308),  Rotation3d(0.000, 0.524, 3.142))
-
-        tag15=AprilTag()
         tag15.ID = 15
-        tag15.pose = Pose3d(Translation3d(8.272, 1.915, 0.308),  Rotation3d(0.000, 0.524, 3.142))
-
-        tag16=AprilTag()
         tag16.ID = 16
-        tag16.pose = Pose3d(Translation3d(5.988, -0.004,	0.308), Rotation3d(0.000,	0.000, 1.571))
-
-        tag17=AprilTag()
         tag17.ID = 17
-        tag17.pose = Pose3d(Translation3d(4.074, 3.306,  0.308),  Rotation3d(0.000, 0.000, 4.189))
-        
-        tag18=AprilTag()                
         tag18.ID = 18
-        tag18.pose = Pose3d(Translation3d(3.658, 4.026, 0.308),  Rotation3d(0.000, 0.000, 3.142))
-        
-        tag19=AprilTag()
         tag19.ID = 19
-        tag19.pose = Pose3d(Translation3d(4.074, 4.745, 0.308),  Rotation3d(0.000, 0.000, 2.094))
-
-        tag20=AprilTag()
         tag20.ID = 20
-        tag20.pose = Pose3d(Translation3d( 4.905, 4.745, 0.308),  Rotation3d(0.000, 0.000, 1.047))
+        tag21.ID = 21
+        tag22.ID = 22
+        tag23.ID = 23
+        tag24.ID = 24
+        tag25.ID = 25
+        tag26.ID = 26
+        tag27.ID = 27
+        tag28.ID = 28
+        tag29.ID = 29
+        tag30.ID = 30
+        tag31.ID = 31
+        tag32.ID = 32
 
-        tag21=AprilTag()        
-        tag21.ID = 21  
-        tag21.pose = Pose3d(Translation3d(5.321, 4.026, 0.308),  Rotation3d(0.000, 0.000, 0.000))
-        
+        tag1.pose = Pose3d(Translation3d(11.878, 7.425, 0.889), Rotation3d(0.000, 0.000, 3.142))
+        tag2.pose = Pose3d(Translation3d(11.915, 4.638, 1.124), Rotation3d(0.000, 0.000, 1.571))
+        tag3.pose = Pose3d(Translation3d(11.312, 4.390, 1.124), Rotation3d(0.000, 0.000, 3.142))
+        tag4.pose = Pose3d(Translation3d(11.312, 4.035, 1.124), Rotation3d(0.000, 0.000, 3.142))
+        tag5.pose = Pose3d(Translation3d(11.915, 3.431, 1.124), Rotation3d(0.000, 0.000, 4.712))
+        tag6.pose = Pose3d(Translation3d(11.878, 0.644, 0.889), Rotation3d(0.000, 0.000, 3.142))
+        tag7.pose = Pose3d(Translation3d(11.953, 0.644, 0.889), Rotation3d(0.000, 0.000, 0.000))
+        tag8.pose = Pose3d(Translation3d(12.271, 3.431, 1.124), Rotation3d(0.000, 0.000, 4.712))
+        tag9.pose = Pose3d(Translation3d(12.519, 3.679, 1.124), Rotation3d(0.000, 0.000, 0.000))
+        tag10.pose = Pose3d(Translation3d(12.519, 4.035, 1.124), Rotation3d(0.000, 0.000, 0.000))
+        tag11.pose = Pose3d(Translation3d(12.271, 4.638, 1.124), Rotation3d(0.000, 0.000, 1.571))
+        tag12.pose = Pose3d(Translation3d(11.953, 7.425, 0.889), Rotation3d(0.000, 0.000, 0.000))
+        tag13.pose = Pose3d(Translation3d(16.533, 7.403, 0.552), Rotation3d(0.000, 0.000, 3.142))
+        tag14.pose = Pose3d(Translation3d(16.533, 6.972, 0.552), Rotation3d(0.000, 0.000, 3.142))
+        tag15.pose = Pose3d(Translation3d(16.533, 4.324, 0.552), Rotation3d(0.000, 0.000, 3.142))
+        tag16.pose = Pose3d(Translation3d(16.533, 3.892, 0.552), Rotation3d(0.000, 0.000, 3.142))
+        tag17.pose = Pose3d(Translation3d(4.663, 0.644, 0.889), Rotation3d(0.000, 0.000, 0.000))
+        tag18.pose = Pose3d(Translation3d(4.626, 3.431, 1.124), Rotation3d(0.000, 0.000, 4.712))
+        tag19.pose = Pose3d(Translation3d(5.229, 3.679, 1.124), Rotation3d(0.000, 0.000, 0.000))
+        tag20.pose = Pose3d(Translation3d(5.229, 4.035, 1.124), Rotation3d(0.000, 0.000, 0.000))
+        tag21.pose = Pose3d(Translation3d(4.626, 4.638, 1.124), Rotation3d(0.000, 0.000, 1.571))
+        tag22.pose = Pose3d(Translation3d(4.663, 7.425, 0.889), Rotation3d(0.000, 0.000, 0.000))
+        tag23.pose = Pose3d(Translation3d(4.588, 7.425, 0.889), Rotation3d(0.000, 0.000, 3.142))
+        tag24.pose = Pose3d(Translation3d(4.270, 4.638, 1.124), Rotation3d(0.000, 0.000, 1.571))
+        tag25.pose = Pose3d(Translation3d(4.022, 4.390, 1.124), Rotation3d(0.000, 0.000, 3.142))
+        tag26.pose = Pose3d(Translation3d(4.022, 4.035, 1.124), Rotation3d(0.000, 0.000, 3.142))
+        tag27.pose = Pose3d(Translation3d(4.270, 3.431, 1.124), Rotation3d(0.000, 0.000, 4.712))
+        tag28.pose = Pose3d(Translation3d(4.588, 0.644, 0.889), Rotation3d(0.000, 0.000, 3.142))
+        tag29.pose = Pose3d(Translation3d(0.008, 0.666, 0.552), Rotation3d(0.000, 0.000, 0.000))
+        tag30.pose = Pose3d(Translation3d(0.008, 1.098, 0.552), Rotation3d(0.000, 0.000, 0.000))
+        tag31.pose = Pose3d(Translation3d(0.008, 3.746, 0.552), Rotation3d(0.000, 0.000, 0.000))
+        tag32.pose = Pose3d(Translation3d(0.008, 4.178, 0.552), Rotation3d(0.000, 0.000, 0.000))
+
+
+
         # tags facing robot have r3 = 180 degrees
         
         tags_list = [tag1,tag2,tag3,tag4,tag5,tag6,tag7,tag8,tag9,tag10,tag11,
-                    tag12,tag13,tag14,tag15,tag16,tag17,tag18,tag19,tag20,tag21]
-
-        field_length_meters = 16.48 # Example field dimensions
+                    tag12,tag13,tag14,tag15,tag16,tag17,tag18,tag19,tag20,tag21,
+                    tag22, tag23,tag24, tag25,tag26,tag27,tag28,tag29,tag30,tag31,tag32]
+        
+        
+        field_length_meters = 16.533 # Example field dimensions
         field_width_meters = 8.11 # Example field dimensions
         field_layout = AprilTagFieldLayout(tags_list, field_length_meters, field_width_meters)
+        
+        
 
-
-        field_layout = AprilTagFieldLayout("deploy/apriltags/2026_field.json")
-        tags_list=field_layout.getTags()
-
+    #    field_layout = AprilTagFieldLayout("deploy/apriltags/2026_field.json")
+    #    tags_list=field_layout.getTags()   
     
     @staticmethod
     def update_constants():
@@ -223,20 +259,20 @@ class ConstantValues():
 
 
         ## Update values for limelimesystyem
-        ConstantValues.LimelightConstants.CAMERA_NAME_R = SmartDashboard.getString("LL Right Cam Name", ConstantValues.LimelightConstants.CAMERA_NAME_R)
-        ConstantValues.LimelightConstants.X_OFFSET_R = SmartDashboard.getNumber("LL Right x_offset",ConstantValues.LimelightConstants.X_OFFSET_R) 
-        ConstantValues.LimelightConstants.Y_OFFSET_R = SmartDashboard.getNumber("LL Right y_offset",ConstantValues.LimelightConstants.Y_OFFSET_R)
-        ConstantValues.LimelightConstants.Z_OFFSET_R = SmartDashboard.getNumber("LL Right z_offset",ConstantValues.LimelightConstants.Z_OFFSET_R) 
-        ConstantValues.LimelightConstants.THETA_X_OFFSET_R = SmartDashboard.getNumber("LL Right thetaX_offset",ConstantValues.LimelightConstants.THETA_X_OFFSET_R)
-        ConstantValues.LimelightConstants.THETA_Y_OFFSET_R = SmartDashboard.getNumber("LL Right thetaY_offset",ConstantValues.LimelightConstants.THETA_Y_OFFSET_R)
-        ConstantValues.LimelightConstants.THETA_Z_OFFSET_R = SmartDashboard.getNumber("LL Right thetaZ_offset",ConstantValues.LimelightConstants.THETA_Z_OFFSET_R)                 
-        ConstantValues.LimelightConstants.CAMERA_NAME_L = SmartDashboard.getString("LL Left Cam Name", ConstantValues.LimelightConstants.CAMERA_NAME_L)
-        ConstantValues.LimelightConstants.X_OFFSET_L = SmartDashboard.getNumber("LL Left x_offset",ConstantValues.LimelightConstants.X_OFFSET_L) 
-        ConstantValues.LimelightConstants.Y_OFFSET_L = SmartDashboard.getNumber("LL Left y_offset",ConstantValues.LimelightConstants.Y_OFFSET_L)
-        ConstantValues.LimelightConstants.Z_OFFSET_L = SmartDashboard.getNumber("LL Left z_offset",ConstantValues.LimelightConstants.Z_OFFSET_L) 
-        ConstantValues.LimelightConstants.THETA_X_OFFSET_L = SmartDashboard.getNumber("LL Left thetaX_offset",ConstantValues.LimelightConstants.THETA_X_OFFSET_L)
-        ConstantValues.LimelightConstants.THETA_Y_OFFSET_L = SmartDashboard.getNumber("LL Left thetaY_offset",ConstantValues.LimelightConstants.THETA_Y_OFFSET_L)
-        ConstantValues.LimelightConstants.THETA_Z_OFFSET_L = SmartDashboard.getNumber("LL Left thetaZ_offset",ConstantValues.LimelightConstants.THETA_Z_OFFSET_L)                 
+        ConstantValues.LimelightConstants.CAM_NAME[0] = SmartDashboard.getString("LL Cam0 Name", ConstantValues.LimelightConstants.CAM_NAME[0])
+        ConstantValues.LimelightConstants.CAM_X_OFFSET[0] = SmartDashboard.getNumber("LL CAM0 x_offset",ConstantValues.LimelightConstants.CAM_X_OFFSET[0]) 
+        ConstantValues.LimelightConstants.CAM_Y_OFFSET[0] = SmartDashboard.getNumber("LL CAM0 y_offset",ConstantValues.LimelightConstants.CAM_Y_OFFSET[0])
+        ConstantValues.LimelightConstants.CAM_Z_OFFSET[0] = SmartDashboard.getNumber("LL CAM0 z_offset",ConstantValues.LimelightConstants.CAM_Z_OFFSET[0]) 
+        ConstantValues.LimelightConstants.CAM_THETA_X_OFFSET[0] = SmartDashboard.getNumber("LL CAM0 thetaX_offset",ConstantValues.LimelightConstants.CAM_THETA_X_OFFSET[0])
+        ConstantValues.LimelightConstants.CAM_THETA_Y_OFFSET[0] = SmartDashboard.getNumber("LL CAM0 thetaY_offset",ConstantValues.LimelightConstants.CAM_THETA_Y_OFFSET[0])
+        ConstantValues.LimelightConstants.CAM_THETA_Z_OFFSET[0] = SmartDashboard.getNumber("LL CAM0 thetaZ_offset",ConstantValues.LimelightConstants.CAM_THETA_Z_OFFSET[0])                 
+        ConstantValues.LimelightConstants.CAM_NAME[1] = SmartDashboard.getString("LL CAM1 Name", ConstantValues.LimelightConstants.CAM_NAME[1])
+        ConstantValues.LimelightConstants.CAM_X_OFFSET[1] = SmartDashboard.getNumber("LL CAM1 x_offset",ConstantValues.LimelightConstants.CAM_X_OFFSET[1]) 
+        ConstantValues.LimelightConstants.CAM_Y_OFFSET[1] = SmartDashboard.getNumber("LL CAM1 y_offset",ConstantValues.LimelightConstants.CAM_Y_OFFSET[1])
+        ConstantValues.LimelightConstants.CAM_Z_OFFSET[1] = SmartDashboard.getNumber("LL CAM1 z_offset",ConstantValues.LimelightConstants.CAM_Z_OFFSET[1]) 
+        ConstantValues.LimelightConstants.CAM_THETA_X_OFFSET[1] = SmartDashboard.getNumber("LL CAM1 thetaX_offset",ConstantValues.LimelightConstants.CAM_THETA_X_OFFSET[1])
+        ConstantValues.LimelightConstants.CAM_THETA_Y_OFFSET[1] = SmartDashboard.getNumber("LL CAM1 thetaY_offset",ConstantValues.LimelightConstants.CAM_THETA_Y_OFFSET[1])
+        ConstantValues.LimelightConstants.CAM_THETA_Z_OFFSET[1] = SmartDashboard.getNumber("LL CAM1 thetaZ_offset",ConstantValues.LimelightConstants.CAM_THETA_Z_OFFSET[1])                 
         ConstantValues.LimelightConstants.STD_DEV_COEFF_XY = SmartDashboard.getNumber("LL StdDevCoeff_xy",ConstantValues.LimelightConstants.STD_DEV_COEFF_XY)
         ConstantValues.LimelightConstants.STD_DEV_COEFF_THETA = SmartDashboard.getNumber("LL StdDevCoeff_theta",ConstantValues.LimelightConstants.STD_DEV_COEFF_THETA)
         ConstantValues.LimelightConstants.CAMERA_CUTOFF_DISTANCE = SmartDashboard.getNumber("LL CutoffDist",ConstantValues.LimelightConstants.CAMERA_CUTOFF_DISTANCE)
@@ -289,20 +325,20 @@ class ConstantValues():
         SmartDashboard.putNumber("DTG_Cam Rot Amax",ConstantValues.DriveToGoalCameraConstants.kRotAmax) 
 
 
-        SmartDashboard.putString("LL Right Cam Name", ConstantValues.LimelightConstants.CAMERA_NAME_R)
-        SmartDashboard.putNumber("LL Right x_offset",ConstantValues.LimelightConstants.X_OFFSET_R) 
-        SmartDashboard.putNumber("LL Right y_offset",ConstantValues.LimelightConstants.Y_OFFSET_R)
-        SmartDashboard.putNumber("LL Right z_offset",ConstantValues.LimelightConstants.Z_OFFSET_R) 
-        SmartDashboard.putNumber("LL Right thetaX_offset",ConstantValues.LimelightConstants.THETA_X_OFFSET_R)
-        SmartDashboard.putNumber("LL Right thetaY_offset",ConstantValues.LimelightConstants.THETA_Y_OFFSET_R)
-        SmartDashboard.putNumber("LL Right thetaZ_offset",ConstantValues.LimelightConstants.THETA_Z_OFFSET_R)                 
-        SmartDashboard.putString("LL Left Cam Name", ConstantValues.LimelightConstants.CAMERA_NAME_L)
-        SmartDashboard.putNumber("LL Left x_offset",ConstantValues.LimelightConstants.X_OFFSET_L) 
-        SmartDashboard.putNumber("LL Left y_offset",ConstantValues.LimelightConstants.Y_OFFSET_L)
-        SmartDashboard.putNumber("LL Left z_offset",ConstantValues.LimelightConstants.Z_OFFSET_L) 
-        SmartDashboard.putNumber("LL Left thetaX_offset",ConstantValues.LimelightConstants.THETA_X_OFFSET_L)
-        SmartDashboard.putNumber("LL Left thetaY_offset",ConstantValues.LimelightConstants.THETA_Y_OFFSET_L)
-        SmartDashboard.putNumber("LL Left thetaZ_offset",ConstantValues.LimelightConstants.THETA_Z_OFFSET_L)                 
+        SmartDashboard.putString("LL CAM0 Cam Name", ConstantValues.LimelightConstants.CAM_NAME[0])
+        SmartDashboard.putNumber("LL CAM0 x_offset",ConstantValues.LimelightConstants.CAM_X_OFFSET[0]) 
+        SmartDashboard.putNumber("LL CAM0 y_offset",ConstantValues.LimelightConstants.CAM_Y_OFFSET[0])
+        SmartDashboard.putNumber("LL CAM0 z_offset",ConstantValues.LimelightConstants.CAM_Z_OFFSET[0]) 
+        SmartDashboard.putNumber("LL CAM0 thetaX_offset",ConstantValues.LimelightConstants.CAM_THETA_X_OFFSET[0])
+        SmartDashboard.putNumber("LL CAM0 thetaY_offset",ConstantValues.LimelightConstants.CAM_THETA_Y_OFFSET[0])
+        SmartDashboard.putNumber("LL CAM0 thetaZ_offset",ConstantValues.LimelightConstants.CAM_THETA_Z_OFFSET[0])                 
+        SmartDashboard.putString("LL CAM1 Cam Name", ConstantValues.LimelightConstants.CAM_NAME[1])
+        SmartDashboard.putNumber("LL CAM1 x_offset",ConstantValues.LimelightConstants.CAM_X_OFFSET[1]) 
+        SmartDashboard.putNumber("LL CAM1 y_offset",ConstantValues.LimelightConstants.CAM_Y_OFFSET[1])
+        SmartDashboard.putNumber("LL CAM1 z_offset",ConstantValues.LimelightConstants.CAM_Z_OFFSET[1]) 
+        SmartDashboard.putNumber("LL CAM1 thetaX_offset",ConstantValues.LimelightConstants.CAM_THETA_X_OFFSET[1])
+        SmartDashboard.putNumber("LL CAM1 thetaY_offset",ConstantValues.LimelightConstants.CAM_THETA_Y_OFFSET[1])
+        SmartDashboard.putNumber("LL CAM1 thetaZ_offset",ConstantValues.LimelightConstants.CAM_THETA_Z_OFFSET[1])                 
         SmartDashboard.putNumber("LL StdDevCoeff_xy",ConstantValues.LimelightConstants.STD_DEV_COEFF_XY)
         SmartDashboard.putNumber("LL StdDevCoeff_theta",ConstantValues.LimelightConstants.STD_DEV_COEFF_THETA)
         SmartDashboard.putNumber("LL CutoffDist",ConstantValues.LimelightConstants.CAMERA_CUTOFF_DISTANCE)

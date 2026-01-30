@@ -14,8 +14,6 @@ from subsystems.Drive.drivetrain_generator import DrivetrainGenerator
 from subsystems.laser_can import LaserCAN
 
 class LLsystem(Subsystem):
-    LC_dist = 32000
-    LC_cam = None
     instance = None
 
     @staticmethod
@@ -27,95 +25,140 @@ class LLsystem(Subsystem):
     
 
     def __init__(self):
-        self.closestTagDist=9999
+        self.numCams = 1   # number of cameras on robot
+
         self.robotState = RobotState.getInstance()
         self.driveTrain = DrivetrainGenerator.getInstance()
         self.constants =  ConstantValues.LimelightConstants
-        LLsystem.LC_cam = self.constants.CAMERA_NAME_L
 
         self.max_value = 9999
 
-        self.previousLeftEstimate = PoseEstimate()
-        self.previousRightEstimate = PoseEstimate()
+        self.closestTagDist = [self.max_value]*4
+        self.closestTagID = [0]*4
+        self.avgTagDist = [self.max_value]*4
+        self.minClosestTagDist=self.max_value
+        self.minAvgTagDist=self.max_value      
+        self.camNum_minClosestTagDist=0
+        self.camNum_minAvgTagDist=0
+        self.canNum_best=-1
+          
 
+        self.previous_estimate = [None,None,None,None]
+        self.current_estimate = [PoseEstimate(),PoseEstimate(),PoseEstimate(),PoseEstimate()]                
+        self.estimate =  PoseEstimate()
 
-        self.PE = PoseEstimate()
+        for i in range(self.numCams):
+            self.closestTagDist[i] = 9999
+            
+
 
         self.configfureLimelights()
         self.zeroAndseedIMU(0)
 
-        self.LC = LaserCAN.getInstance()
-        self.LC_distance = 0
 
     def periodic(self):
+        rot =  self.robotState.getRotationDeg()
+        for i in range(self.numCams):    
+            LimelightHelpers.set_robot_orientation(
+                self.constants.CAM_NAME[i],rot, 0, 0, 0, 0, 0)
+
         self.update()
-        self.LC_distance = self.LC.get_distance_meters()
-        SmartDashboard.putNumber("LaserCan Dist",self.LC_distance)                    
 
 
     def update(self): 
-        self.closestTagDist = None
-        SmartDashboard.putBoolean("LL left tv",LimelightHelpers.get_tv(self.constants.CAMERA_NAME_L))
-        SmartDashboard.putBoolean("LL right tv",LimelightHelpers.get_tv(self.constants.CAMERA_NAME_R))        
-        """ check if we are moving too fast for an accurate camera measurement """
-        shouldAccept = (self.robotState.getChassisSpeedsNorm()<3 
-                        and abs(self.robotState.getRotationalSpeedsRPS())<2)
-        SmartDashboard.putBoolean("Accept Target",shouldAccept)
-
-        """ set the standard deviations for use in the pose estimator """
-        leftEstimate_avgDist = self.max_value
-        rightEstimate_avgDist = self.max_value
-        estimate = None
+        self.estimate = None
+        self.minAvgTagDist = self.max_value
+        self.minClosestTagDist = self.max_value
+#        self.canNum_best=-1
         
-        leftEstimate = self.pollLL(self.constants.CAMERA_NAME_L, self.previousLeftEstimate)
-        rightEstimate = self.pollLL(self.constants.CAMERA_NAME_R, self.previousRightEstimate)
-        if leftEstimate is not None: leftEstimate_avgDist = leftEstimate.avg_tag_dist
-        if rightEstimate is not None: rightEstimate_avgDist = rightEstimate.avg_tag_dist        
-  
-        if leftEstimate_avgDist<rightEstimate_avgDist:
-            estimate = leftEstimate
-            cam="left"
-        elif leftEstimate_avgDist>rightEstimate_avgDist:
-            estimate = rightEstimate
-            cam="right"
-        else:
-            cam = "none"
-        SmartDashboard.putString("Cam",cam)
+        # check if we are moving too fast for an accurate camera measurement
+        shouldAccept = (self.robotState.getChassisSpeedsNorm()<3 
+            and abs(self.robotState.getRotationalSpeedsRPS())<2)
+        SmartDashboard.putBoolean("LL accept",shouldAccept)
 
-        if shouldAccept :
-            if estimate is not None:
-              if len(estimate.raw_fiducials) > 0:
-                closestID,self.closestTagDist = self.minDist(estimate.raw_fiducials)
-                stdDev = self.constants.STD_DEV_COEFF_XY * (self.closestTagDist ** 2) / estimate.tag_count
-#                stdDev = 0.02 + 0.05 * self.closestTagDist
-                headingStdDev = self.constants.STD_DEV_COEFF_THETA * (self.closestTagDist** 2) / estimate.tag_count
-                if estimate.avg_tag_dist > self.constants.CAMERA_CUTOFF_DISTANCE:
-                    stdDev = self.max_value
-                        
-                LLsystem.LC_dist = self.closestTagDist
-                SmartDashboard.putNumber("LL closest ID",closestID)    
-                SmartDashboard.putNumber("LL closest Dist",round(self.closestTagDist,3))                                    
-                SmartDashboard.putNumber("LL Num Targ",estimate.tag_count)                
-                SmartDashboard.putNumber("LL pose X",round(estimate.pose.translation().X(),3))
-                SmartDashboard.putNumber("LL pose Y",round(estimate.pose.translation().Y(),3)) 
-                SmartDashboard.putNumber("LL pose R",round(estimate.pose.rotation().radians(),3) )                               
-                SmartDashboard.putNumber("LL Dist avg",round(estimate.avg_tag_dist,3))                
-                SmartDashboard.putNumber("LL Area avg",round(estimate.avg_tag_area,3))    
-                SmartDashboard.putNumber("LL Pitch_ty",LimelightHelpers.get_ty(self.constants.CAMERA_NAME_L))                                 
-                SmartDashboard.putNumber("LL Pitch_tync",LimelightHelpers.get_tync(self.constants.CAMERA_NAME_L))
-                SmartDashboard.putNumber("LL Yaw_tx",LimelightHelpers.get_tx(self.constants.CAMERA_NAME_L))                                 
-                SmartDashboard.putNumber("LL Yaw_txnc",LimelightHelpers.get_txnc(self.constants.CAMERA_NAME_L))                
-                SmartDashboard.putNumber("LL Std Dev XY",round(stdDev,3))  
-                SmartDashboard.putNumber("LL Std Dev Theta",round(headingStdDev,3))  
-                
-                self.driveTrain.add_vision_measurement(
-                        estimate.pose,
-                        utils.fpga_to_current_time(estimate.timestamp_seconds),
-                        (stdDev, stdDev, headingStdDev))
+    
+
+
+        if (shouldAccept):
+            
+            for i in range(self.numCams):
+
+                cam_label="Cam"+str(i)
+                self.closestTagDist[i] = None
+                self.avgTagDist[i] = None            
+                self.current_estimate[i]=None
+
+                SmartDashboard.putBoolean(cam_label+" tv",
+                    LimelightHelpers.get_tv(self.constants.CAM_NAME[i]))       
+
+                # read the pose estimate from each camera, and find the estimate
+                # with either the closest individual tag or 
+                # the min average tag distance
+
+                self.previous_estimate[i],self.current_estimate[i] = self.pollLL(self.constants.CAM_NAME[i], 
+                    self.previous_estimate[i])
                 
 
-#    def get_minDist():
-#        return         
+                if self.current_estimate[i] is not None and len(self.current_estimate[i].raw_fiducials)>0:     
+                    #self.previous_estimate[i]=self.current_estimate[i]
+                    self.avgTagDist[i] = (self.current_estimate[i].avg_tag_dist)
+
+
+                    self.closestTagID[i],self.closestTagDist[i] = (
+                        self.minDist(self.current_estimate[i].raw_fiducials))
+
+                    if(self.avgTagDist[i]<self.minAvgTagDist):
+                        self.minAvgTagDist=self.avgTagDist[i]
+                        self.camNum_minAvgTagDist=i
+                        # comment next 2 lines  to use minumum individual tag distance
+                        #  self.estimate=self.current_estimate[i]
+                        # self.canNum_best=i
+                
+                    if(self.closestTagDist[i]<self.minClosestTagDist):
+                        self.minClosestTagDist=self.closestTagDist[i]
+                        self.camNum_minClosestTagDist=i
+                        # comment next 2 lines  to use min avg tag dfistance                     
+                        self.estimate=self.current_estimate[i]
+                        self.canNum_best=i
+            
+        
+        
+                    stdDev = self.constants.STD_DEV_COEFF_XY * (self.minClosestTagDist ** 2) / self.estimate.tag_count
+                    #stdDev = 0.02 + 0.05 * self.minClosestTagDist
+                    headingStdDev = self.constants.STD_DEV_COEFF_THETA * (self.minClosestTagDist** 2) / self.estimate.tag_count
+                
+                #  can change to avg Tag distance to use avg as cutoff criteria
+                    if self.minClosestTagDist > self.constants.CAMERA_CUTOFF_DISTANCE:
+                        stdDev = self.max_value
+                        headingStdDev - self.max_value
+
+                
+                #    self.driveTrain.add_vision_measurement(
+                #        self.estimate.pose,
+#                        utils.fpga_to_current_time(self.estimate.timestamp_seconds),
+                 #       self.estimate.timestamp_seconds,
+                 #       (stdDev, stdDev, headingStdDev))
+            
+
+
+                    label="LL Cam"+str(i)+" "
+                    SmartDashboard.putNumber(label+"closest Tag ID ",self.closestTagID[i])    
+                    SmartDashboard.putNumber(label+"closest Dist",round(self.closestTagDist[i],3))                                    
+                    SmartDashboard.putNumber(label+"Num Targ",self.current_estimate[i].tag_count)                
+                    SmartDashboard.putNumber(label+"pose X",round(self.current_estimate[i].pose.translation().X(),3))
+                    SmartDashboard.putNumber(label+"pose Y",round(self.current_estimate[i].pose.translation().Y(),3))
+                    SmartDashboard.putNumber(label+"pose Rot",round(self.current_estimate[i].pose.rotation().degrees(),3) )                               
+                    SmartDashboard.putNumber(label+"Dist avg",round(self.current_estimate[i].avg_tag_dist,3))                
+                    SmartDashboard.putNumber(label+"Area avg",round(self.current_estimate[i].avg_tag_area,3))    
+                    SmartDashboard.putNumber(label+"Pitch_ty",LimelightHelpers.get_ty(self.constants.CAM_NAME[i]))                                 
+                    SmartDashboard.putNumber(label+"Pitch_tync",LimelightHelpers.get_tync(self.constants.CAM_NAME[i]))
+                    SmartDashboard.putNumber(label+"Yaw_tx",LimelightHelpers.get_tx(self.constants.CAM_NAME[i]))                                 
+                    SmartDashboard.putNumber(label+"Yaw_txnc",LimelightHelpers.get_txnc(self.constants.CAM_NAME[i]))                
+                    SmartDashboard.putNumber(label+"Std Dev XY",round(stdDev,3))  
+                    SmartDashboard.putNumber(label+"Std Dev Theta",round(headingStdDev,3))  
+
+
+        SmartDashboard.putNumber("Best Cam",self.canNum_best)
 
 
     def minDist(self,rf:List[RawFiducial]):
@@ -135,19 +178,17 @@ class LLsystem(Subsystem):
 
 
     def pollLL(self,id,previousEstimate: PoseEstimate): 
-        LimelightHelpers.set_robot_orientation(
-                id, self.robotState.getRotationDeg(), 0, 0, 0, 0, 0)
         if (LimelightHelpers.get_tv(id)):
             if previousEstimate is not None:
+
                 oldTimestamp =  previousEstimate.timestamp_seconds 
             else:
                 oldTimestamp = self.max_value
                 
             newEstimate = LimelightHelpers.get_botpose_estimate_wpiblue_megatag2(id)
+#            print("*********************   ",LimelightHelpers.get_tv(id),"  ",newEstimate.tag_count)
             
-            
-            if newEstimate is not None:
-                
+            if newEstimate is not None and newEstimate.tag_count>0:
                 if newEstimate.timestamp_seconds == oldTimestamp:
                     newEstimate = None
                 else:
@@ -155,81 +196,46 @@ class LLsystem(Subsystem):
         else:
             newEstimate = None 
 
-        return newEstimate         
+        return previousEstimate,newEstimate         
         
 
     def configfureLimelights(self):
+        for i in range(self.numCams):
+            LimelightHelpers.set_camerapose_robotspace(
+                self.constants.CAM_NAME[i],
+                self.constants.CAM_X_OFFSET[i], 
+                self.constants.CAM_Y_OFFSET[i],
+                self.constants.CAM_Z_OFFSET[i],
+                self.constants.CAM_THETA_X_OFFSET[i],
+                self.constants.CAM_THETA_Y_OFFSET[i],
+                self.constants.CAM_THETA_Z_OFFSET[i])
+            
 
-        LimelightHelpers.set_camerapose_robotspace(
-                self.constants.CAMERA_NAME_L,
-                self.constants.X_OFFSET_L, 
-                self.constants.Y_OFFSET_L,
-                self.constants.Z_OFFSET_L,
-                self.constants.THETA_X_OFFSET_L,
-                self.constants.THETA_Y_OFFSET_L,
-                self.constants.THETA_Z_OFFSET_L)
-        
-        LimelightHelpers.set_camerapose_robotspace(
-                self.constants.CAMERA_NAME_R,
-                self.constants.X_OFFSET_R, 
-                self.constants.Y_OFFSET_R,
-                self.constants.Z_OFFSET_R,
-                self.constants.THETA_X_OFFSET_R,
-                self.constants.THETA_Y_OFFSET_R,
-                self.constants.THETA_Z_OFFSET_R)   
 
     
     def zeroAndseedIMU(self,rot=None):
         if rot is None:
-            rot=self.robotState.getRotationRad()
+            rot=self.robotState.getRotationDeg()  # LLH set_robot_orientation uses degrees
 
-        LimelightHelpers.set_robot_orientation(
-                self.constants.CAMERA_NAME_L, rot, 0, 0, 0, 0, 0)
-        LimelightHelpers.set_robot_orientation(
-                self.constants.CAMERA_NAME_R, rot, 0, 0, 0, 0, 0)
-        
-        # use external IMU, seed internal IMU with value from set_robot_orientation
-        LimelightHelpers.set_imu_mode(self.constants.CAMERA_NAME_L, 1)
-        LimelightHelpers.set_imu_mode(self.constants.CAMERA_NAME_R, 1)    
+        for i in range(self.numCams):
+            # send the current robot pose to the limelight
+            LimelightHelpers.set_robot_orientation(self.constants.CAM_NAME[i], rot, 0, 0, 0, 0, 0)
+            # use external IMU, seed internal IMU with value from set_robot_orientation
+            LimelightHelpers.set_imu_mode(self.constants.CAM_NAME[i], 1)
 
 
     def set_IMU_Mode(self, mode:int):
-        LimelightHelpers.set_imu_mode(self.constants.CAMERA_NAME_L, mode)
-        LimelightHelpers.set_imu_mode(self.constants.CAMERA_NAME_R, mode)    
+        for i in range(self.numCams):
+            LimelightHelpers.set_imu_mode(self.constants.CAM_NAME[i], mode)   
 
 # only these tags can be detected, limits what tags used for megatag
-    def set_id_filter_override(self,idList:List[int]):
-        LimelightHelpers.set_fiducial_id_filters_override(self.constants.CAMERA_NAME_L,idList)
-        LimelightHelpers.set_fiducial_id_filters_override(self.constants.CAMERA_NAME_R,idList)        
+# do this on a specified camera since it mayu differ by camera
+    def set_id_filter_override(self,cam_number,idList:List[int]):
+        LimelightHelpers.set_fiducial_id_filters_override(self.constants.CAM_NAME[cam_number],idList)
 
 # choose preferred tag for best target, determines which tag used for tx, ty, ta
 # megatag still uses all visible tags
-    def set_priority_tag(self,id):
-        LimelightHelpers.set_priority_tag_id(self.constants.CAMERA_NAME_L,2)        
-        LimelightHelpers.set_priority_tag_id(self.constants.CAMERA_NAME_R,2)        
-
-
-
-# Use this to for simulating the lasercan.
-    def readPacketNew(api: int, packet:CANData):
-        status = 1
-        dist = int(32000)
-        b = False
-
-        if LimelightHelpers.get_tv(LLsystem.LC_cam): 
-                if LLsystem.LC_dist is not None:
-                    if LLsystem.LC_dist<4:
-                        status=0
-                        dist=int(LLsystem.LC_dist*1000)
-                        b = True
-
-        high_byte = dist >> 8
-        low_byte = dist & 0xFF
-        
-        packet.data[0] = status
-        packet.data[2] = low_byte
-        packet.data[1] = high_byte    
-
-        return b            
-
+# do this on a specified camera since it mayu differ by camera
+    def set_priority_tag(self,cam_number,id):
+        LimelightHelpers.set_priority_tag_id(self.constants.CAM_NAME[cam_number],id)        
                         
