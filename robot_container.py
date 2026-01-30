@@ -141,12 +141,9 @@ class RobotContainer:
     
         
     def createPPStuff(self):
-        from pathplannerlib.auto import AutoBuilder #!!!
-        print("AAAAAAAAAAAA")
-        from Auto.auto_generator import AutoGenerator #!!!
-        print("BBBBBBBBBBBB")
-        from Commands.drive_path_generator import DrivePathGenerator #!!!
-        print("CCCCCCCCCCCCCCCCCC")        
+        from pathplannerlib.auto import AutoBuilder 
+        from Auto.auto_generator import AutoGenerator 
+        from Commands.drive_path_generator import DrivePathGenerator 
         self.autoGenerator = AutoGenerator()
         self.autoChooser = AutoBuilder.buildAutoChooser("NoAction")
         SmartDashboard.putData("Auto Chooser", self.autoChooser)
