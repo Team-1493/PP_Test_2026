@@ -109,12 +109,12 @@ class RobotContainer:
 #        self._joystick.button(7).whileTrue(FindkS())
 
 
-#        self._joystick.button(7).whileTrue(
-##            commands2.DeferredCommand(lambda:self.drive_path.drive_path_to_tag(27,0,-1.5)).finallyDo
-#           (self.headingController.setTargetRotationInt))
+        self._joystick.button(7).whileTrue(
+            commands2.DeferredCommand(lambda:self.drive_path.drive_path_to_tag(27,0,-1.5)).finallyDo
+           (self.headingController.setTargetRotationInt))
 
-#        self._joystick.button(8).whileTrue(
-#            AutoPilotCommand(24,0,1.5,0 ).finallyDo((self.headingController.setTargetRotationInt)))
+        self._joystick.button(8).whileTrue(
+            AutoPilotCommand(24,0,1.5,0 ).finallyDo((self.headingController.setTargetRotationInt)))
  
         self._joystick.button(9).onTrue(
               InstantCommand(lambda:self.update_constants()))
@@ -134,9 +134,8 @@ class RobotContainer:
         # update limelight, autobuilder, and heading controller constants  
         self.limelightSytem.configfureLimelights()
         self.autoGenerator.configAutoBuilder()
-        DrivetrainGenerator.updateGains()
-        DrivetrainGenerator.apply_teleop_gains()
-        self.drive_teleop_command.update()
+        self.drivetrain.update()
+        self.drive_teleop_command.setConstants()
         # DriveGoal_Cam does not need to be explicitly updated, it is generated at each use
     
         

@@ -33,17 +33,18 @@ class HeadingController(Subsystem):
 
 
     def get_rotation_state(self,stick_rot):
+        dir=self.driveTrain.get_operator_forward_direction().radians()
         self.rotation = self.getRotation()
 
         if abs(stick_rot) > 0:
-            self.targetRotation = self.rotation
+            self.targetRotation = self.rotation+dir
             self.state=0
             self.time1 = self.timer.get()
         elif self.state != 2 : 
             self.state = 1
             if self.timer.get() - self.time1<0.5:
-                self.targetRotation = self.rotation
-
+                self.targetRotation = self.rotation+dir
+        print(self.state, self.getRotation(), self.targetRotation)
         return self.state,self.targetRotation
 
 
@@ -81,7 +82,8 @@ class HeadingController(Subsystem):
         return  InstantCommand(lambda: self.setTargetRotation(angle))   
     
     def setTargetRotationInt (self,b:bool):
-        self.setTargetRotation(self.getRotation())
+        self.state=2
+        self.setTargetRotation(self.getRotation()+self.driveTrain.get_operator_forward_direction().radians())
 
     
     

@@ -8,15 +8,10 @@ class StopDrive(commands2.Command):
  
         self.drivetrain = DrivetrainGenerator.getInstance()
 
-        self.stop = (
-            swerve.requests.FieldCentric().with_drive_request_type(
-                swerve.SwerveModule.DriveRequestType.VELOCITY)
-            .with_velocity_x(0).with_velocity_y(0).with_rotational_rate(0)
-            )
-      
-
 
     def execute(self) -> None:
-        self.drivetrain.set_control(self.stop)
+        self.drivetrain.drive_FC(0,0,0)
 
         
+    def isFinished(self):
+        return True

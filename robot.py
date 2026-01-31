@@ -81,6 +81,6 @@ class MyRobot(commands2.TimedCommandRobot):
 
     @typing.override
     def _simulationInit(self):
-#        from subsystems.Vision.photon_vision_sim import PVisionSim
-#        vsim = PVisionSim()
+        from subsystems.Vision.photon_vision_sim import PVisionSim
+        vsim = PVisionSim()
         ""

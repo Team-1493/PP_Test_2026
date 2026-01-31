@@ -4,7 +4,7 @@ from wpilib import SmartDashboard
 from wpimath.geometry import Pose3d, Rotation3d,Translation3d
 
 
-from generated.tuner_constants import TunerConstants
+#from generated.tuner_constants import TunerConstants
 
 class ConstantValues():
     instance=None
@@ -19,15 +19,23 @@ class ConstantValues():
     
     class DriveConstants():
         
-        TELEOP_kP = 3.45#TunerConstants._drive_gains.k_p
-        TELEOP_kS = 0.0 #TunerConstants._drive_gains.k_s
-        TELEOP_kV = 0# TunerConstants._drive_gains.k_v
-        TELEOP_kA =  0.0# TunerConstants._drive_gains.k_a
+        # modify these in tuner_constants also!
+        TELEOP_kP = 3.45 #TunerConstants._drive_gains.k_p
+        TELEOP_kS = 0 #TunerConstants._drive_gains.k_s
+        TELEOP_kV = 0 # TunerConstants._drive_gains.k_v
+        TELEOP_kA = 0 # TunerConstants._drive_gains.k_a
+        TELEOP_DEADBAND = 0.0025
+        TELEOP_MAX_ANGULAR_RATE = 1
+        TELEOP_SCALE_FACTOR_XY = 0.3
+        TELEOP_SCALE_FACTOR_ROT = 0.3
+        SPEED_AT_12_VOLTS = 3.6#TunerConstants.speed_at_12_volts 
+
 
         AUTO_kP = 3.45
         AUTO_kS = 0
         AUTO_kV = 0
-        AUTO_kA = 0       
+        AUTO_kA = 0    
+
         
 
     class LimelightConstants():
@@ -237,6 +245,14 @@ class ConstantValues():
         ConstantValues.DriveConstants.AUTO_kV = SmartDashboard.getNumber("Drive Auto kV",ConstantValues.DriveConstants.AUTO_kV)
         ConstantValues.DriveConstants.AUTO_kA = SmartDashboard.getNumber("Drive Auto kA",ConstantValues.DriveConstants.AUTO_kA)                         
 
+        ConstantValues.DriveConstants.TELEOP_DEADBAND = SmartDashboard.getNumber("Drive Teleop Deadband",ConstantValues.DriveConstants.TELEOP_DEADBAND)                         
+        ConstantValues.DriveConstants.TELEOP_MAX_ANGULAR_RATE = SmartDashboard.getNumber("Drive Teleop MaxAngRate",ConstantValues.DriveConstants.TELEOP_MAX_ANGULAR_RATE)
+        ConstantValues.DriveConstants.TELEOP_SCALE_FACTOR_XY = SmartDashboard.getNumber("Drive Teleop Scale XY",ConstantValues.DriveConstants.TELEOP_SCALE_FACTOR_XY)
+        ConstantValues.DriveConstants.TELEOP_SCALE_FACTOR_ROT = SmartDashboard.getNumber("Drive Teleop Scale Rot",ConstantValues.DriveConstants.TELEOP_SCALE_FACTOR_ROT)                                 
+        ConstantValues.DriveConstants.SPEED_AT_12_VOLTS = SmartDashboard.getNumber("Drive Speed 12V",ConstantValues.DriveConstants.SPEED_AT_12_VOLTS)                         
+
+
+  
         ### Update Constants for DriveToGoalCamera
         ConstantValues.DriveToGoalCameraConstants.kLateralTolerance = SmartDashboard.getNumber("DTG_Cam LatTol",ConstantValues.DriveToGoalCameraConstants.kLateralTolerance)      
         ConstantValues.DriveToGoalCameraConstants.kForwardTolerance = SmartDashboard.getNumber("DTG_Cam ForTol",ConstantValues.DriveToGoalCameraConstants.kForwardTolerance)
@@ -303,7 +319,14 @@ class ConstantValues():
         SmartDashboard.putNumber("Drive Auto kP",ConstantValues.DriveConstants.AUTO_kP)
         SmartDashboard.putNumber("Drive Auto kS",ConstantValues.DriveConstants.AUTO_kS)
         SmartDashboard.putNumber("Drive Auto kV",ConstantValues.DriveConstants.AUTO_kV)
-        SmartDashboard.putNumber("Drive Auto kA",ConstantValues.DriveConstants.AUTO_kA)                        
+        SmartDashboard.putNumber("Drive Auto kA",ConstantValues.DriveConstants.AUTO_kA)    
+
+        SmartDashboard.putNumber("Drive Teleop Deadband",ConstantValues.DriveConstants.TELEOP_DEADBAND)                         
+        SmartDashboard.putNumber("Drive Teleop MaxAngRate",ConstantValues.DriveConstants.TELEOP_MAX_ANGULAR_RATE)
+        SmartDashboard.putNumber("Drive Teleop Scale XY",ConstantValues.DriveConstants.TELEOP_SCALE_FACTOR_XY)
+        SmartDashboard.putNumber("Drive Teleop Scale Rot",ConstantValues.DriveConstants.TELEOP_SCALE_FACTOR_ROT)                                 
+        SmartDashboard.putNumber("Drive Speed 12V",ConstantValues.DriveConstants.SPEED_AT_12_VOLTS)                         
+                    
 
         SmartDashboard.putNumber("DTG_Cam LatTol",ConstantValues.DriveToGoalCameraConstants.kLateralTolerance)      
         SmartDashboard.putNumber("DTG_Cam ForTol",ConstantValues.DriveToGoalCameraConstants.kForwardTolerance)

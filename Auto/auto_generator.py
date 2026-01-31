@@ -21,7 +21,6 @@ class AutoGenerator():
         self.constants = ConstantValues.AutoBuilderConstants
         self.robotState = RobotState.getInstance()
         self.driveTrain = DrivetrainGenerator.getInstance()
-        self._apply_robot_speeds = swerve.requests.ApplyRobotSpeeds()
         self.driveRC=  swerve.requests.ApplyRobotSpeeds().with_drive_request_type(
             swerve.SwerveModule.DriveRequestType.VELOCITY)
         self.configAutoBuilder()

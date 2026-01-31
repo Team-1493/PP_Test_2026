@@ -59,5 +59,5 @@ class AutoPilotCommand(commands2.Command):
 
     @override
     def end(self,interrupted:bool):
-        StopDrive().schedule()  #not the best way to do this, should have method in drivetrain
+        self.m_drivetrain.drive_RC(0,0,0)
         print("done with autopilot")

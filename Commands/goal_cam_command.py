@@ -2,9 +2,6 @@ from typing import override
 import commands2
 from wpilib import SmartDashboard, Timer
 from math import hypot, pi
-from wpimath.geometry import Pose2d,Rotation2d
-from wpimath.kinematics import ChassisSpeeds
-from phoenix6 import swerve
 from wpimath.controller  import ProfiledPIDController,PIDController
 from wpimath.trajectory import TrapezoidProfile
 from commands2 import Command
@@ -26,9 +23,7 @@ class GoalCamCommand(commands2.Command):
         self.angle = 0
         self.rot = 0
         self.endTriggerDebounced: Trigger
-        self.requestRC = (swerve.requests.RobotCentric().with_drive_request_type(
-                swerve.SwerveModule.DriveRequestType.VELOCITY))
-        
+
         self.LC = LaserCAN.getInstance()
         self.llh = LimelightHelpers
         self.goalFor = -goalFor
@@ -115,14 +110,14 @@ class GoalCamCommand(commands2.Command):
               "   om: ",round(omega,3)              
             )
 
-        self.driveRC(vx,vy,omega)
+        self.driveTrain.request_RC(vx,vy,omega)
 
 
     @override
     def end(self, interrupted: bool) :
         self.timer.stop()
         print("Time:  ",self.timer.get())
-        self.driveRC(0,0,0)
+        self.driveTrain.drive_RC(0,0,0)
 
     @override
     def isFinished(self):
@@ -138,13 +133,7 @@ class GoalCamCommand(commands2.Command):
             return (forOK and latOK and rotOK) or self.timer.get()>self.kTimeoutTeleop
            
         return ((Trigger(condition)).debounce(self.kEndTriggerDebounce))
-    
 
-    def driveRC(self, x,y,z):
-        self.driveTrain.set_control(
-            self.requestRC.with_velocity_x(x)
-            .with_velocity_y(y)
-            .with_rotational_rate(z)) 
 
     # enforce maximum value of control effort
     def cap(self,value,minmax):

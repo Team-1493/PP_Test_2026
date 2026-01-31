@@ -7,7 +7,6 @@ from wpilib import Timer
 from math import hypot, pi
 from wpimath.geometry import Pose2d,Rotation2d
 from wpimath.kinematics import ChassisSpeeds
-from phoenix6 import swerve
 
 from commands2 import Command
 from commands2.button import Trigger
@@ -34,8 +33,6 @@ class GoalPID(commands2.Command):
         
         self.timer =Timer()
         self.endTriggerDebounced: Trigger
-        self.requestRC = (swerve.requests.RobotCentric().with_drive_request_type(
-                swerve.SwerveModule.DriveRequestType.VELOCITY))
 
     @override
     def initialize(self):
@@ -54,7 +51,7 @@ class GoalPID(commands2.Command):
         speeds = ChassisSpeeds(min(speeds.vx, 1.0),min(speeds.vy, 1.0),
                 speeds.omega)
 
-        self.driveRC(speeds.vx,speeds.vy,speeds.omega)
+        self.driveTrain.drive_RC(speeds.vx,speeds.vy,speeds.omega)
 
 
     @override
@@ -116,10 +113,5 @@ class GoalPID(commands2.Command):
         return ((Trigger(condition)).debounce(self.kEndTriggerDebounce))
     
 
-    def driveRC(self, x,y,z):
-        self.driveTrain.set_control(
-            self.requestRC.with_velocity_x(x)
-            .with_velocity_y(y)
-            .with_rotational_rate(z)) 
 
     

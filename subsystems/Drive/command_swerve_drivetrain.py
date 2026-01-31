@@ -2,10 +2,12 @@ from commands2 import Command, Subsystem
 from commands2.sysid import SysIdRoutine
 import math
 from phoenix6 import SignalLogger, swerve, units, utils, hardware
+from phoenix6.configs import Slot0Configs, Slot1Configs
 from typing import Callable, overload
 from wpilib import DriverStation, Notifier, RobotController
 from wpilib.sysid import SysIdRoutineLog
 from wpimath.geometry import Pose2d, Rotation2d
+from Constants1 import ConstantValues
 
 
 class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonFX, hardware.TalonFX, hardware.CANcoder]):
@@ -145,12 +147,16 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
             self, drive_motor_type, steer_motor_type, encoder_type,
             drivetrain_constants, arg0, arg1, arg2, arg3
         )
+
+
         self.reset_pose(Pose2d())
         self._sim_notifier: Notifier | None = None
         self._last_sim_time: units.second = 0.0
 
         self._has_applied_operator_perspective = False
         """Keep track if we've ever applied the operator perspective before or not"""
+
+        self.setup_swerve_requests()
 
         # Swerve requests to apply during SysId characterization
         self._translation_characterization = swerve.requests.SysIdSwerveTranslation()
@@ -320,3 +326,90 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
         """
         swerve.SwerveDrivetrain.add_vision_measurement(self, vision_robot_pose, utils.fpga_to_current_time(timestamp), vision_measurement_std_devs)
                
+
+
+    def setup_swerve_requests(self):
+        
+        self.request_teleop_FC = (
+            swerve.requests.FieldCentric()
+            .with_deadband(ConstantValues.DriveConstants.SPEED_AT_12_VOLTS *
+                    ConstantValues.DriveConstants.TELEOP_DEADBAND)  #squared input, so db starts at 0.05
+            .with_drive_request_type(
+                swerve.SwerveModule.DriveRequestType.VELOCITY)
+        )
+        
+        self.request_teleop_FC_facing = (
+            swerve.requests.FieldCentricFacingAngle()
+            .with_deadband(ConstantValues.DriveConstants.SPEED_AT_12_VOLTS *
+                    ConstantValues.DriveConstants.TELEOP_DEADBAND)  #squared input, so db starts at 0.05
+            .with_drive_request_type(
+                swerve.SwerveModule.DriveRequestType.VELOCITY)
+            .with_heading_pid(
+                ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_KP,
+                0,
+                ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_KD)    
+        )
+
+        self.request_RC = (swerve.requests.RobotCentric().with_drive_request_type(
+                swerve.SwerveModule.DriveRequestType.VELOCITY))
+        
+
+    def drive_FC(self,x_vel,y_vel,rot_vel):
+        self.set_control(
+                self.request_teleop_FC.
+                with_velocity_x(x_vel).
+                with_velocity_y(y_vel).
+                with_rotational_rate(rot_vel))
+        
+    def drive_FC_facing(self,x_vel,y_vel,angle):
+        self.set_control(
+                self.request_teleop_FC_facing.
+                with_velocity_x(x_vel).
+                with_velocity_y(y_vel).
+                with_target_direction(Rotation2d(angle)))
+        
+
+    def drive_RC(self,x_vel,y_vel,rot_vel):
+        self.set_control(
+                self.request_RC.
+                with_velocity_x(x_vel).
+                with_velocity_y(y_vel).
+                with_rotational_rate(rot_vel))
+
+    def update(self):
+        slot1_auto = Slot1Configs()
+        slot0_teleop = Slot0Configs()
+
+        k_p_tele = ConstantValues.DriveConstants.TELEOP_kP
+        k_v_tele = ConstantValues.DriveConstants.TELEOP_kV
+        k_s_tele = ConstantValues.DriveConstants.TELEOP_kS
+        k_a_tele = ConstantValues.DriveConstants.TELEOP_kA
+        
+        slot0_teleop.k_p = k_p_tele
+        slot0_teleop.k_s = k_s_tele
+        slot0_teleop.k_v = k_v_tele
+        slot0_teleop.k_a = k_a_tele                        
+
+        k_p_auto = ConstantValues.DriveConstants.AUTO_kP
+        k_v_auto = ConstantValues.DriveConstants.AUTO_kV
+        k_s_auto = ConstantValues.DriveConstants.AUTO_kS
+        k_a_auto = ConstantValues.DriveConstants.AUTO_kA
+
+        slot1_auto.k_p = k_p_auto
+        slot1_auto.k_s = k_s_auto
+        slot1_auto.k_v = k_v_auto
+        slot1_auto.k_a = k_a_auto                                
+
+
+        self.get_module(0).drive_motor.configurator.apply(slot0_teleop)
+        self.get_module(1).drive_motor.configurator.apply(slot0_teleop)
+        self.get_module(2).drive_motor.configurator.apply(slot0_teleop)
+        self.get_module(3).drive_motor.configurator.apply(slot0_teleop)       
+
+
+        self.get_module(0).drive_motor.configurator.apply(slot1_auto)
+        self.get_module(1).drive_motor.configurator.apply(slot1_auto)
+        self.get_module(2).drive_motor.configurator.apply(slot1_auto)
+        self.get_module(3).drive_motor.configurator.apply(slot1_auto)        
+        
+        self.setup_swerve_requests()
