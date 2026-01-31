@@ -44,7 +44,7 @@ class HeadingController(Subsystem):
             self.state = 1
             if self.timer.get() - self.time1<0.5:
                 self.targetRotation = self.rotation+dir
-        print(self.state, self.getRotation(), self.targetRotation)
+#        print(self.state, self.getRotation(), self.targetRotation)
         return self.state,self.targetRotation
 
 

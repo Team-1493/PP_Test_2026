@@ -2,6 +2,7 @@ from commands2 import Command, Subsystem
 from commands2.sysid import SysIdRoutine
 import math
 from phoenix6 import SignalLogger, swerve, units, utils, hardware
+from phoenix6.swerve.requests import ForwardPerspectiveValue
 from phoenix6.configs import Slot0Configs, Slot1Configs
 from typing import Callable, overload
 from wpilib import DriverStation, Notifier, RobotController
@@ -350,6 +351,18 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
                 ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_KD)    
         )
 
+
+        self.request_autopilot = (
+            swerve.requests.FieldCentricFacingAngle()
+            .with_drive_request_type(
+                swerve.SwerveModule.DriveRequestType.VELOCITY)
+            .with_forward_perspective(ForwardPerspectiveValue.BLUE_ALLIANCE)                
+            .with_heading_pid(
+                ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_KP,
+                0,
+                ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_KD)    
+        )        
+
         self.request_RC = (swerve.requests.RobotCentric().with_drive_request_type(
                 swerve.SwerveModule.DriveRequestType.VELOCITY))
         
@@ -363,10 +376,16 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
         
     def drive_FC_facing(self,x_vel,y_vel,angle):
         self.set_control(
-                self.request_teleop_FC_facing.
-                with_velocity_x(x_vel).
-                with_velocity_y(y_vel).
-                with_target_direction(Rotation2d(angle)))
+                self.request_teleop_FC_facing
+                .with_velocity_x(x_vel)
+                .with_velocity_y(y_vel)
+                .with_target_direction(Rotation2d(angle)))
+        
+    def drive_autopilot(self,x_vel,y_vel,angle):
+        self.set_control(self.request_autopilot
+                .with_velocity_x(x_vel)
+                .with_velocity_y(y_vel)
+                .with_target_direction(Rotation2d(angle)))
         
 
     def drive_RC(self,x_vel,y_vel,rot_vel):

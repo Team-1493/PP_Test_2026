@@ -57,7 +57,7 @@ class GoalPID(commands2.Command):
     @override
     def end(self, interrupted: bool) :
         self.timer.stop()
-        self.driveRC(0,0,0)
+        self.driveTrain.drive_RC(0,0,0)
 
     @override
     def isFinished(self):

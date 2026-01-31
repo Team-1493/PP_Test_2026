@@ -6,8 +6,6 @@ from AutoPilot_py.APTarget import ap_target
 from AutoPilot_py.AP_Driver import ap_driver
 from Commands.stop_drive import StopDrive
 from subsystems.Drive.drivetrain_generator import DrivetrainGenerator
-from phoenix6 import swerve
-from phoenix6.swerve.requests import ForwardPerspectiveValue
 from Utilities.helper_methods import HelperMethods
 
 
@@ -25,11 +23,6 @@ class AutoPilotCommand(commands2.Command):
             .with_velocity(0)
         )
         self.m_drivetrain = DrivetrainGenerator.getInstance()
-        self.m_request = (swerve.requests.FieldCentricFacingAngle()
-                .with_forward_perspective(ForwardPerspectiveValue.BLUE_ALLIANCE)
-                .with_drive_request_type(swerve.SwerveModule.DriveRequestType.VELOCITY)
-                .with_heading_pid(4,0,0))
-        self.addRequirements(self.m_drivetrain)
 
 
     @override
@@ -44,10 +37,8 @@ class AutoPilotCommand(commands2.Command):
         pose = state.pose
 
         out = self.ap_drive.kAutopilot.calculate(pose, robotRelativeSpeeds, self.m_target)
-        self.m_drivetrain.set_control(self.m_request
-            .with_velocity_x(out.vx)
-            .with_velocity_y(out.vy)
-            .with_target_direction(out.targetAngle))
+
+        self.m_drivetrain.drive_autopilot(out.vx,out.vy,out.targetAngle.radians())
   
 
     @override
