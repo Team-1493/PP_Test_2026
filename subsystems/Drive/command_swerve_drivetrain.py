@@ -5,7 +5,7 @@ from phoenix6 import SignalLogger, swerve, units, utils, hardware
 from phoenix6.swerve.requests import ForwardPerspectiveValue
 from phoenix6.configs import Slot0Configs, Slot1Configs
 from typing import Callable, overload
-from wpilib import DriverStation, Notifier, RobotController
+from wpilib import DriverStation, Notifier, RobotController, SmartDashboard
 from wpilib.sysid import SysIdRoutineLog
 from wpimath.geometry import Pose2d, Rotation2d
 from Constants1 import ConstantValues
@@ -148,8 +148,8 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
             self, drive_motor_type, steer_motor_type, encoder_type,
             drivetrain_constants, arg0, arg1, arg2, arg3
         )
-
-
+    
+        self.rot_deg=0 
         self.reset_pose(Pose2d())
         self._sim_notifier: Notifier | None = None
         self._last_sim_time: units.second = 0.0
@@ -294,6 +294,29 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
                 )
                 self._has_applied_operator_perspective = True
 
+        self.state = self.get_state()
+        self.pose = self.state.pose
+        self.rotation = self.pose.rotation()
+        self.rot_rads = self.rotation.radians()
+        self.rot_deg = self.rotation.degrees()
+        self.X = self.pose.X()
+        self.Y = self.pose.Y()
+        self.chassisSpeeds = self.state.speeds
+        self.vx = self.chassisSpeeds.vx
+        self.vy = self.chassisSpeeds.vy
+        self.speeds_norm = math.hypot(self.vx,self.vy)       
+        self.omega_rps = self.chassisSpeeds.omega
+        self.omega_dps = self.chassisSpeeds.omega_dps
+#        self.operator_fwd_dir_deg = self.get_operator_forward_direction().degrees()    
+
+        SmartDashboard.putNumber("Vx: ",round(self.vx,3))
+        SmartDashboard.putNumber("Vy: ",round(self.vy,3))
+        SmartDashboard.putNumber("Rot Rate: ",round(self.omega_dps,3))   
+        SmartDashboard.putNumber("X: ",round(self.X,3))
+        SmartDashboard.putNumber("y: ",round(self.Y,3))
+        SmartDashboard.putNumber("Rot: ",round(self.rot_deg,3))  
+
+
     def _start_sim_thread(self):
         def _sim_periodic():
             current_time = utils.get_current_time_seconds()
@@ -390,10 +413,11 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
 
     def drive_RC(self,x_vel,y_vel,rot_vel):
         self.set_control(
-                self.request_RC.
-                with_velocity_x(x_vel).
-                with_velocity_y(y_vel).
-                with_rotational_rate(rot_vel))
+                self.request_RC
+                .with_velocity_x(x_vel)
+                .with_velocity_y(y_vel)
+                .with_rotational_rate(rot_vel)
+                )
 
     def update(self):
         slot1_auto = Slot1Configs()

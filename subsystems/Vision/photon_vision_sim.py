@@ -13,7 +13,7 @@ from wpilib import RobotBase
 from wpimath.geometry import Rotation2d,Translation3d,Rotation3d, Transform3d
 from Constants1 import ConstantValues
 from math import radians
-from robot_state import RobotState
+#from robot_state import RobotState
 from wpilib import SmartDashboard
 from subsystems.Drive.drivetrain_generator import DrivetrainGenerator
 
@@ -31,7 +31,7 @@ class PVisionSim(Subsystem):
 # Load the field layout
  
 
-            self.robotState = RobotState.getInstance() 
+#            self.robotState = RobotState.getInstance() 
             self.driveTrain = DrivetrainGenerator.getInstance()
             self.visionSim = VisionSystemSim("PVsim")
             self.layout = ConstantValues.VisionConstants.field_layout 
@@ -72,7 +72,7 @@ class PVisionSim(Subsystem):
        if RobotBase.isSimulation():
             estimatedRobotPose = None
 
-            self.visionSim.update(self.robotState.getPose())
+            self.visionSim.update(self.driveTrain.pose)
             mindist=999
             results = self.dummyCam.getAllUnreadResults()
             length=len(results)

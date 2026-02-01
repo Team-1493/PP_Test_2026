@@ -5,7 +5,7 @@ from pathplannerlib.controller import PPHolonomicDriveController
 from pathplannerlib.config import RobotConfig, PIDConstants
 from wpilib import DriverStation
 from Commands.stop_drive import StopDrive
-from robot_state import RobotState
+#from robot_state import RobotState
 from subsystems.Drive.drivetrain_generator import DrivetrainGenerator
 from phoenix6 import swerve
 from Constants1 import ConstantValues
@@ -19,7 +19,7 @@ class AutoGenerator():
 
     def __init__(self):
         self.constants = ConstantValues.AutoBuilderConstants
-        self.robotState = RobotState.getInstance()
+ #       self.robotState = RobotState.getInstance()
         self.driveTrain = DrivetrainGenerator.getInstance()
         self.driveRC=  swerve.requests.ApplyRobotSpeeds().with_drive_request_type(
             swerve.SwerveModule.DriveRequestType.VELOCITY)

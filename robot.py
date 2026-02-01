@@ -10,7 +10,7 @@ import commands2
 import typing
 
 from robot_container import RobotContainer
-from robot_state import RobotState
+#from robot_state import RobotState
 autonomousCommand: typing.Optional[commands2.Command] = None
 
 
@@ -24,7 +24,7 @@ class MyRobot(commands2.TimedCommandRobot):
 
     def robotInit(self) -> None:
         self.container = RobotContainer()  
-        self.robotState = RobotState.getInstance()
+ #       self.robotState = RobotState.getInstance()
         self.IMU_mode = 0
 
     def robotPeriodic(self) -> None:
@@ -34,7 +34,7 @@ class MyRobot(commands2.TimedCommandRobot):
         This runs after the mode specific periodic functions, but before LiveWindow and
         SmartDashboard integrated updating."""
 
-        self.robotState.update()
+  #      self.robotState.update()
 
         # Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
         # commands, running already-scheduled commands, removing finished or interrupted commands,

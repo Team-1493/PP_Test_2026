@@ -31,11 +31,11 @@ class RobotContainer:
         self.timer.reset()
         self.timer.start()
 
-        while self.timer.get()<4:
+        while self.timer.get()<1:
             print("Waiting for Warmup",round(self.timer.get(),0))
         self.constants = ConstantValues.getInstance()  #OK
         self.drivetrain = DrivetrainGenerator.getInstance()  #OK
-        while self.timer.get()<8:
+        while self.timer.get()<1:
             print("Creating CAN Devices",round(self.timer.get(),0))
 
         self.headingController = HeadingController.getInstance() #OK

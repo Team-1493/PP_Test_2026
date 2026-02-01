@@ -6,7 +6,7 @@ from Utilities.LLH import PoseEstimate
 from Utilities.LLH import RawFiducial
 from phoenix6 import utils
 from wpilib import CANData, DriverStation, RobotBase
-from robot_state import RobotState
+#from robot_state import RobotState
 from  Constants1 import ConstantValues
 from wpilib import SmartDashboard
 
@@ -27,7 +27,7 @@ class LLsystem(Subsystem):
     def __init__(self):
         self.numCams = 1   # number of cameras on robot
 
-        self.robotState = RobotState.getInstance()
+ #       self.robotState = RobotState.getInstance()
         self.driveTrain = DrivetrainGenerator.getInstance()
         self.constants =  ConstantValues.LimelightConstants
 
@@ -57,7 +57,7 @@ class LLsystem(Subsystem):
 
 
     def periodic(self):
-        rot =  self.robotState.getRotationDeg()
+        rot =  self.driveTrain.rot_deg
         for i in range(self.numCams):    
             LimelightHelpers.set_robot_orientation(
                 self.constants.CAM_NAME[i],rot, 0, 0, 0, 0, 0)
@@ -72,8 +72,8 @@ class LLsystem(Subsystem):
 #        self.canNum_best=-1
         
         # check if we are moving too fast for an accurate camera measurement
-        shouldAccept = (self.robotState.getChassisSpeedsNorm()<3 
-            and abs(self.robotState.getRotationalSpeedsRPS())<2)
+        shouldAccept = (self.driveTrain.speeds_norm<3 
+            and abs(self.driveTrain.omega_rps)<2)
         SmartDashboard.putBoolean("LL accept",shouldAccept)
 
     
@@ -215,7 +215,7 @@ class LLsystem(Subsystem):
     
     def zeroAndseedIMU(self,rot=None):
         if rot is None:
-            rot=self.robotState.getRotationDeg()  # LLH set_robot_orientation uses degrees
+            rot=self.driveTrain.rot_deg  # LLH set_robot_orientation uses degrees
 
         for i in range(self.numCams):
             # send the current robot pose to the limelight

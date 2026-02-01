@@ -49,10 +49,11 @@ class GoalCamCommand(commands2.Command):
         # if we have a valid tag ID, use that tag's rotation as the target rotation
         # if not, use the current robot rotatation as the target (maintain current rotation)
         if self.id >0:
-            self.goalRot = self.constantsVision.tags_list[self.id-1].pose.toPose2d().rotation().radians()-pi
+            dir = self.driveTrain.get_operator_forward_direction().radians()
+            self.goalRot = self.constantsVision.tags_list[self.id-1].pose.toPose2d().rotation().radians()-pi+dir
             print("BBBBBB  ",self.goalRot)
         else: 
-            pose = self.driveTrain.get_state().pose
+            pose = self.driveTrain.pose
             self.goalRot = pose.rotation().radians()
 
         # adjust for wraparound
@@ -97,7 +98,7 @@ class GoalCamCommand(commands2.Command):
             vx = 0
 
         # get robot current rotation and calculate omega
-        self.rot = self.driveTrain.get_state().pose.rotation().radians()
+        self.rot = self.driveTrain.rot_rads
         omega = self.controllerRot.calculate(self.rot)
         omega = self.cap(omega,self.kRotVmax)                          
                  
@@ -110,7 +111,7 @@ class GoalCamCommand(commands2.Command):
               "   om: ",round(omega,3)              
             )
 
-        self.driveTrain.request_RC(vx,vy,omega)
+        self.driveTrain.drive_RC(vx,vy,omega)
 
 
     @override
