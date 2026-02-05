@@ -53,7 +53,7 @@ class GoalCamCommand(commands2.Command):
             self.goalRot = self.constantsVision.tags_list[self.id-1].pose.toPose2d().rotation().radians()-pi+dir
             print("BBBBBB  ",self.goalRot)
         else: 
-            pose = self.driveTrain.pose
+            pose = self.driveTrain.get_pose()
             self.goalRot = pose.rotation().radians()
 
         # adjust for wraparound
@@ -98,7 +98,7 @@ class GoalCamCommand(commands2.Command):
             vx = 0
 
         # get robot current rotation and calculate omega
-        self.rot = self.driveTrain.rot_rads
+        self.rot = self.driveTrain.get_rotation_rad()
         omega = self.controllerRot.calculate(self.rot)
         omega = self.cap(omega,self.kRotVmax)                          
                  

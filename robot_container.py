@@ -93,28 +93,20 @@ class RobotContainer:
         self._joystick.button(4).onTrue(
             self.headingController.runOnce(lambda:self.headingController.rotateTo270()))
 
-
-
-#        self._joystick.button(5).whileTrue(
-#            FindWheelBase().finallyDo((self.headingController.setTargetRotationInt)))
-
-#        self._joystick.button(7).whileTrue(
-#            commands2.DeferredCommand(lambda:self.drive_path.drive_pathfind_to_tag(16,-1,0)).finallyDo
-#           (self.headingController.setTargetRotationInt))
-
-#        self._joystick.button(7).whileTrue(
-#            commands2.DeferredCommand(lambda:self.drive_path.drive_path_to_tag(16,-1,0)).finallyDo
-#            (self.headingController.setTargetRotationInt))
             
 #        self._joystick.button(7).whileTrue(FindkS())
 
 
         self._joystick.button(7).whileTrue(
-            commands2.DeferredCommand(lambda:self.drive_path.drive_path_to_tag(27,0,-1.5)).finallyDo
+            commands2.DeferredCommand(lambda:self.drive_path.drive_path_to_tag(23,-.75,0)).finallyDo
            (self.headingController.setTargetRotationInt))
+        
+#        self._joystick.button(8).whileTrue(
+#            commands2.DeferredCommand(lambda:self.drive_path.drive_trench()).finallyDo
+#           (self.headingController.setTargetRotationInt))        
 
         self._joystick.button(8).whileTrue(
-            AutoPilotCommand(24,0,1.5,0 ).finallyDo((self.headingController.setTargetRotationInt)))
+            AutoPilotCommand(23,0,1.75,0).finallyDo((self.headingController.setTargetRotationInt)))
  
         self._joystick.button(9).onTrue(
               InstantCommand(lambda:self.update_constants()))

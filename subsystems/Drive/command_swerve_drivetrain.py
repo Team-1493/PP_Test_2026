@@ -294,27 +294,18 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
                 )
                 self._has_applied_operator_perspective = True
 
-        self.state = self.get_state()
-        self.pose = self.state.pose
-        self.rotation = self.pose.rotation()
-        self.rot_rads = self.rotation.radians()
-        self.rot_deg = self.rotation.degrees()
-        self.X = self.pose.X()
-        self.Y = self.pose.Y()
-        self.chassisSpeeds = self.state.speeds
-        self.vx = self.chassisSpeeds.vx
-        self.vy = self.chassisSpeeds.vy
-        self.speeds_norm = math.hypot(self.vx,self.vy)       
-        self.omega_rps = self.chassisSpeeds.omega
-        self.omega_dps = self.chassisSpeeds.omega_dps
-#        self.operator_fwd_dir_deg = self.get_operator_forward_direction().degrees()    
 
-        SmartDashboard.putNumber("Vx: ",round(self.vx,3))
-        SmartDashboard.putNumber("Vy: ",round(self.vy,3))
-        SmartDashboard.putNumber("Rot Rate: ",round(self.omega_dps,3))   
-        SmartDashboard.putNumber("X: ",round(self.X,3))
-        SmartDashboard.putNumber("y: ",round(self.Y,3))
-        SmartDashboard.putNumber("Rot: ",round(self.rot_deg,3))  
+     
+       
+#        self.operator_fwd_dir_deg = self.get_operator_forward_direction().degrees()    
+        pose =  self.get_pose()
+        spd = self.get_speeds()
+        SmartDashboard.putNumber("Vx: ",round(spd.vx,3))
+        SmartDashboard.putNumber("Vy: ",round(spd.vy,3))
+        SmartDashboard.putNumber("Rot Rate: ",round(self.get_omega_dps(),3))   
+        SmartDashboard.putNumber("X: ",round(pose.X(),3))
+        SmartDashboard.putNumber("y: ",round(pose.Y(),3))
+        SmartDashboard.putNumber("Rot: ",round(self.get_rotation_deg(),3))  
 
 
     def _start_sim_thread(self):
@@ -419,6 +410,35 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
                 .with_rotational_rate(rot_vel)
                 )
 
+    def get_speeds(self):
+        return self.get_state().speeds
+    
+    def get_pose(self):
+        return self.get_state().pose
+    
+    def get_speeds_norm(self):
+        speed = self.get_state().speeds
+        return  math.hypot(speed.vx,speed.vy)       
+
+    def get_X(self):
+        return  self.get_state().pose.X()
+
+    def get_Y(self):
+        return  self.get_state().pose.Y()                  
+
+    def get_rotation_deg(self):
+        return  self.get_state().pose.rotation().degrees()
+
+    def get_rotation_rad(self):
+        return  self.get_state().pose.rotation().radians()   
+
+    def get_omega_rps(self):
+        return self.get_state().speeds.omega
+    
+    def get_omega_dps(self):
+        return self.get_state().speeds.omega_dps                   
+
+
     def update(self):
         slot1_auto = Slot1Configs()
         slot0_teleop = Slot0Configs()
@@ -456,3 +476,5 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
         self.get_module(3).drive_motor.configurator.apply(slot1_auto)        
         
         self.setup_swerve_requests()
+
+

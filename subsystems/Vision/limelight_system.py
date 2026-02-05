@@ -57,7 +57,7 @@ class LLsystem(Subsystem):
 
 
     def periodic(self):
-        rot =  self.driveTrain.rot_deg
+        rot =  self.driveTrain.get_rotation_deg()
         for i in range(self.numCams):    
             LimelightHelpers.set_robot_orientation(
                 self.constants.CAM_NAME[i],rot, 0, 0, 0, 0, 0)
@@ -72,8 +72,8 @@ class LLsystem(Subsystem):
 #        self.canNum_best=-1
         
         # check if we are moving too fast for an accurate camera measurement
-        shouldAccept = (self.driveTrain.speeds_norm<3 
-            and abs(self.driveTrain.omega_rps)<2)
+        shouldAccept = (self.driveTrain.get_speeds_norm()<3 
+            and abs(self.driveTrain.get_omega_rps())<2)
         SmartDashboard.putBoolean("LL accept",shouldAccept)
 
     
@@ -215,7 +215,7 @@ class LLsystem(Subsystem):
     
     def zeroAndseedIMU(self,rot=None):
         if rot is None:
-            rot=self.driveTrain.rot_deg  # LLH set_robot_orientation uses degrees
+            rot=self.driveTrain.get_rotation_deg()  # LLH set_robot_orientation uses degrees
 
         for i in range(self.numCams):
             # send the current robot pose to the limelight

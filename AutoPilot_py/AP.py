@@ -183,9 +183,9 @@ class Autopilot:
         if thetaErr<-math.pi: thetaErr = thetaErr - 2*math.pi 
         okTheta = abs(thetaErr) <= self.m_profile.errorTheta
 
-        print(round(goal.X(),3),round(goal.Y(),3),round(current.X(),3),
-            round(current.Y(),3), round(xyErr,3),round(goal.rotation().radians(),3),
-            round(current.rotation().radians(),3),round(thetaErr,3))
+#        print(round(goal.X(),3),round(goal.Y(),3),round(current.X(),3),
+#            round(current.Y(),3), round(xyErr,3),round(goal.rotation().radians(),3),
+#            round(current.rotation().radians(),3),round(thetaErr,3))
         return okXY and okTheta
 
         """"
@@ -215,7 +215,7 @@ class Autopilot:
         offset = self.toTargetCoordinateFrame(
             target.m_reference.translation() - current.translation(), target)
         if offset == Translation2d() :
-           return APResult(0,0,target.m_reference.rotation())
+           return APResult(0,0,target.m_reference.rotation()),0
         
         fieldRelativeSpeeds = (
             Translation2d(robotRelativeSpeeds.vx,robotRelativeSpeeds.vy).
@@ -230,13 +230,14 @@ class Autopilot:
             out = self.correct(initial, goal)
             velo = self.toGlobalCoordinateFrame(out, target)
             rot = self.getRotationTarget(current.rotation(), target, disp)
-            return APResult(velo.X(), velo.Y(), rot)
+            return APResult(velo.X(), velo.Y(), rot),disp
     
         goal = self.calculateSwirlyVelocity(offset, target)
         out = self.correct(initial, goal)
         velo = self.toGlobalCoordinateFrame(out, target)
         rot = self.getRotationTarget(current.rotation(), target, disp)
-        return  APResult(velo.X(), velo.Y(), rot)
+#        print(velo.X(),velo.Y(),disp)
+        return  APResult(velo.X(), velo.Y(), rot),disp
   
 
 
