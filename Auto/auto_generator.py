@@ -1,17 +1,17 @@
 from commands2 import Command
 from wpimath.geometry import Pose2d, Rotation2d
-from pathplannerlib.auto import AutoBuilder
+from wpimath.kinematics import ChassisSpeeds
+from phoenix6 import swerve
+from pathplannerlib.auto import AutoBuilder,NamedCommands
 from pathplannerlib.controller import PPHolonomicDriveController
 from pathplannerlib.config import RobotConfig, PIDConstants
 from wpilib import DriverStation
-from Commands.stop_drive import StopDrive
-#from robot_state import RobotState
-from subsystems.Drive.drivetrain_generator import DrivetrainGenerator
-from phoenix6 import swerve
+
+
 from Constants1 import ConstantValues
+from subsystems.Drive.drivetrain_generator import DrivetrainGenerator
+from Commands.stop_drive import StopDrive
 from Commands.goal_cam_command import GoalCamCommand
-from wpimath.kinematics import ChassisSpeeds
-from pathplannerlib.auto import NamedCommands
 
 
 class AutoGenerator():
@@ -19,7 +19,6 @@ class AutoGenerator():
 
     def __init__(self):
         self.constants = ConstantValues.AutoBuilderConstants
- #       self.robotState = RobotState.getInstance()
         self.driveTrain = DrivetrainGenerator.getInstance()
         self.driveRC=  swerve.requests.ApplyRobotSpeeds().with_drive_request_type(
             swerve.SwerveModule.DriveRequestType.VELOCITY)

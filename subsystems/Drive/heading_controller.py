@@ -1,6 +1,5 @@
 from commands2 import Command, InstantCommand, Subsystem
 from wpilib import SmartDashboard, Timer
-import commands2
 from wpimath.controller  import ProfiledPIDController
 from wpimath.trajectory import TrapezoidProfile
 from math import pi,hypot

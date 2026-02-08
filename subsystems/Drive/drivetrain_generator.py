@@ -1,10 +1,11 @@
-from generated.tuner_constants import TunerConstants
 from phoenix6.hardware import TalonFX,TalonFXS
 from phoenix6 import configs
-from subsystems.Drive.command_swerve_drivetrain import CommandSwerveDrivetrain
-from Constants1 import ConstantValues
 from phoenix6.configs import Slot0Configs
 from phoenix6 import swerve
+
+from Constants1 import ConstantValues
+from subsystems.Drive.command_swerve_drivetrain import CommandSwerveDrivetrain
+from generated.tuner_constants import TunerConstants
 
 class DrivetrainGenerator():
     instance : CommandSwerveDrivetrain

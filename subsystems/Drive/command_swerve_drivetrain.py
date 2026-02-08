@@ -148,7 +148,7 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
             self, drive_motor_type, steer_motor_type, encoder_type,
             drivetrain_constants, arg0, arg1, arg2, arg3
         )
-    
+        print("222222222222222222")
         self.rot_deg=0 
         self.reset_pose(Pose2d())
         self._sim_notifier: Notifier | None = None

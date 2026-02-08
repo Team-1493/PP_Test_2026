@@ -14,14 +14,14 @@ from Constants1 import ConstantValues
 from generated.tuner_constants import TunerConstants
 from subsystems.Drive.drivetrain_generator import DrivetrainGenerator 
 from telemetry import Telemetry
-from subsystems.Vision.limelight_system import LLsystem
 from subsystems.Drive.heading_controller import HeadingController
+from subsystems.Vision.limelight_system import LLsystem
 
+from Commands.seed_zero import SeedZero
 from Commands.drive_teleop_command import DriveTeleopCommand
 from Commands.auto_pilot_command import AutoPilotCommand
 from Commands.find_wheel_base import FindWheelBase
 from Commands.find_ks import FindkS
-from Commands.seed_zero import SeedZero
 
 
 class RobotContainer:
@@ -31,11 +31,11 @@ class RobotContainer:
         self.timer.reset()
         self.timer.start()
 
-        while self.timer.get()<1:
+        while self.timer.get()<3:
             print("Waiting for Warmup",round(self.timer.get(),0))
         self.constants = ConstantValues.getInstance()  #OK
         self.drivetrain = DrivetrainGenerator.getInstance()  #OK
-        while self.timer.get()<1:
+        while self.timer.get()<6:
             print("Creating CAN Devices",round(self.timer.get(),0))
 
         self.headingController = HeadingController.getInstance() #OK
@@ -97,16 +97,16 @@ class RobotContainer:
 #        self._joystick.button(7).whileTrue(FindkS())
 
 
-        self._joystick.button(7).whileTrue(
-            commands2.DeferredCommand(lambda:self.drive_path.drive_path_to_tag(23,-.75,0)).finallyDo
-           (self.headingController.setTargetRotationInt))
+#        self._joystick.button(7).whileTrue(
+#            commands2.DeferredCommand(lambda:self.drive_path.drive_path_to_tag(23,-.75,0)).finallyDo
+#           (self.headingController.setTargetRotationInt))
         
 #        self._joystick.button(8).whileTrue(
 #            commands2.DeferredCommand(lambda:self.drive_path.drive_trench()).finallyDo
 #           (self.headingController.setTargetRotationInt))        
 
-        self._joystick.button(8).whileTrue(
-            AutoPilotCommand(23,0,1.75,0).finallyDo((self.headingController.setTargetRotationInt)))
+#        self._joystick.button(8).whileTrue(
+#            AutoPilotCommand(23,0,1.75,0).finallyDo((self.headingController.setTargetRotationInt)))
  
         self._joystick.button(9).onTrue(
               InstantCommand(lambda:self.update_constants()))

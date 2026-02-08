@@ -78,9 +78,10 @@ class MyRobot(commands2.TimedCommandRobot):
         # Cancels all running commands at the start of test mode
         commands2.CommandScheduler.getInstance().cancelAll()
         #self.container.setHeadingControlToCurrentrHeading()
-
+    
+    """"
     @typing.override
     def _simulationInit(self):
         from subsystems.Vision.photon_vision_sim import PVisionSim
         vsim = PVisionSim()
-        ""
+    """

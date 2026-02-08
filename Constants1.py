@@ -3,9 +3,6 @@ from robotpy_apriltag import  AprilTag,AprilTagField,AprilTagFieldLayout
 from wpilib import SmartDashboard
 from wpimath.geometry import Pose3d, Rotation3d,Translation3d
 
-
-#from generated.tuner_constants import TunerConstants
-
 class ConstantValues():
     instance=None
     
@@ -47,10 +44,11 @@ class ConstantValues():
         CAM_THETA_Y_OFFSET=[None,None,None,None]
         CAM_THETA_Z_OFFSET=[None,None,None,None]
 
-        CAM_NAME[0] =  "limelight-a"
-        CAM_X_OFFSET[0] = -.1615 # forward positive
-        CAM_Y_OFFSET[0] = .0889 # right positive
-        CAM_Z_OFFSET[0] = .5715 # up positive
+        # limelight 4 on practice robot
+        CAM_NAME[0] =  "limelight-a"  
+        CAM_X_OFFSET[0] = -.135 # forward positive
+        CAM_Y_OFFSET[0] = .077 # right positive
+        CAM_Z_OFFSET[0] = .552 # up positive
         CAM_THETA_X_OFFSET[0] = 0 # roll
         CAM_THETA_Y_OFFSET[0] = 0 # pitch
         CAM_THETA_Z_OFFSET[0] = 0 # yaw
