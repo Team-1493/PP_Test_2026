@@ -29,16 +29,18 @@ from Commands.findkP_maxA import FindKP_MaxA
 class RobotContainer:
 
     def __init__(self) -> None:
-        self.timer = Timer()
-        self.timer.reset()
-        self.timer.start()
+        ""
+    
+#        self.timer = Timer()
+#        self.timer.reset()
+#        self.timer.start()
 
         self.constants = ConstantValues.getInstance()
-        while self.timer.get()<3:
-            print("Waiting for Warmup",round(self.timer.get(),0))
+ #       while self.timer.get()<3:""
+#            print("Waiting for Warmup",round(self.timer.get(),0))
         self.drivetrain = DrivetrainGenerator.getInstance()
-        while self.timer.get()<5:
-            print("Creating CAN Devices",round(self.timer.get(),0))
+ #       while self.timer.get()<5:""
+#            print("Creating CAN Devices",round(self.timer.get(),0))
 
         self.headingController = HeadingController.getInstance()        
         LaserCAN.getInstance()
@@ -71,7 +73,7 @@ class RobotContainer:
 #        )
 
 
-        # reset the field-centric heading on left bumper press
+#        reset the field-centric heading on left bumper press
         self._joystick.button(5).onTrue(self.seedZero)
 
         #reset pose to 0
@@ -82,7 +84,7 @@ class RobotContainer:
         self.drivetrain.register_telemetry(
             lambda state: self._logger.telemeterize(state)
         )
-
+        
         self._joystick.button(1).onTrue(
             self.headingController.runOnce(lambda:self.headingController.rotateToZero()))
         
@@ -95,8 +97,7 @@ class RobotContainer:
         self._joystick.button(4).onTrue(
             self.headingController.runOnce(lambda:self.headingController.rotateTo270()))
 
-            
-#        self._joystick.button(7).whileTrue(FindkS())
+        
 
 #        self._joystick.button(7).whileTrue(FindkS())
 #        self._joystick.button(8).whileTrue(FindSlipCurrent())
@@ -122,22 +123,24 @@ class RobotContainer:
     def getAutonomousCommand(self):
         return  self.autoChooser.getSelected()
 
-
+    
     def setHeadingControlToCurrentrHeading(self):
         self.headingController.setTargetRotationInt(True)  
-
-
+    
+        
+    
     def update_constants(self):
         # transfer constants from smartdashbaord to constants class        
         self.constants.update_constants()
         # update limelight, autobuilder, and heading controller constants  
-        self.limelightSytem.configfureLimelights()
-        self.autoGenerator.configAutoBuilder()
+#        self.limelightSytem.configfureLimelights()
+#        self.autoGenerator.configAutoBuilder()
         self.drivetrain.update()
         self.drive_teleop_command.setConstants()
         # DriveGoal_Cam does not need to be explicitly updated, it is generated at each use
     
-        
+     
+          
     def createPPStuff(self):
         from pathplannerlib.auto import AutoBuilder 
         from Auto.auto_generator import AutoGenerator 
@@ -147,4 +150,4 @@ class RobotContainer:
         SmartDashboard.putData("Auto Chooser", self.autoChooser)
         self.drive_path = DrivePathGenerator(
                  lambda: self.drivetrain.get_state().pose)
- 
+        

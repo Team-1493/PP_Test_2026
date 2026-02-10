@@ -60,7 +60,7 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
         drive_motor_type: type,
         steer_motor_type: type,
         encoder_type: type,
-        drivetrain_constants: swerve.SwerveDrivetrainConstants,
+#        drivetrain_constants: swerve.SwerveDrivetrainConstants,
         odometry_update_frequency: units.hertz,
         modules: list[swerve.SwerveModuleConstants],
     ) -> None:
@@ -94,7 +94,7 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
         drive_motor_type: type,
         steer_motor_type: type,
         encoder_type: type,
-        drivetrain_constants: swerve.SwerveDrivetrainConstants,
+#        drivetrain_constants: swerve.SwerveDrivetrainConstants,
         odometry_update_frequency: units.hertz,
         odometry_standard_deviation: tuple[float, float, float],
         vision_standard_deviation: tuple[float, float, float],
@@ -293,14 +293,14 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
      
        
 #        self.operator_fwd_dir_deg = self.get_operator_forward_direction().degrees()    
-        pose =  self.get_pose()
-        spd = self.get_speeds()
-        SmartDashboard.putNumber("Vx: ",round(spd.vx,3))
-        SmartDashboard.putNumber("Vy: ",round(spd.vy,3))
-        SmartDashboard.putNumber("Rot Rate: ",round(self.get_omega_dps(),3))   
-        SmartDashboard.putNumber("X: ",round(pose.X(),3))
-        SmartDashboard.putNumber("y: ",round(pose.Y(),3))
-        SmartDashboard.putNumber("Rot: ",round(self.get_rotation_deg(),3))  
+       # pose =  self.get_pose()
+       # spd = self.get_speeds()
+        #SmartDashboard.putNumber("Vx: ",round(spd.vx,3))
+        #SmartDashboard.putNumber("Vy: ",round(spd.vy,3))
+        #SmartDashboard.putNumber("Rot Rate: ",round(self.get_omega_dps(),3))   
+        #SmartDashboard.putNumber("X: ",round(pose.X(),3))
+        #SmartDashboard.putNumber("y: ",round(pose.Y(),3))
+        #SmartDashboard.putNumber("Rot: ",round(self.get_rotation_deg(),3))  
 
 
     def _start_sim_thread(self):
@@ -336,7 +336,7 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
         """
         swerve.SwerveDrivetrain.add_vision_measurement(self, vision_robot_pose, utils.fpga_to_current_time(timestamp), vision_measurement_std_devs)
                
-
+    
 
     def setup_swerve_requests(self):
         self.request_teleop_FC = (
@@ -404,7 +404,7 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
                 .with_velocity_y(y_vel)
                 .with_rotational_rate(rot_vel)
                 )
-
+    
     def get_speeds(self):
         return self.get_state().speeds
     
@@ -433,7 +433,7 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
     def get_omega_dps(self):
         return self.get_state().speeds.omega_dps                   
 
-
+    
     def update(self):
         slot1_auto = Slot1Configs()
         slot0_teleop = Slot0Configs()

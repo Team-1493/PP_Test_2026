@@ -29,10 +29,36 @@ class DriveTeleopCommand(commands2.Command):
         self.drivetrain = _drivetrain
 
         self.headingController = HeadingController.getInstance()
+      
+        self.request_teleop_FC = (
+            swerve.requests.FieldCentric()
+            .with_deadband(ConstantValues.DriveConstants.SPEED_AT_12_VOLTS *
+                    ConstantValues.DriveConstants.TELEOP_DEADBAND)  #squared input, so db starts at 0.05
+            .with_drive_request_type(
+                swerve.SwerveModule.DriveRequestType.VELOCITY)
+        )
+
+        self.request_teleop_FC_facing = (
+            swerve.requests.FieldCentricFacingAngle()
+            .with_deadband(ConstantValues.DriveConstants.SPEED_AT_12_VOLTS *
+                    ConstantValues.DriveConstants.TELEOP_DEADBAND)  #squared input, so db starts at 0.05
+            .with_drive_request_type(
+                swerve.SwerveModule.DriveRequestType.VELOCITY)
+            .with_heading_pid(
+                ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_KP,
+                0,
+                ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_KD)    
+        )
+
         self.setConstants()
 
       
+
+
+
         self.addRequirements(self.drivetrain)
+
+
 
 
     def execute(self) -> None:
@@ -52,18 +78,24 @@ class DriveTeleopCommand(commands2.Command):
         SmartDashboard.putNumber("requested velocity", self.requested_velocity)
         dir = self.drivetrain.get_operator_forward_direction().radians()
         state, target_angle = self.headingController.get_rotation_state(rot*self._max_angular_rate)    
-    
+#        state =0.
+#        target_angle=0   
         if state==0:
-            self.drivetrain.drive_FC(
-                forw*self._max_speed*self.scale_factorXY,
-                sde*self._max_speed*self.scale_factorXY,
-                rot*self._max_angular_rate*self.scale_factorRot)
+
+            self.drivetrain.set_control(self.request_teleop_FC.with_velocity_x(
+                forw*self._max_speed*self.scale_factorXY)
+                .with_velocity_y(
+                sde*self._max_speed*self.scale_factorXY)
+                .with_rotational_rate(
+                rot*self._max_angular_rate*self.scale_factorRot))
             
         else:
-            self.drivetrain.drive_FC_facing(
-                forw*self._max_speed*self.scale_factorXY,
-                sde*self._max_speed*self.scale_factorXY,
-                target_angle)
+            self.drivetrain.set_control(self.request_teleop_FC_facing.with_velocity_x(
+                forw*self._max_speed*self.scale_factorXY)
+                .with_velocity_y(
+                sde*self._max_speed*self.scale_factorXY)
+                .with_target_direction(
+                Rotation2d(target_angle)))
             
         
 

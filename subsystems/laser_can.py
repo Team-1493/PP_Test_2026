@@ -1,7 +1,4 @@
-from wpilib import CAN,CANData, RobotBase
-
-import robot
-from subsystems.Vision import limelight_system
+from wpilib import CAN,CANData
 
 
 class LaserCAN:

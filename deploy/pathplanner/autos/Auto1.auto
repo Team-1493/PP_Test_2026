@@ -11,9 +11,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "DriveToGoalCam"
+            "waitTime": 1.0
           }
         },
         {
@@ -23,9 +23,15 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "DriveToGoalCam"
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Path3"
           }
         },
         {

@@ -5,6 +5,7 @@ from wpimath.trajectory import TrapezoidProfile
 from math import pi,hypot
 from Constants1 import ConstantValues
 from subsystems.Drive.drivetrain_generator import DrivetrainGenerator 
+import RobotState
 
 #To Do - check if rotation not being controlled until first rotation
 
@@ -19,6 +20,7 @@ class HeadingController(Subsystem):
         return HeadingController.instance
     
     def __init__(self):
+#        self.robot_state = RobotState.RobotState.getInstance()
         self.timer = Timer()
         self.timer.reset()
         self.timer.start()
@@ -73,7 +75,9 @@ class HeadingController(Subsystem):
 
 
     def getRotation(self) -> float:
-        return self.driveTrain.get_state().pose.rotation().radians()
+        return self.driveTrain.get_rotation_rad()#robot_state.getRotationRad()
+    
+     #self.driveTrain.get_state().pose.rotation().radians()
     
 
     def setTargetRotationCommand(self,angle) -> Command:

@@ -12,7 +12,7 @@ class FindKP_MaxA(commands2.Command):
         self.drivetrain = DrivetrainGenerator.getInstance()
         self.addRequirements(self.drivetrain)
         self.timer = Timer()
-        self.accel = 2  #m/s/s
+        self.accel = 1.5  #m/s/s
         
     @override
     def initialize(self):
