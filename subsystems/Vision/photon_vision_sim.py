@@ -13,7 +13,6 @@ from wpilib import RobotBase
 from wpimath.geometry import Rotation2d,Translation3d,Rotation3d, Transform3d
 from Constants1 import ConstantValues
 from math import radians
-#from robot_state import RobotState
 from wpilib import SmartDashboard
 from subsystems.Drive.drivetrain_generator import DrivetrainGenerator
 

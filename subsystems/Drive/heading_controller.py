@@ -20,7 +20,6 @@ class HeadingController(Subsystem):
         return HeadingController.instance
     
     def __init__(self):
-#        self.robot_state = RobotState.RobotState.getInstance()
         self.timer = Timer()
         self.timer.reset()
         self.timer.start()
@@ -75,7 +74,7 @@ class HeadingController(Subsystem):
 
 
     def getRotation(self) -> float:
-        return self.driveTrain.get_rotation_rad()#robot_state.getRotationRad()
+        return self.driveTrain.get_rotation_rad()
     
      #self.driveTrain.get_state().pose.rotation().radians()
     
