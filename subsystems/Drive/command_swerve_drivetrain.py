@@ -148,7 +148,6 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
             self, drive_motor_type, steer_motor_type, encoder_type,
             drivetrain_constants, arg0, arg1, arg2, arg3
         )
-        print("222222222222222222")
         self.rot_deg=0 
         self.reset_pose(Pose2d())
         self._sim_notifier: Notifier | None = None
@@ -156,9 +155,7 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
 
         self._has_applied_operator_perspective = False
         """Keep track if we've ever applied the operator perspective before or not"""
-
         self.setup_swerve_requests()
-
         # Swerve requests to apply during SysId characterization
         self._translation_characterization = swerve.requests.SysIdSwerveTranslation()
         self._steer_characterization = swerve.requests.SysIdSwerveSteerGains()
@@ -237,10 +234,8 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
 
         self._sys_id_routine_to_apply = self._sys_id_routine_translation
         """The SysId routine to test"""
-
         if utils.is_simulation():
             self._start_sim_thread()
-
     def apply_request(
         self, request: Callable[[], swerve.requests.SwerveRequest]
     ) -> Command:
@@ -344,7 +339,6 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
 
 
     def setup_swerve_requests(self):
-        
         self.request_teleop_FC = (
             swerve.requests.FieldCentric()
             .with_deadband(ConstantValues.DriveConstants.SPEED_AT_12_VOLTS *
@@ -379,7 +373,7 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
 
         self.request_RC = (swerve.requests.RobotCentric().with_drive_request_type(
                 swerve.SwerveModule.DriveRequestType.VELOCITY))
-        
+
 
     def drive_FC(self,x_vel,y_vel,rot_vel):
         self.set_control(
@@ -387,6 +381,7 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
                 with_velocity_x(x_vel).
                 with_velocity_y(y_vel).
                 with_rotational_rate(rot_vel))
+
         
     def drive_FC_facing(self,x_vel,y_vel,angle):
         self.set_control(

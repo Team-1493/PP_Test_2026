@@ -17,5 +17,6 @@ class DrivetrainGenerator():
         "****************** Starting  *****************"
         if DrivetrainGenerator.instance == None:
             DrivetrainGenerator.instance = TunerConstants.create_drivetrain()
-            print("**********************  CFREATING DT  **********************") 
+            print("**********************  CREATING DT  **********************") 
+            print(DrivetrainGenerator.instance.getName())
         return DrivetrainGenerator.instance

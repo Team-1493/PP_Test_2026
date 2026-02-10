@@ -47,9 +47,9 @@ class FindkS(commands2.Command):
 
 
         self.drivetrain.set_control(self.driveKS.with_volts(self.voltage))
-        chassisSpeed = self.drivetrain.get_state().speeds
+        chassisSpeed = self.drivetrain.get_speeds()
         self.spd = math.sqrt(chassisSpeed.vx**2+chassisSpeed.vy**2)
-        if spd>.00125:
+        if self.spd>.00125:
             self.haskS = True
 
         if not self.haskS:
@@ -65,18 +65,9 @@ class FindkS(commands2.Command):
 
             self.avgVolt=(volt0+volt1+volt2+volt3)/4
             self.avgTorqueCurrnet = (mod0+mod1+mod2+mod3)/4
-            SmartDashboard.putNumber("Drive kS - measured",self.voltage)
-            SmartDashboard.putNumber("Torqe Current- measured (module 0)",mod0)
-            SmartDashboard.putNumber("Torqe Current- measured (module 1)",mod1)
-            SmartDashboard.putNumber("Torqe Current- measured (module 2)",mod2)
-            SmartDashboard.putNumber("Torqe Current- measured (module 3)",mod3)
-            SmartDashboard.putNumber("Average Torque Current", self.avgTorqueCurrnet) 
 
-            SmartDashboard.putNumber("Voltage- measured (module 0)",volt0)
-            SmartDashboard.putNumber("Voltage- measured (module 1)",volt1)
-            SmartDashboard.putNumber("Voltage- measured (module 2)",volt2)
-            SmartDashboard.putNumber("Voltage- measured (module 3)",volt3)
-            SmartDashboard.putNumber("Average Voltage", self.avgVolt)       
+            SmartDashboard.putNumber("Ks - Torque Current", self.avgTorqueCurrnet) 
+            SmartDashboard.putNumber("Ks - Voltage", self.avgVolt)       
 
     @override
     def end(self, interrupted: bool) :

@@ -15,7 +15,7 @@ class FindWheelBase(commands2.Command):
                 .with_heading_pid(4,0,0))
         self.addRequirements(self.drivetrain)
         self.timer = Timer()
-        self.rotationRate = 0.5  #ramp rate volts per second
+        self.rotationRate = 1  #radians/sec
     
 
     
@@ -33,7 +33,6 @@ class FindWheelBase(commands2.Command):
         deltaTime = timeCurrent - self.timePrevious
         self.timePrevious = timeCurrent
         self.rotation+= deltaTime*self.rotationRate
-        print(deltaTime,self.rotation)
         if self.rotation>2*math.pi:
             self.rotation = 2*math.pi
         rot = Rotation2d(self.rotation)

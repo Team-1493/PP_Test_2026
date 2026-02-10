@@ -4,13 +4,10 @@
 # Open Source Software; you can modify and/or share it under the terms of
 # the WPILib BSD license file in the root directory of this project.
 #
-
-import wpilib
 import commands2
 import typing
 
 from robot_container import RobotContainer
-#from robot_state import RobotState
 autonomousCommand: typing.Optional[commands2.Command] = None
 
 
@@ -19,12 +16,10 @@ class MyRobot(commands2.TimedCommandRobot):
     Command v2 robots are encouraged to inherit from TimedCommandRobot, which
     has an implementation of robotPeriodic which runs the scheduler for you
     """
-
     autonomousCommand: typing.Optional[commands2.Command] = None
 
     def robotInit(self) -> None:
         self.container = RobotContainer()  
- #       self.robotState = RobotState.getInstance()
         self.IMU_mode = 0
 
     def robotPeriodic(self) -> None:
@@ -34,8 +29,6 @@ class MyRobot(commands2.TimedCommandRobot):
         This runs after the mode specific periodic functions, but before LiveWindow and
         SmartDashboard integrated updating."""
 
-  #      self.robotState.update()
-
         # Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
         # commands, running already-scheduled commands, removing finished or interrupted commands,
         # and running subsystem periodic() methods.  This must be called from the robot's periodic
@@ -43,7 +36,7 @@ class MyRobot(commands2.TimedCommandRobot):
         commands2.CommandScheduler.getInstance().run()
 
     def disabledInit(self) -> None:
-            pass
+        pass
 
     def disabledPeriodic(self) -> None:
         self.container.limelightSytem.zeroAndseedIMU()
@@ -52,7 +45,6 @@ class MyRobot(commands2.TimedCommandRobot):
     def autonomousInit(self) -> None:
         self.container.limelightSytem.set_IMU_Mode(self.IMU_mode)
         self.autonomousCommand = self.container.getAutonomousCommand()
-
         if self.autonomousCommand:
             self.autonomousCommand.schedule()
 

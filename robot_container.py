@@ -16,12 +16,14 @@ from subsystems.Drive.drivetrain_generator import DrivetrainGenerator
 from telemetry import Telemetry
 from subsystems.Drive.heading_controller import HeadingController
 from subsystems.Vision.limelight_system import LLsystem
-
+from subsystems.laser_can import LaserCAN
 from Commands.seed_zero import SeedZero
 from Commands.drive_teleop_command import DriveTeleopCommand
 from Commands.auto_pilot_command import AutoPilotCommand
 from Commands.find_wheel_base import FindWheelBase
 from Commands.find_ks import FindkS
+from Commands.find_slipCurrent import FindSlipCurrent
+from Commands.findkP_maxA import FindKP_MaxA
 
 
 class RobotContainer:
@@ -31,21 +33,21 @@ class RobotContainer:
         self.timer.reset()
         self.timer.start()
 
+        self.constants = ConstantValues.getInstance()
         while self.timer.get()<3:
             print("Waiting for Warmup",round(self.timer.get(),0))
-        self.constants = ConstantValues.getInstance()  #OK
-        self.drivetrain = DrivetrainGenerator.getInstance()  #OK
-        while self.timer.get()<6:
+        self.drivetrain = DrivetrainGenerator.getInstance()
+        while self.timer.get()<5:
             print("Creating CAN Devices",round(self.timer.get(),0))
 
-        self.headingController = HeadingController.getInstance() #OK
-        self.limelightSytem = LLsystem.getInstance()  #OK
+        self.headingController = HeadingController.getInstance()        
+        LaserCAN.getInstance()
+        self.limelightSytem = LLsystem.getInstance()
         self._joystick = CommandXboxController(0)
         self.seedZero = SeedZero(self.drivetrain,self.headingController)
-        
 
         self._logger = Telemetry(TunerConstants.speed_at_12_volts)
-        DataLogManager.start()
+#        DataLogManager.start()
 
         # speed_at_12_volts desired top speed
         self._max_speed = (TunerConstants.speed_at_12_volts) 
@@ -95,6 +97,11 @@ class RobotContainer:
 
             
 #        self._joystick.button(7).whileTrue(FindkS())
+
+#        self._joystick.button(7).whileTrue(FindkS())
+#        self._joystick.button(8).whileTrue(FindSlipCurrent())
+        self._joystick.button(7).whileTrue(FindWheelBase())        
+        self._joystick.button(8).whileTrue(FindKP_MaxA())        
 
 
 #        self._joystick.button(7).whileTrue(
