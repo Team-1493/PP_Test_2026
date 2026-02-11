@@ -100,9 +100,9 @@ class RobotContainer:
         
 
 #        self._joystick.button(7).whileTrue(FindkS())
-#        self._joystick.button(8).whileTrue(FindSlipCurrent())
-        self._joystick.button(7).whileTrue(FindWheelBase())        
-        self._joystick.button(8).whileTrue(FindKP_MaxA())        
+        self._joystick.button(7).whileTrue(FindSlipCurrent())
+#        self._joystick.button(7).whileTrue(FindWheelBase())        
+#        self._joystick.button(8).whileTrue(FindKP_MaxA())        
 
 
 #        self._joystick.button(7).whileTrue(
@@ -113,8 +113,8 @@ class RobotContainer:
 #            commands2.DeferredCommand(lambda:self.drive_path.drive_trench()).finallyDo
 #           (self.headingController.setTargetRotationInt))        
 
-#        self._joystick.button(8).whileTrue(
-#            AutoPilotCommand(23,0,1.75,0).finallyDo((self.headingController.setTargetRotationInt)))
+        self._joystick.button(8).whileTrue(
+            AutoPilotCommand(26,-1.5,0,0).finallyDo((self.headingController.setTargetRotationInt)))
  
         self._joystick.button(9).onTrue(
               InstantCommand(lambda:self.update_constants()))
@@ -146,7 +146,7 @@ class RobotContainer:
         from Auto.auto_generator import AutoGenerator 
         from Commands.drive_path_generator import DrivePathGenerator 
         self.autoGenerator = AutoGenerator()
-        self.autoChooser = AutoBuilder.buildAutoChooser("NoAction")
+        self.autoChooser = AutoBuilder.buildAutoChooser("square")
         SmartDashboard.putData("Auto Chooser", self.autoChooser)
         self.drive_path = DrivePathGenerator(
                  lambda: self.drivetrain.get_state().pose)

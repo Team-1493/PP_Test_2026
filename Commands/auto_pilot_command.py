@@ -29,6 +29,8 @@ class AutoPilotCommand(commands2.Command):
             self.actions_length = 0 
             self.hasActions = False
 
+        self.addRequirements(self.m_drivetrain)    
+
     @override
     def initialize(self):
         print("****STARTING AUTOPILOT")
@@ -36,6 +38,7 @@ class AutoPilotCommand(commands2.Command):
         self.ap_drive = ap_driver.getInstance()
         self.m_target = ap_target(pose).with_entry_angle(pose.rotation()).with_velocity(0)
         self.index_actions = 0
+        print("************",self.m_target.get_reference().X(),"  ",self.m_target.get_reference().Y())
   
 
     @override

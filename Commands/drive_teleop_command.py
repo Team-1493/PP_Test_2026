@@ -81,22 +81,16 @@ class DriveTeleopCommand(commands2.Command):
 #        state =0.
 #        target_angle=0   
         if state==0:
-
-            self.drivetrain.set_control(self.request_teleop_FC.with_velocity_x(
-                forw*self._max_speed*self.scale_factorXY)
-                .with_velocity_y(
-                sde*self._max_speed*self.scale_factorXY)
-                .with_rotational_rate(
-                rot*self._max_angular_rate*self.scale_factorRot))
+            self.drivetrain.drive_FC(
+                forw*self._max_speed*self.scale_factorXY,
+                sde*self._max_speed*self.scale_factorXY,
+                rot*self._max_angular_rate*self.scale_factorRot)
             
         else:
-            self.drivetrain.set_control(self.request_teleop_FC_facing.with_velocity_x(
-                forw*self._max_speed*self.scale_factorXY)
-                .with_velocity_y(
-                sde*self._max_speed*self.scale_factorXY)
-                .with_target_direction(
-                Rotation2d(target_angle)))
-            
+            self.drivetrain.drive_FC_facing(
+                forw*self._max_speed*self.scale_factorXY,
+                sde*self._max_speed*self.scale_factorXY,
+                target_angle)    
         
 
     def setConstants(self):

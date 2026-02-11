@@ -5,7 +5,6 @@ from wpimath.trajectory import TrapezoidProfile
 from math import pi,hypot
 from Constants1 import ConstantValues
 from subsystems.Drive.drivetrain_generator import DrivetrainGenerator 
-import RobotState
 
 #To Do - check if rotation not being controlled until first rotation
 
