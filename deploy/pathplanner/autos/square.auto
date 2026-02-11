@@ -7,37 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "auto1_1"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
+            "pathName": "square_1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "auto1_2"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
+            "pathName": "square_2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "auto1_3"
+            "pathName": "square_3"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "StopDrive"
+            "pathName": "square_4"
           }
         }
       ]

@@ -146,8 +146,7 @@ class RobotContainer:
         from Auto.auto_generator import AutoGenerator 
         from Commands.drive_path_generator import DrivePathGenerator 
         self.autoGenerator = AutoGenerator()
-        self.autoChooser = AutoBuilder.buildAutoChooser("square")
+        self.autoChooser = AutoBuilder.buildAutoChooser("DoNothing")
         SmartDashboard.putData("Auto Chooser", self.autoChooser)
         self.drive_path = DrivePathGenerator(
                  lambda: self.drivetrain.get_state().pose)
-        
