@@ -129,13 +129,13 @@ class LLsystem(Subsystem):
                         stdDev = self.max_value
                         headingStdDev - self.max_value
 
-                
+                    """"                
                     self.driveTrain.add_vision_measurement(
                         self.estimate.pose,
 #                        utils.fpga_to_current_time(self.estimate.timestamp_seconds),
                         self.estimate.timestamp_seconds,
                         (stdDev, stdDev, headingStdDev))
-            
+                    """
 
 
                     label="LL Cam"+str(i)+" "

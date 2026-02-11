@@ -134,7 +134,7 @@ class RobotContainer:
         self.constants.update_constants()
         # update limelight, autobuilder, and heading controller constants  
 #        self.limelightSytem.configfureLimelights()
-#        self.autoGenerator.configAutoBuilder()
+        self.autoGenerator.configAutoBuilder()
         self.drivetrain.update()
         self.drive_teleop_command.setConstants()
         # DriveGoal_Cam does not need to be explicitly updated, it is generated at each use
