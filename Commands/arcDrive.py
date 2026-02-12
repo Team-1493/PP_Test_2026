@@ -9,7 +9,7 @@ from subsystems.Drive.command_swerve_drivetrain import CommandSwerveDrivetrain
 from subsystems.Drive.drivetrain_generator import DrivetrainGenerator
 from phoenix6 import swerve
 from wpimath.geometry import Pose2d,Rotation2d
-from drive_path_generator import DrivePathGenerator
+from Commands.drive_path_generator import DrivePathGenerator
 
 class arcDrive(commands2.Command):
     def __init__(self,
@@ -22,14 +22,12 @@ class arcDrive(commands2.Command):
         x= 0
         y= 0
         angleToTarget = 0
-        goToTarg = DrivePathGenerator.drive_path_to_pose(Pose2d(x,y,angleToTarget), 0)
+        # goToTarg = DrivePathGenerator.drive_path_to_pose(Pose2d(x,y,angleToTarget), 0)
 
         # self.targetPose = _targetPose
         # self.addRequirements([self.driveTrain])
         self.isFinishedFlag = False
-    def calculateSpeedToTarget(self):
-        
-        return
+
     def execute(self):
         currentPose = self.driveTrain.get_state().pose
         # targetPose = self.targetPose()
@@ -52,4 +50,11 @@ class arcDrive(commands2.Command):
         else:
             omega = 0
             print(distanceToTarget)
-            
+
+        self.driveTrain.set_control(
+            swerve.requests.FieldCentricFacingAngle()
+            .with_velocity_x(omega * 2)
+            .with_velocity_y(omega * 2)
+            .with_target_direction(angleToTarget)
+        )
+        

@@ -11,11 +11,8 @@ from  Constants1 import ConstantValues
 from wpilib import SmartDashboard
 
 from subsystems.Drive.drivetrain_generator import DrivetrainGenerator
-from subsystems.laser_can import LaserCAN
 
 class LLsystem(Subsystem):
-    LC_dist = 32000
-    LC_cam = None
     instance = None
 
     @staticmethod
@@ -44,13 +41,9 @@ class LLsystem(Subsystem):
         self.configfureLimelights()
         self.zeroAndseedIMU(0)
 
-        self.LC = LaserCAN.getInstance()
-        self.LC_distance = 0
 
     def periodic(self):
         self.update()
-        self.LC_distance = self.LC.get_distance_meters()
-        SmartDashboard.putNumber("LaserCan Dist",self.LC_distance)                    
 
 
     def update(self): 

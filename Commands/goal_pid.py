@@ -8,7 +8,7 @@ from math import hypot, pi
 from wpimath.geometry import Pose2d,Rotation2d
 from wpimath.kinematics import ChassisSpeeds
 from phoenix6 import swerve
-import auto_pilot_command
+from Commands.auto_pilot_command import AutoPilotCommand
 from commands2 import Command
 from commands2.button import Trigger
 from subsystems.Drive.drivetrain_generator import DrivetrainGenerator
@@ -23,7 +23,7 @@ class GoalPID(commands2.Command):
         self.goalPose = goalPose
         self.kTranslationPID = PIDConstants(5.0,0,0)
         self.kRotationPID = PIDConstants(5.0,0,0)
-        self.auto_pilot = auto_pilot_command.AutoPilotCommand()
+        self.auto_pilot = AutoPilotCommand()
         self.auto_pilot.drive = self.auto_pilot.ap_drive.kAutopilot.atTarget(
             self.m_drivetrain.get_state().pose, 
             self.m_target)

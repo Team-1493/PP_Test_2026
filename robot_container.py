@@ -12,6 +12,8 @@ from wpimath.geometry import Pose2d
 from wpilib import DataLogManager, SmartDashboard, Timer
 
 from Commands.drive_while_shooting import DriveWhileShooting
+from Commands.arcDrive import arcDrive
+
 from Constants1 import ConstantValues
 from generated.tuner_constants import TunerConstants
 from subsystems.Drive.drivetrain_generator import DrivetrainGenerator 
@@ -40,6 +42,7 @@ class RobotContainer:
             print("Creating CAN Devices",round(self.timer.get(),0))
 
         self.headingController = HeadingController.getInstance() #OK
+        self.arcDrive = arcDrive(self, self.drivetrain)
         self.limelightSytem = LLsystem.getInstance()  #OK
         self._joystick = CommandXboxController(0)
         
@@ -93,9 +96,10 @@ class RobotContainer:
 
         self._joystick.button(4).onTrue(
             self.headingController.runOnce(lambda:self.headingController.rotateTo270()))
-
-
-
+       
+        self._joystick.button(10).whileTrue(
+            commands2.DeferredCommand(lambda:self.arcDrive)
+        )
 #        self._joystick.button(5).whileTrue(
 #            FindWheelBase().finallyDo((self.headingController.setTargetRotationInt)))
 
