@@ -11,27 +11,21 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "DriveToGoalCam"
+            "pathName": "square2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Path2"
+            "pathName": "square3"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "DriveToGoalCam"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopDrive"
+            "pathName": "square4"
           }
         }
       ]
