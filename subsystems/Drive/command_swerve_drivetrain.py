@@ -2,6 +2,7 @@ from commands2 import Command, Subsystem
 from commands2.sysid import SysIdRoutine
 import math
 from phoenix6 import SignalLogger, swerve, units, utils, hardware
+import phoenix6
 from phoenix6.swerve.requests import ForwardPerspectiveValue
 from phoenix6.configs import Slot0Configs, Slot1Configs
 from typing import Callable, overload
@@ -288,11 +289,24 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
                     else self._BLUE_ALLIANCE_PERSPECTIVE_ROTATION
                 )
                 self._has_applied_operator_perspective = True
-
-
+        configs = phoenix6.configs.TalonFXConfiguration()
+        self.get_module(0).drive_motor.configurator.refresh(configs)
      
-       
+        a = self.get_module(0).drive_motor.get_closed_loop_reference().value_as_double
+        b = self.get_module(0).drive_motor.get_torque_current().value_as_double
+        c = self.get_module(0).drive_motor.get_velocity().value_as_double
+        d= self.get_module(0).drive_motor.get_closed_loop_output().value_as_double
+        e = self.get_module(0).drive_motor.get_closed_loop_proportional_output().value_as_double
+        f = self.get_module(0).drive_motor.get_closed_loop_feed_forward().value_as_double
+        SmartDashboard.putNumber("Test CLRef",a)        
+        SmartDashboard.putNumber("Test TC",b)        
+        SmartDashboard.putNumber("Test Vel",c)        
+        SmartDashboard.putNumber("Test CLout",d)
+        SmartDashboard.putNumber("Test CLPropOut",e)
+        SmartDashboard.putNumber("Test CLFF",f)                                
+
 #        self.operator_fwd_dir_deg = self.get_operator_forward_direction().degrees()    
+
        # pose =  self.get_pose()
        # spd = self.get_speeds()
         #SmartDashboard.putNumber("Vx: ",round(spd.vx,3))
@@ -345,6 +359,7 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
                     ConstantValues.DriveConstants.TELEOP_DEADBAND)  #squared input, so db starts at 0.05
             .with_drive_request_type(
                 swerve.SwerveModule.DriveRequestType.VELOCITY)
+                .with_rotational_deadband(0.01)
         )
         
         self.request_teleop_FC_facing = (
@@ -357,6 +372,8 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
                 ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_KP,
                 0,
                 ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_KD)    
+                .with_rotational_deadband(ConstantValues.DriveConstants.TELEOP_DEADBAND).
+                with_max_abs_rotational_rate(ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_VMAX)
         )
 
 
@@ -439,24 +456,16 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
         slot0_teleop = Slot0Configs()
 
         k_p_tele = ConstantValues.DriveConstants.TELEOP_kP
-        k_v_tele = ConstantValues.DriveConstants.TELEOP_kV
         k_s_tele = ConstantValues.DriveConstants.TELEOP_kS
-        k_a_tele = ConstantValues.DriveConstants.TELEOP_kA
         
         slot0_teleop.k_p = k_p_tele
         slot0_teleop.k_s = k_s_tele
-        slot0_teleop.k_v = k_v_tele
-        slot0_teleop.k_a = k_a_tele                        
 
         k_p_auto = ConstantValues.DriveConstants.AUTO_kP
-        k_v_auto = ConstantValues.DriveConstants.AUTO_kV
         k_s_auto = ConstantValues.DriveConstants.AUTO_kS
-        k_a_auto = ConstantValues.DriveConstants.AUTO_kA
 
         slot1_auto.k_p = k_p_auto
         slot1_auto.k_s = k_s_auto
-        slot1_auto.k_v = k_v_auto
-        slot1_auto.k_a = k_a_auto                                
 
 
         self.get_module(0).drive_motor.configurator.apply(slot0_teleop)

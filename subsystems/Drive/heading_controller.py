@@ -34,8 +34,7 @@ class HeadingController(Subsystem):
     def get_rotation_state(self,stick_rot):
         dir=self.driveTrain.get_operator_forward_direction().radians()
         self.rotation = self.getRotation()
-
-        if abs(stick_rot) > 0:
+        if (abs(stick_rot) > 0):
             self.targetRotation = self.rotation+dir
             self.state=0
             self.time1 = self.timer.get()

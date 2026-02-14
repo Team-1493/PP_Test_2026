@@ -31,13 +31,13 @@ class RobotContainer:
     def __init__(self) -> None:
         ""
     
-#        self.timer = Timer()
-#        self.timer.reset()
-#        self.timer.start()
+        self.timer = Timer()
+        self.timer.reset()
+        self.timer.start()
 
         self.constants = ConstantValues.getInstance()
- #       while self.timer.get()<3:""
-#            print("Waiting for Warmup",round(self.timer.get(),0))
+        while self.timer.get()<3:
+            print("Waiting for Warmup",round(self.timer.get(),0))
         self.drivetrain = DrivetrainGenerator.getInstance()
  #       while self.timer.get()<5:""
 #            print("Creating CAN Devices",round(self.timer.get(),0))
@@ -85,16 +85,16 @@ class RobotContainer:
             lambda state: self._logger.telemeterize(state)
         )
         
-        self._joystick.button(1).onTrue(
+        self._joystick.button(4).onTrue(
             self.headingController.runOnce(lambda:self.headingController.rotateToZero()))
         
-        self._joystick.button(2).onTrue(
+        self._joystick.button(3).onTrue(
             self.headingController.runOnce(lambda:self.headingController.rotateTo90()))
 
-        self._joystick.button(3).onTrue(
+        self._joystick.button(1).onTrue(
             self.headingController.runOnce(lambda:self.headingController.rotateTo180()))
 
-        self._joystick.button(4).onTrue(
+        self._joystick.button(2).onTrue(
             self.headingController.runOnce(lambda:self.headingController.rotateTo270()))
 
         
@@ -133,8 +133,8 @@ class RobotContainer:
         # transfer constants from smartdashbaord to constants class        
         self.constants.update_constants()
         # update limelight, autobuilder, and heading controller constants  
-#        self.limelightSytem.configfureLimelights()
-#        self.autoGenerator.configAutoBuilder()
+        self.limelightSytem.configfureLimelights()
+        self.autoGenerator.update()
         self.drivetrain.update()
         self.drive_teleop_command.setConstants()
         # DriveGoal_Cam does not need to be explicitly updated, it is generated at each use

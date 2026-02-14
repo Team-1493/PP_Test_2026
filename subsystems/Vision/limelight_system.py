@@ -51,7 +51,7 @@ class LLsystem(Subsystem):
 
         self.configfureLimelights()
         self.zeroAndseedIMU(0)
-
+        SmartDashboard.putBoolean("Vision Active",False)
 
     def periodic(self):
         rot =  self.driveTrain.get_rotation_deg()
@@ -129,10 +129,10 @@ class LLsystem(Subsystem):
                         stdDev = self.max_value
                         headingStdDev - self.max_value
 
-                
-                    self.driveTrain.add_vision_measurement(
+                    if (SmartDashboard.getBoolean("Vision Active",True)):                
+                     self.driveTrain.add_vision_measurement(
                         self.estimate.pose,
-#                        utils.fpga_to_current_time(self.estimate.timestamp_seconds),
+# Use for PV !          utils.fpga_to_current_time(self.estimate.timestamp_seconds),
                         self.estimate.timestamp_seconds,
                         (stdDev, stdDev, headingStdDev))
             

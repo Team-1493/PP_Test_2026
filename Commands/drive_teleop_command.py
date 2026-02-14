@@ -29,33 +29,7 @@ class DriveTeleopCommand(commands2.Command):
         self.drivetrain = _drivetrain
 
         self.headingController = HeadingController.getInstance()
-      
-        self.request_teleop_FC = (
-            swerve.requests.FieldCentric()
-            .with_deadband(ConstantValues.DriveConstants.SPEED_AT_12_VOLTS *
-                    ConstantValues.DriveConstants.TELEOP_DEADBAND)  #squared input, so db starts at 0.05
-            .with_drive_request_type(
-                swerve.SwerveModule.DriveRequestType.VELOCITY)
-        )
-
-        self.request_teleop_FC_facing = (
-            swerve.requests.FieldCentricFacingAngle()
-            .with_deadband(ConstantValues.DriveConstants.SPEED_AT_12_VOLTS *
-                    ConstantValues.DriveConstants.TELEOP_DEADBAND)  #squared input, so db starts at 0.05
-            .with_drive_request_type(
-                swerve.SwerveModule.DriveRequestType.VELOCITY)
-            .with_heading_pid(
-                ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_KP,
-                0,
-                ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_KD)    
-        )
-
         self.setConstants()
-
-      
-
-
-
         self.addRequirements(self.drivetrain)
 
 
@@ -74,12 +48,9 @@ class DriveTeleopCommand(commands2.Command):
         sde = copysign(sde**2,sde)
         rot = copysign(rot**2,rot)
 
-        self.requested_velocity=forw*self._max_speed*self.scale_factorXY
-        SmartDashboard.putNumber("requested velocity", self.requested_velocity)
-        dir = self.drivetrain.get_operator_forward_direction().radians()
-        state, target_angle = self.headingController.get_rotation_state(rot*self._max_angular_rate)    
-#        state =0.
-#        target_angle=0   
+        state, target_angle = self.headingController.get_rotation_state(rot*self._max_angular_rate)  
+          
+
         if state==0:
             self.drivetrain.drive_FC(
                 forw*self._max_speed*self.scale_factorXY,
