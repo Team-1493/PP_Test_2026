@@ -27,7 +27,6 @@ class ConstantValues():
         TELEOP_SCALE_FACTOR_ROT = 0.3
         SPEED_AT_12_VOLTS = 3.6#TunerConstants.speed_at_12_volts 
 
-
         AUTO_kP = 3.45
         AUTO_kS = 2
 
@@ -52,14 +51,14 @@ class ConstantValues():
         CAM_THETA_Z_OFFSET[0] = 0 # yaw
 
         CAM_NAME[1] =  "limelight-c"
-        CAM_X_OFFSET[1] = 0 # forward positive
+        CAM_X_OFFSET[1] = 0 # forward positiv
         CAM_Y_OFFSET[1] = 0 # right positive
         CAM_Z_OFFSET[1] = .85 # up positive
         CAM_THETA_X_OFFSET[1] = 0 # roll
         CAM_THETA_Y_OFFSET[1] = 0 # pitch
-        CAM_THETA_Z_OFFSET[1] = 0 # yaw
+        CAM_THETA_Z_OFFSET[1] = 180 # yaw
 
-        CAM_NAME[2] =  "limelight-a"
+        CAM_NAME[2] =  "limelight-b"
         CAM_X_OFFSET[2] = 0 # forward positive
         CAM_Y_OFFSET[2] = 0 # right positive
         CAM_Z_OFFSET[2] = 0 # up positive
@@ -67,11 +66,13 @@ class ConstantValues():
         CAM_THETA_Y_OFFSET[2] = 0 # pitch
         CAM_THETA_Z_OFFSET[2] = 0 # yaw
 
-        STD_DEV_COEFF_XY = .1 #0.05
+        STD_DEV_COEFF_XY_1 = .1 #0.05
+        STD_DEV_COEFF_XY_2 = .1 #0.05        
         STD_DEV_COEFF_THETA = 999 #0.04 or self,max_value
 
-        CAMERA_CUTOFF_DISTANCE = 3 # meters, above this distance std's set to max        
-
+        CAMERA_CUTOFF_DISTANCE_1 = 2 # meters, above this distance std's set to max 
+        CAMERA_CUTOFF_DISTANCE_2 = 4 # meters, above this distance std's set to max                
+        CAMERA_CUTOFF_DIFFERENCE = 0.25 # meters, above this distance std's set to max                
 
     class AutoBuilderConstants():
         AUTOBUILDER_XY_kP = 5        
@@ -190,7 +191,7 @@ class ConstantValues():
         tag14.pose = Pose3d(Translation3d(16.533, 6.972, 0.552), Rotation3d(0.000, 0.000, 3.142))
         tag15.pose = Pose3d(Translation3d(16.533, 4.324, 0.552), Rotation3d(0.000, 0.000, 3.142))
         tag16.pose = Pose3d(Translation3d(16.533, 3.892, 0.552), Rotation3d(0.000, 0.000, 3.142))
-        tag17.pose = Pose3d(Translation3d(4.663, 0.644, 0.889), Rotation3d(0.000, 0.000, 0.000))
+        tag17.pose = Pose3d(Translation3d(4.663, 0.644, 5.889), Rotation3d(0.000, 0.000, 0.000))
         tag18.pose = Pose3d(Translation3d(4.626, 3.431, 1.124), Rotation3d(0.000, 0.000, 4.712))
         tag19.pose = Pose3d(Translation3d(5.229, 3.679, 1.124), Rotation3d(0.000, 0.000, 0.000))
         tag20.pose = Pose3d(Translation3d(5.229, 4.035, 1.124), Rotation3d(0.000, 0.000, 0.000))
@@ -279,9 +280,11 @@ class ConstantValues():
         ConstantValues.LimelightConstants.CAM_THETA_X_OFFSET[1] = SmartDashboard.getNumber("LL CAM1 thetaX_offset",ConstantValues.LimelightConstants.CAM_THETA_X_OFFSET[1])
         ConstantValues.LimelightConstants.CAM_THETA_Y_OFFSET[1] = SmartDashboard.getNumber("LL CAM1 thetaY_offset",ConstantValues.LimelightConstants.CAM_THETA_Y_OFFSET[1])
         ConstantValues.LimelightConstants.CAM_THETA_Z_OFFSET[1] = SmartDashboard.getNumber("LL CAM1 thetaZ_offset",ConstantValues.LimelightConstants.CAM_THETA_Z_OFFSET[1])                 
-        ConstantValues.LimelightConstants.STD_DEV_COEFF_XY = SmartDashboard.getNumber("LL StdDevCoeff_xy",ConstantValues.LimelightConstants.STD_DEV_COEFF_XY)
+        ConstantValues.LimelightConstants.STD_DEV_COEFF_XY_1 = SmartDashboard.getNumber("LL StdDevCoeff_xy",ConstantValues.LimelightConstants.STD_DEV_COEFF_XY_1)
+        ConstantValues.LimelightConstants.STD_DEV_COEFF_XY_2 = SmartDashboard.getNumber("LL StdDevCoeff_xy",ConstantValues.LimelightConstants.STD_DEV_COEFF_XY_2)        
         ConstantValues.LimelightConstants.STD_DEV_COEFF_THETA = SmartDashboard.getNumber("LL StdDevCoeff_theta",ConstantValues.LimelightConstants.STD_DEV_COEFF_THETA)
-        ConstantValues.LimelightConstants.CAMERA_CUTOFF_DISTANCE = SmartDashboard.getNumber("LL CutoffDist",ConstantValues.LimelightConstants.CAMERA_CUTOFF_DISTANCE)
+        ConstantValues.LimelightConstants.CAMERA_CUTOFF_DISTANCE_1 = SmartDashboard.getNumber("LL CutoffDist",ConstantValues.LimelightConstants.CAMERA_CUTOFF_DISTANCE_1)
+        ConstantValues.LimelightConstants.CAMERA_CUTOFF_DISTANCE_2 = SmartDashboard.getNumber("LL CutoffDist",ConstantValues.LimelightConstants.CAMERA_CUTOFF_DISTANCE_2)        
         
         # Update values for autobuilder
         ConstantValues.AutoBuilderConstants.AUTOBUILDER_XY_kP=  SmartDashboard.getNumber("AutoBuilder XY_kP",ConstantValues.AutoBuilderConstants.AUTOBUILDER_XY_kP)
@@ -344,10 +347,12 @@ class ConstantValues():
         SmartDashboard.putNumber("LL CAM1 z_offset",ConstantValues.LimelightConstants.CAM_Z_OFFSET[1]) 
         SmartDashboard.putNumber("LL CAM1 thetaX_offset",ConstantValues.LimelightConstants.CAM_THETA_X_OFFSET[1])
         SmartDashboard.putNumber("LL CAM1 thetaY_offset",ConstantValues.LimelightConstants.CAM_THETA_Y_OFFSET[1])
-        SmartDashboard.putNumber("LL CAM1 thetaZ_offset",ConstantValues.LimelightConstants.CAM_THETA_Z_OFFSET[1])                 
-        SmartDashboard.putNumber("LL StdDevCoeff_xy",ConstantValues.LimelightConstants.STD_DEV_COEFF_XY)
+        SmartDashboard.putNumber("LL CAM1 thetaZ_offset",ConstantValues.LimelightConstants.CAM_THETA_Z_OFFSET[1])   
+        SmartDashboard.putNumber("LL StdDevCoeff_xy_1",ConstantValues.LimelightConstants.STD_DEV_COEFF_XY_1)
+        SmartDashboard.putNumber("LL StdDevCoeff_xy_2",ConstantValues.LimelightConstants.STD_DEV_COEFF_XY_2)
         SmartDashboard.putNumber("LL StdDevCoeff_theta",ConstantValues.LimelightConstants.STD_DEV_COEFF_THETA)
-        SmartDashboard.putNumber("LL CutoffDist",ConstantValues.LimelightConstants.CAMERA_CUTOFF_DISTANCE)
+        SmartDashboard.putNumber("LL CutoffDist_1",ConstantValues.LimelightConstants.CAMERA_CUTOFF_DISTANCE_1)
+        SmartDashboard.putNumber("LL CutoffDist_2",ConstantValues.LimelightConstants.CAMERA_CUTOFF_DISTANCE_2)
 
 
         SmartDashboard.putNumber("AutoBuilder XY_kP",ConstantValues.AutoBuilderConstants.AUTOBUILDER_XY_kP)

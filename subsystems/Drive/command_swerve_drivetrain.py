@@ -7,6 +7,7 @@ from phoenix6.swerve.requests import ForwardPerspectiveValue
 from phoenix6.configs import Slot0Configs, Slot1Configs
 from typing import Callable, overload
 from wpilib import DriverStation, Notifier, RobotController, SmartDashboard
+import wpilib
 from wpilib.sysid import SysIdRoutineLog
 from wpimath.geometry import Pose2d, Rotation2d
 from Constants1 import ConstantValues
@@ -289,32 +290,28 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
                     else self._BLUE_ALLIANCE_PERSPECTIVE_ROTATION
                 )
                 self._has_applied_operator_perspective = True
-        configs = phoenix6.configs.TalonFXConfiguration()
-        self.get_module(0).drive_motor.configurator.refresh(configs)
-     
-        a = self.get_module(0).drive_motor.get_closed_loop_reference().value_as_double
-        b = self.get_module(0).drive_motor.get_torque_current().value_as_double
-        c = self.get_module(0).drive_motor.get_velocity().value_as_double
-        d= self.get_module(0).drive_motor.get_closed_loop_output().value_as_double
-        e = self.get_module(0).drive_motor.get_closed_loop_proportional_output().value_as_double
-        f = self.get_module(0).drive_motor.get_closed_loop_feed_forward().value_as_double
-        SmartDashboard.putNumber("Test CLRef",a)        
-        SmartDashboard.putNumber("Test TC",b)        
-        SmartDashboard.putNumber("Test Vel",c)        
-        SmartDashboard.putNumber("Test CLout",d)
-        SmartDashboard.putNumber("Test CLPropOut",e)
-        SmartDashboard.putNumber("Test CLFF",f)                                
 
-#        self.operator_fwd_dir_deg = self.get_operator_forward_direction().degrees()    
+#        self.operator_fwd_dir_deg = self.get_operator_forward_direction().degrptrees()    
 
-       # pose =  self.get_pose()
-       # spd = self.get_speeds()
-        #SmartDashboard.putNumber("Vx: ",round(spd.vx,3))
-        #SmartDashboard.putNumber("Vy: ",round(spd.vy,3))
-        #SmartDashboard.putNumber("Rot Rate: ",round(self.get_omega_dps(),3))   
-        #SmartDashboard.putNumber("X: ",round(pose.X(),3))
-        #SmartDashboard.putNumber("y: ",round(pose.Y(),3))
-        #SmartDashboard.putNumber("Rot: ",round(self.get_rotation_deg(),3))  
+        pose =  self.get_pose()
+        spd = self.get_speeds()
+        x =pose.X()
+        y = pose.Y()
+        rot = pose.rotation().degrees()
+        x_in = x*39.37
+        y_in = y*39.37  
+
+
+
+        SmartDashboard.putNumber("Vx: ",round(spd.vx,3))
+        SmartDashboard.putNumber("Vy: ",round(spd.vy,3))
+        SmartDashboard.putNumber("Rot Rate: ",round(self.get_omega_dps(),3))   
+        SmartDashboard.putNumber("X: ",round(x,3))
+        SmartDashboard.putNumber("y: ",round(y,3))
+        SmartDashboard.putNumber("Rot: ",round(rot,3))
+        SmartDashboard.putNumber("X_in: ",round(x_in,3))
+        SmartDashboard.putNumber("y_in: ",round(y_in,3))
+
 
 
     def _start_sim_thread(self):
@@ -467,12 +464,10 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
         slot1_auto.k_p = k_p_auto
         slot1_auto.k_s = k_s_auto
 
-
         self.get_module(0).drive_motor.configurator.apply(slot0_teleop)
         self.get_module(1).drive_motor.configurator.apply(slot0_teleop)
         self.get_module(2).drive_motor.configurator.apply(slot0_teleop)
         self.get_module(3).drive_motor.configurator.apply(slot0_teleop)       
-
 
         self.get_module(0).drive_motor.configurator.apply(slot1_auto)
         self.get_module(1).drive_motor.configurator.apply(slot1_auto)
@@ -482,3 +477,30 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
         self.setup_swerve_requests()
 
 
+
+    def wait_for_can_ready(self, timeout=9.0):
+        timer = wpilib.Timer()
+        timer.start()
+
+        while timer.get() < timeout:
+
+            all_connected = True
+
+            for i in range(4):
+                module = self.get_module(i)
+
+                if not module.drive_motor.is_connected():
+                    all_connected = False
+                if not module.steer_motor.is_connected():
+                    all_connected = False
+                if not module.encoder.is_connected():
+                    all_connected = False
+
+            if all_connected:
+                print("All CAN devices ready.")
+                return True
+
+            wpilib.Timer.delay(0.02)
+
+        print("WARNING: CAN devices not fully ready!")
+        return False

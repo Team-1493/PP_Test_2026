@@ -109,8 +109,10 @@ class PVisionSim(Subsystem):
                     avg_area=avg_area/length
             
             if self.targetVisible:
-                estimatedRobotPose = self.photonEstimator.estimateCoprocMultiTagPose(result)
-#                print("PV pose is none ",estimatedRobotPose is None)
+                if length>1:
+                    estimatedRobotPose = self.photonEstimator.estimateCoprocMultiTagPose(result)
+                else:
+                    estimatedRobotPose=self.photonEstimator.estimateLowestAmbiguityPose(result)
             SmartDashboard.putNumber("PV hasTarget",self.hasTarget)
             LimelightHelpers.set_tv(self.camName, self.hasTarget)
 
@@ -151,7 +153,6 @@ class PVisionSim(Subsystem):
                 LimelightHelpers.set_tync(self.camName, minPitch) 
                 LimelightHelpers.set_txnc(self.camName, minYaw)  
                 LimelightHelpers.set_fiducialid_id(self.camName,minID)                               
-#                print("PV ",length)
                 LimelightHelpers.set_botpose_estimate_wpiblue_megatag2(
                     estimatedRobotPose.estimatedPose.toPose2d(),
                     result.getTimestampSeconds(),

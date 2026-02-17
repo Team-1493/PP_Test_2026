@@ -71,9 +71,9 @@ class MyRobot(commands2.TimedCommandRobot):
         commands2.CommandScheduler.getInstance().cancelAll()
         self.container.setHeadingControlToCurrentrHeading()
     
-    """"
+    
     @typing.override
     def _simulationInit(self):
         from subsystems.Vision.photon_vision_sim import PVisionSim
         vsim = PVisionSim()
-    """
+    

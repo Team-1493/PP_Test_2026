@@ -1022,5 +1022,3 @@ class LimelightHelpers:
 		array.append(tag_area)
 		array.extend(raw_fiducials)
 		return 1.0 == LimelightHelpers.set_limelight_NTDoubleArray(name, "botpose_orb_wpiblue",array)
-
-		
