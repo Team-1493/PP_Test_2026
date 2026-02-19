@@ -187,7 +187,18 @@ class ConstantValues():
         field_layout = AprilTagFieldLayout("deploy/apriltags/2026_field.json")
         tags_list=field_layout.getTags()
 
-    
+    class IntakeConstants():
+        # To be tuned
+        INTAKE_KP = 3.0
+        INTAKE_KV = 0.12
+        INTAKE_VOLTAGE = 0.5
+
+        ARM_KP = 0.0
+        ARM_KD = 0.0
+        ARM_KI = 0.0
+        ARM_PEAK_FORWARD_TORQUE_CURRENT = 0.0
+        ARM_PEAK_REVERSE_TORQUE_CURRENT = 0.0
+
     @staticmethod
     def update_constants():
 
@@ -255,6 +266,16 @@ class ConstantValues():
         ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_TOLERANCE =  SmartDashboard.getNumber("HeadingController Tol",ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_TOLERANCE)
         ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_RATE_TOLERANCE =  SmartDashboard.getNumber("HeadingController Rate Tol",ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_RATE_TOLERANCE)
 
+        # update values for intake motor
+        ConstantValues.IntakeConstants.INTAKE_KP = SmartDashboard.getNumber("Intake kP", ConstantValues.IntakeConstants.INTAKE_KP)
+        ConstantValues.IntakeConstants.INTAKE_KV = SmartDashboard.getNumber("Intake kV", ConstantValues.IntakeConstants.INTAKE_KV)
+        ConstantValues.IntakeConstants.INTAKE_VOLTAGE = SmartDashboard.getNumber("Intake Voltage", ConstantValues.IntakeConstants.INTAKE_VOLTAGE)
+        ConstantValues.IntakeConstants.ARM_KP = SmartDashboard.getNumber("Arm kP", ConstantValues.IntakeConstants.ARM_KP)
+        ConstantValues.IntakeConstants.ARM_KD = SmartDashboard.getNumber("Arm kD", ConstantValues.IntakeConstants.ARM_KD)
+        ConstantValues.IntakeConstants.ARM_KI = SmartDashboard.getNumber("Arm kI", ConstantValues.IntakeConstants.ARM_KI)
+        ConstantValues.IntakeConstants.ARM_PEAK_FORWARD_TORQUE_CURRENT = SmartDashboard.getNumber("Arm peak forward torque current", ConstantValues.IntakeConstants.ARM_PEAK_FORWARD_TORQUE_CURRENT)
+        ConstantValues.IntakeConstants.ARM_PEAK_REVERSE_TORQUE_CURRENT = SmartDashboard.getNumber("Arm peak reverse torque current", ConstantValues.IntakeConstants.ARM_PEAK_REVERSE_TORQUE_CURRENT)
+
 
  
     @staticmethod
@@ -320,5 +341,15 @@ class ConstantValues():
         SmartDashboard.putNumber("HeadingController Amax",ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_AMAX)                               
         SmartDashboard.putNumber("HeadingController Tol",ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_TOLERANCE)
         SmartDashboard.putNumber("HeadingController Rate Tol",ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_RATE_TOLERANCE)
+
+
+        SmartDashboard.putNumber("Intake kV", ConstantValues.IntakeConstants.INTAKE_KV)
+        SmartDashboard.putNumber("Intake kP", ConstantValues.IntakeConstants.INTAKE_KP)
+        SmartDashboard.putNumber("Arm kP", ConstantValues.IntakeConstants.ARM_KP)
+        SmartDashboard.putNumber("Arm kD", ConstantValues.IntakeConstants.ARM_KD)
+        SmartDashboard.putNumber("Arm kI", ConstantValues.IntakeConstants.ARM_KI)
+        SmartDashboard.putNumber("Intake Voltage", ConstantValues.IntakeConstants.INTAKE_VOLTAGE)
+        SmartDashboard.getNumber("Arm peak forward torque current", ConstantValues.IntakeConstants.ARM_PEAK_FORWARD_TORQUE_CURRENT)
+        SmartDashboard.getNumber("Arm peak reverse torque current", ConstantValues.IntakeConstants.ARM_PEAK_REVERSE_TORQUE_CURRENT)
 
 
