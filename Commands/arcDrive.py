@@ -13,7 +13,7 @@ from Commands.drive_path_generator import DrivePathGenerator
 
 class arcDrive(commands2.Command):
     def __init__(self,
-                _driveTrain:CommandSwerveDrivetrain,
+                _driveTrain:DrivetrainGenerator,
                 # _targetPose: typing.Callable[[], Pose2d],
                 ) -> None:
         super().__init__()
