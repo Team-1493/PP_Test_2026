@@ -196,6 +196,8 @@ class ConstantValues():
         ARM_KP = 0.0
         ARM_KD = 0.0
         ARM_KI = 0.0
+        ARM_KG = 0.0
+
         ARM_PEAK_FORWARD_TORQUE_CURRENT = 0.0
         ARM_PEAK_REVERSE_TORQUE_CURRENT = 0.0
 
@@ -273,6 +275,7 @@ class ConstantValues():
         ConstantValues.IntakeConstants.ARM_KP = SmartDashboard.getNumber("Arm kP", ConstantValues.IntakeConstants.ARM_KP)
         ConstantValues.IntakeConstants.ARM_KD = SmartDashboard.getNumber("Arm kD", ConstantValues.IntakeConstants.ARM_KD)
         ConstantValues.IntakeConstants.ARM_KI = SmartDashboard.getNumber("Arm kI", ConstantValues.IntakeConstants.ARM_KI)
+        ConstantValues.IntakeConstants.ARM_KG = SmartDashboard.getNumber("Arm kG", ConstantValues.IntakeConstants.ARM_KG)
         ConstantValues.IntakeConstants.ARM_PEAK_FORWARD_TORQUE_CURRENT = SmartDashboard.getNumber("Arm peak forward torque current", ConstantValues.IntakeConstants.ARM_PEAK_FORWARD_TORQUE_CURRENT)
         ConstantValues.IntakeConstants.ARM_PEAK_REVERSE_TORQUE_CURRENT = SmartDashboard.getNumber("Arm peak reverse torque current", ConstantValues.IntakeConstants.ARM_PEAK_REVERSE_TORQUE_CURRENT)
 
@@ -348,6 +351,7 @@ class ConstantValues():
         SmartDashboard.putNumber("Arm kP", ConstantValues.IntakeConstants.ARM_KP)
         SmartDashboard.putNumber("Arm kD", ConstantValues.IntakeConstants.ARM_KD)
         SmartDashboard.putNumber("Arm kI", ConstantValues.IntakeConstants.ARM_KI)
+        SmartDashboard.putNumber("Arm kG", ConstantValues.IntakeConstants.ARM_KG)
         SmartDashboard.putNumber("Intake Voltage", ConstantValues.IntakeConstants.INTAKE_VOLTAGE)
         SmartDashboard.getNumber("Arm peak forward torque current", ConstantValues.IntakeConstants.ARM_PEAK_FORWARD_TORQUE_CURRENT)
         SmartDashboard.getNumber("Arm peak reverse torque current", ConstantValues.IntakeConstants.ARM_PEAK_REVERSE_TORQUE_CURRENT)
