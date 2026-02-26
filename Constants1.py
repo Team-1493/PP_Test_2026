@@ -70,9 +70,9 @@ class ConstantValues():
         STD_DEV_COEFF_XY_2 = .1 #0.05        
         STD_DEV_COEFF_THETA = 999 #0.04 or self,max_value
 
-        CAMERA_CUTOFF_DISTANCE_1 = 2 # meters, above this distance std's set to max 
-        CAMERA_CUTOFF_DISTANCE_2 = 4 # meters, above this distance std's set to max                
-        CAMERA_CUTOFF_DIFFERENCE = 0.25 # meters, above this distance std's set to max                
+        CAMERA_CUTOFF_DISTANCE_1 = 8 # meters, above this distance std's set to max 
+        CAMERA_CUTOFF_DISTANCE_2 = 8 # meters, above this distance std's set to max                
+        CAMERA_CUTOFF_DIFFERENCE = 8 # meters, above this distance std's set to max                
 
     class AutoBuilderConstants():
         AUTOBUILDER_XY_kP = 5        
@@ -202,7 +202,8 @@ class ConstantValues():
         tag25.pose = Pose3d(Translation3d(4.022, 4.390, 1.124), Rotation3d(0.000, 0.000, 3.142))
         tag26.pose = Pose3d(Translation3d(4.022, 4.035, 1.124), Rotation3d(0.000, 0.000, 3.142))
         tag27.pose = Pose3d(Translation3d(4.270, 3.431, 1.124), Rotation3d(0.000, 0.000, 4.712))
-        tag28.pose = Pose3d(Translation3d(4.588, 0.644, 0.889), Rotation3d(0.000, 0.000, 3.142))
+#  this is actual field:        tag28.pose = Pose3d(Translation3d(4.588, 0.644, 0.889), Rotation3d(0.000, 0.000, 3.142))
+        tag28.pose = Pose3d(Translation3d(4.638, 0.644, 0.889), Rotation3d(0.000, 0.000, 3.142))        
         tag29.pose = Pose3d(Translation3d(0.008, 0.666, 0.552), Rotation3d(0.000, 0.000, 0.000))
         tag30.pose = Pose3d(Translation3d(0.008, 1.098, 0.552), Rotation3d(0.000, 0.000, 0.000))
         tag31.pose = Pose3d(Translation3d(0.008, 3.746, 0.552), Rotation3d(0.000, 0.000, 0.000))

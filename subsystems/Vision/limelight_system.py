@@ -7,8 +7,8 @@ from Utilities.LLH import RawFiducial
 from  Constants1 import ConstantValues
 from wpilib import SmartDashboard
 
+
 from subsystems.Drive.drivetrain_generator import DrivetrainGenerator
-from subsystems.laser_can import LaserCAN
 
 class LLsystem(Subsystem):
     instance = None
@@ -19,10 +19,10 @@ class LLsystem(Subsystem):
             LLsystem.instance = LLsystem()
             print("********************** LL System  **********************") 
         return LLsystem.instance
-    
+
 
     def __init__(self):
-        self.numCams = 2   # number of cameras on robot
+        self.numCams = 1   # number of cameras on robot
 
  #       self.robotState = RobotState.getInstance()
         self.driveTrain = DrivetrainGenerator.getInstance()
@@ -36,13 +36,15 @@ class LLsystem(Subsystem):
         for i in range(self.numCams):
                 self.cam_label[i]="LL Cam "+str(i)+" "
 
-
     def periodic(self):
         self.currentPose = self.driveTrain.get_pose()
         rot =  self.currentPose.rotation().degrees()
         for i in range(self.numCams):    
             LimelightHelpers.set_robot_orientation(
                 self.constants.CAM_NAME[i],rot, 0, 0, 0, 0, 0)
+
+        self.writeToFile=False
+        self.openedFile=False
         self.update()
 
 
@@ -112,11 +114,7 @@ class LLsystem(Subsystem):
 
 
                     label=self.cam_label[i]
-                    error = self.currentPose.translation().distance(current_estimate[i].pose.translation())
-                    SmartDashboard.putNumber(label+"error",round(error,3))
 
-                    ki = error*numTags/(closestTagDist[i]**2)
-                    SmartDashboard.putNumber(label+"ki ",ki)
                     SmartDashboard.putNumber(label+"closest Tag ID ",closestTagID[i])    
                     SmartDashboard.putNumber(label+"closest Dist",round(closestTagDist[i],3))                                    
                     SmartDashboard.putNumber(label+"Num Targ",current_estimate[i].tag_count)                
@@ -220,5 +218,6 @@ class LLsystem(Subsystem):
 # megatag still uses all visible tags
 # do this on a specified camera since it mayu differ by camera
     def set_priority_tag(self,cam_number,id):
-        LimelightHelpers.set_priority_tag_id(self.constants.CAM_NAME[cam_number],id)        
-                        
+        LimelightHelpers.set_priority_tag_id(self.constants.CAM_NAME[cam_number],id)     
+
+ 

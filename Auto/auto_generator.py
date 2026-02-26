@@ -39,7 +39,7 @@ class AutoGenerator():
 
 
     def create_named_commands(self):
-        NamedCommands.registerCommand('DriveToGoalCam', GoalCamCommand(-1,0))
+        NamedCommands.registerCommand('DriveToGoalCam', StopDrive())
         NamedCommands.registerCommand('StopDrive', StopDrive())        
 
 

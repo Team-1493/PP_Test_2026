@@ -35,9 +35,9 @@ class RobotContainer:
         self.timer.reset()
         self.timer.start()
 
-        self.constants = ConstantValues.getInstance()
-        while self.timer.get()<3:
-            print("Waiting for Warmup",round(self.timer.get(),0))
+        self.constants = ConstantValues.getInstance()  
+        while self.timer.get()<0.1:
+            ""#print("Waiting for Warmup",round(self.timer.get(),0))
         self.drivetrain = DrivetrainGenerator.getInstance()
  #       while self.timer.get()<5:""
 #            print("Creating CAN Devices",round(self.timer.get(),0))

@@ -20,19 +20,21 @@ class TunerConstants:
         .with_k_i(0)
         .with_k_d(0.5)
         .with_k_s(0.1)
-        .with_k_v(1.59)
+        .with_k_v(2.66)
         .with_k_a(0)
-        .with_static_feedforward_sign(signals.StaticFeedforwardSignValue.USE_CLOSED_LOOP_SIGN)
+        .with_static_feedforward_sign(
+            signals.StaticFeedforwardSignValue.USE_CLOSED_LOOP_SIGN
+        )
     )
     # When using closed-loop control, the drive motor uses the control
     # output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
     _drive_gains = (
         configs.Slot0Configs()
-        .with_k_p(5.5)  # 0.1 for voltage
+        .with_k_p(.1)
         .with_k_i(0)
         .with_k_d(0)
-        .with_k_s(2)
-        .with_k_v(0)  #0.124 for voltage0
+        .with_k_s(0)
+        .with_k_v(.124)
     )
 
     # The closed-loop output type to use for the steer motors;
@@ -40,7 +42,7 @@ class TunerConstants:
     _steer_closed_loop_output = swerve.ClosedLoopOutputType.VOLTAGE
     # The closed-loop output type to use for the drive motors;
     # This affects the PID/FF gains for the drive motors
-    _drive_closed_loop_output = swerve.ClosedLoopOutputType.TORQUE_CURRENT_FOC #TORQUE_CURRENT_FOC
+    _drive_closed_loop_output = swerve.ClosedLoopOutputType.VOLTAGE
 
     # The type of motor used for the drive motor
     _drive_motor_type = swerve.DriveMotorArrangement.TALON_FX_INTEGRATED
@@ -62,7 +64,8 @@ class TunerConstants:
         configs.CurrentLimitsConfigs()
         # Swerve azimuth does not require much torque output, so we can set a relatively low
         # stator current limit to help avoid brownouts without impacting performance.
-        .with_stator_current_limit(60).with_stator_current_limit_enable(True)
+        .with_stator_current_limit(60.0)
+        .with_stator_current_limit_enable(True)
     )
     _encoder_initial_configs = configs.CANcoderConfiguration()
     # Configs for the Pigeon 2; leave this None to skip applying Pigeon 2 configs
@@ -70,19 +73,19 @@ class TunerConstants:
 
     # CAN bus that the devices are located on;
     # All swerve devices must share the same CAN bus
-    canbus = CANBus("", "./logs/example.hoot")
+    canbus = CANBus("1493Canivore", "./logs/example.hoot")
 
     # Theoretical free speed (m/s) at 12 V applied output;
     # This needs to be tuned to your individual robot
-    speed_at_12_volts: units.meters_per_second = 3.6
+    speed_at_12_volts: units.meters_per_second = 3.79
 
     # Every 1 rotation of the azimuth results in _couple_ratio drive motor turns;
     # This may need to be tuned to your individual robot
-    _couple_ratio = 3.5405   #default 3.5714285714285716
+    _couple_ratio = 3.5714285714285716
 
-    _drive_gear_ratio = 8.14
-    _steer_gear_ratio = 12.8
-    _wheel_radius: units.meter = 0.04914
+    _drive_gear_ratio = 8.142857142857142
+    _steer_gear_ratio = 21.428571428571427
+    _wheel_radius = 0.0508
 
     _invert_left_side = False
     _invert_right_side = True
@@ -103,7 +106,11 @@ class TunerConstants:
         .with_pigeon2_configs(_pigeon_configs)
     )
 
-    _constants_creator: swerve.SwerveModuleConstantsFactory[configs.TalonFXConfiguration, configs.TalonFXConfiguration, configs.CANcoderConfiguration] = (
+    _constants_creator: swerve.SwerveModuleConstantsFactory[
+        configs.TalonFXConfiguration,
+        configs.TalonFXConfiguration,
+        configs.CANcoderConfiguration,
+    ] = (
         swerve.SwerveModuleConstantsFactory()
         .with_drive_motor_gear_ratio(_drive_gear_ratio)
         .with_steer_motor_gear_ratio(_steer_gear_ratio)
@@ -132,45 +139,45 @@ class TunerConstants:
     _front_left_drive_motor_id = 3
     _front_left_steer_motor_id = 4
     _front_left_encoder_id = 13
-    _front_left_encoder_offset: units.rotation = -0.2964# -0.289794921875
-    _front_left_steer_motor_inverted = False
+    _front_left_encoder_offset: units.rotation = -0.18017578125
+    _front_left_steer_motor_inverted = True
     _front_left_encoder_inverted = False
 
-    _front_left_x_pos: units.meter = 0.523
-    _front_left_y_pos: units.meter = 0.523
+    _front_left_x_pos: units.meter = 0.273
+    _front_left_y_pos: units.meter = 0.273
 
     # Front Right
     _front_right_drive_motor_id = 1
     _front_right_steer_motor_id = 2
     _front_right_encoder_id = 11
-    _front_right_encoder_offset: units.rotation = 0.4739 #0.47802734375
-    _front_right_steer_motor_inverted = False
+    _front_right_encoder_offset: units.rotation = 0.06982421875
+    _front_right_steer_motor_inverted = True
     _front_right_encoder_inverted = False
 
-    _front_right_x_pos: units.meter = 0.523
-    _front_right_y_pos: units.meter = -0.523
+    _front_right_x_pos: units.meter =0.273
+    _front_right_y_pos: units.meter = -0.273
 
     # Back Left
-    _back_left_drive_motor_id = 7
-    _back_left_steer_motor_id = 8
-    _back_left_encoder_id = 17
-    _back_left_encoder_offset: units.rotation = -0.15992#-0.161865234375
-    _back_left_steer_motor_inverted = False
+    _back_left_drive_motor_id = 5
+    _back_left_steer_motor_id = 6
+    _back_left_encoder_id = 15
+    _back_left_encoder_offset: units.rotation = 0.30224609375
+    _back_left_steer_motor_inverted = True
     _back_left_encoder_inverted = False
 
-    _back_left_x_pos: units.meter = -0.523
-    _back_left_y_pos: units.meter =0.523
+    _back_left_x_pos: units.meter = -0.273
+    _back_left_y_pos: units.meter = 0.273
 
     # Back Right
-    _back_right_drive_motor_id = 5
-    _back_right_steer_motor_id = 6
-    _back_right_encoder_id = 15
-    _back_right_encoder_offset: units.rotation = 0.419434 #0.418212890625
-    _back_right_steer_motor_inverted = False
+    _back_right_drive_motor_id = 7
+    _back_right_steer_motor_id = 8
+    _back_right_encoder_id = 17
+    _back_right_encoder_offset: units.rotation = -0.2158203125
+    _back_right_steer_motor_inverted = True
     _back_right_encoder_inverted = False
 
-    _back_right_x_pos: units.meter = -0.523
-    _back_right_y_pos: units.meter = -0.523
+    _back_right_x_pos: units.meter = -0.273
+    _back_right_y_pos: units.meter = -0.273
 
 
     front_left = _constants_creator.create_module_constants(
