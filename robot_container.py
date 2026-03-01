@@ -22,6 +22,7 @@ from Commands.auto_pilot_command import AutoPilotCommand
 from Commands.find_wheel_base import FindWheelBase
 from Commands.find_ks import FindkS
 
+from subsystems.Intake.intake_subsystem import IntakeSystem
 
 class RobotContainer:
 
@@ -39,6 +40,7 @@ class RobotContainer:
 
         self.headingController = HeadingController.getInstance() #OK
         self.limelightSytem = LLsystem.getInstance()  #OK
+        self.intakeSystem = IntakeSystem.getInstance()
         self._joystick = CommandXboxController(0)
         
 
@@ -79,7 +81,7 @@ class RobotContainer:
         self.drivetrain.register_telemetry(
             lambda state: self._logger.telemeterize(state)
         )
-
+    
         self._joystick.button(1).onTrue(
             self.headingController.runOnce(lambda:self.headingController.rotateToZero()))
         
@@ -92,8 +94,19 @@ class RobotContainer:
         self._joystick.button(4).onTrue(
             self.headingController.runOnce(lambda:self.headingController.rotateTo270()))
 
-
-
+        self._joystick.button(7).onTrue(
+            self.intakeSystem.runOnce(lambda: self.intakeSystem.intake())
+        )
+        self._joystick.button(7).onFalse(
+            self.intakeSystem.runOnce(lambda: self.intakeSystem.stop_intake())
+        )
+        self._joystick.button(6).onTrue(
+            self.intakeSystem.runOnce(lambda: self.intakeSystem.arm_up())
+        )
+        self._joystick.button(5).onTrue(
+            self.intakeSystem.runOnce(lambda: self.intakeSystem.arm_down())
+        )
+        
 #        self._joystick.button(5).whileTrue(
 #            FindWheelBase().finallyDo((self.headingController.setTargetRotationInt)))
 

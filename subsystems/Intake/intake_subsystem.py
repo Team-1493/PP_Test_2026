@@ -1,21 +1,20 @@
 from commands2 import Subsystem
 from wpilib import SmartDashboard, DigitalInput
-from wpimath.controller import ArmFeedforward
 import wpilib
 from phoenix6 import hardware, configs, controls
 from phoenix6.signals import GravityTypeValue
 from Constants1 import ConstantValues
 
-class Intake(Subsystem):
+class IntakeSystem(Subsystem):
     instance=None
     
     @staticmethod
     def getInstance():
-        if Intake.instance == None:
-            Intake.instance = Intake()
+        if IntakeSystem.instance == None:
+            IntakeSystem.instance = IntakeSystem()
             print('*' * 22 + ' INTAKE ' + '*' * 22)
-        return Intake.instance
-    def __init__(self, intakeMotorID, armMotorID, dioPort):
+        return IntakeSystem.instance
+    def __init__(self, intakeMotorID, armMotorID, dioPortUp, dioPortDown):
         """
         Initialize PID constants for motors
         """
@@ -23,7 +22,8 @@ class Intake(Subsystem):
 
         self.intake_motor = hardware.TalonFX(intakeMotorID)
         self.arm_motor = hardware.TalonFX(armMotorID)
-        self.limit_switch = DigitalInput(dioPort)
+        self.up_limit_switch = DigitalInput(dioPortUp)
+        self.down_limit_switch = DigitalInput(dioPortDown)
         self.voltage = ConstantValues.IntakeConstants.INTAKE_VOLTAGE
 
         self.arm_position_torque = controls.PositionTorqueCurrentFOC(0).with_slot(0)
@@ -40,28 +40,35 @@ class Intake(Subsystem):
         self.cfg.slot0.k_g = ConstantValues.IntakeConstants.ARM_KG
         self.cfg.torque_current.peak_forward_torque_current = ConstantValues.IntakeConstants.ARM_PEAK_FORWARD_TORQUE_CURRENT
         self.cfg.torque_current.peak_reverse_torque_current = ConstantValues.IntakeConstants.ARM_PEAK_REVERSE_TORQUE_CURRENT
-        self.arm_motor.configurator.apply(self.cfg)
         self.cfg.feedback.sensor_to_mechanism_ratio = 50
+        self.arm_motor.configurator.apply(self.cfg)
 
         self.intake_duty = controls.DutyCycleOut(0)
         self.arm_motor.set_position(0)
 
         self.current_goal_position = None
-
-        self.feedforward = ArmFeedforward()
     def periodic(self):
         """
         rotation of the arm
         """
+        if self.up_limit_switch.get() and self.current_goal_position == self.goal_up:
+            self.stop_arm()
+        if self.down_limit_switch.get() and self.current_goal_position == self.goal_down:
+            self.stop_arm()
         if self.current_goal_position is not None:
             self.arm_motor.set_control(self.arm_position_torque.with_position(self.current_goal_position))          
     def intake(self):
         self.intake_motor.set_control(self.intake_duty.with_output(self.voltage))
     def stop_intake(self):
         self.intake_motor.set_control(0)
-    def arm_up(self):
-        self.current_goal_position = self.goal_up
-    def arm_down(self):
-        self.current_goal_position = self.goal_down
     def stop_arm(self):
         self.arm_motor.set_control(self.brake)
+    def arm_up(self):
+        self.current_goal_position = self.goal_up
+        # self.stop_intake()
+        # self.periodic()
+    def arm_down(self):
+        self.current_goal_position = self.goal_down
+        # self.periodic()
+        # if self.down_limit_switch:
+        #     self.intake()
