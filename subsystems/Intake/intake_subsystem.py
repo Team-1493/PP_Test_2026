@@ -14,6 +14,22 @@ class IntakeSystem(Subsystem):
             IntakeSystem.instance = IntakeSystem()
             print('*' * 22 + ' INTAKE ' + '*' * 22)
         return IntakeSystem.instance
+    def setup(self):
+        self.voltage = ConstantValues.IntakeConstants.INTAKE_VOLTAGE
+
+        self.goal_down = ConstantValues.IntakeConstants.MAX_DOWN_ROTATION
+        self.goal_up = ConstantValues.IntakeConstants.MAX_UP_ROTATION
+
+        self.cfg = configs.TalonFXConfiguration()
+        self.cfg.slot0.k_p = ConstantValues.IntakeConstants.ARM_KP
+        self.cfg.slot0.k_d = ConstantValues.IntakeConstants.ARM_KD
+        self.cfg.slot0.k_i = ConstantValues.IntakeConstants.ARM_KI
+        self.cfg.slot0.gravity_type = GravityTypeValue.ARM_COSINE
+        self.cfg.slot0.k_g = ConstantValues.IntakeConstants.ARM_KG
+        self.cfg.torque_current.peak_forward_torque_current = ConstantValues.IntakeConstants.ARM_PEAK_FORWARD_TORQUE_CURRENT
+        self.cfg.torque_current.peak_reverse_torque_current = ConstantValues.IntakeConstants.ARM_PEAK_REVERSE_TORQUE_CURRENT
+        self.cfg.feedback.sensor_to_mechanism_ratio = ConstantValues.IntakeConstants.SENSOR_TO_MECHANISM_RATIO
+        
     def __init__(self, intakeMotorID, armMotorID, dioPortUp, dioPortDown):
         """
         Initialize PID constants for motors
@@ -24,23 +40,12 @@ class IntakeSystem(Subsystem):
         self.arm_motor = hardware.TalonFX(armMotorID)
         self.up_limit_switch = DigitalInput(dioPortUp)
         self.down_limit_switch = DigitalInput(dioPortDown)
-        self.voltage = ConstantValues.IntakeConstants.INTAKE_VOLTAGE
 
         self.arm_position_torque = controls.PositionTorqueCurrentFOC(0).with_slot(0)
         self.brake = controls.NeutralOut()
 
-        self.goal_down = 0
-        self.goal_up = 0.25
+        self.setup()
 
-        self.cfg = configs.TalonFXConfiguration()
-        self.cfg.slot0.k_p = ConstantValues.IntakeConstants.ARM_KP
-        self.cfg.slot0.k_d = ConstantValues.IntakeConstants.ARM_KD
-        self.cfg.slot0.k_i = ConstantValues.IntakeConstants.ARM_KI
-        self.cfg.slot0.gravity_type = GravityTypeValue.ARM_COSINE
-        self.cfg.slot0.k_g = ConstantValues.IntakeConstants.ARM_KG
-        self.cfg.torque_current.peak_forward_torque_current = ConstantValues.IntakeConstants.ARM_PEAK_FORWARD_TORQUE_CURRENT
-        self.cfg.torque_current.peak_reverse_torque_current = ConstantValues.IntakeConstants.ARM_PEAK_REVERSE_TORQUE_CURRENT
-        self.cfg.feedback.sensor_to_mechanism_ratio = 50
         self.arm_motor.configurator.apply(self.cfg)
 
         self.intake_duty = controls.DutyCycleOut(0)

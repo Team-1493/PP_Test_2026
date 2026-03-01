@@ -202,6 +202,8 @@ class ConstantValues():
         ARM_PEAK_FORWARD_TORQUE_CURRENT = 0.0
         ARM_PEAK_REVERSE_TORQUE_CURRENT = 0.0
 
+        SENSOR_TO_MECHANISM_RATIO = 50.0
+
     @staticmethod
     def update_constants():
 
@@ -279,7 +281,7 @@ class ConstantValues():
         ConstantValues.IntakeConstants.ARM_PEAK_REVERSE_TORQUE_CURRENT = SmartDashboard.getNumber("Arm peak reverse torque current", ConstantValues.IntakeConstants.ARM_PEAK_REVERSE_TORQUE_CURRENT)
         ConstantValues.IntakeConstants.MAX_UP_ROTATION = SmartDashboard.getNumber("Max up rotation", ConstantValues.IntakeConstants.MAX_UP_ROTATION)
         ConstantValues.IntakeConstants.MAX_DOWN_ROTATION = SmartDashboard.getNumber("Max down rotation", ConstantValues.IntakeConstants.MAX_DOWN_ROTATION)
-
+        ConstantValues.IntakeConstants.SENSOR_TO_MECHANISM_RATIO = SmartDashboard.getNumber("Sensor to mechanism ratio", ConstantValues.IntakeConstants.SENSOR_TO_MECHANISM_RATIO)
  
     @staticmethod
     def write_constants_dashboard():     
@@ -352,8 +354,10 @@ class ConstantValues():
         SmartDashboard.putNumber("Intake Voltage", ConstantValues.IntakeConstants.INTAKE_VOLTAGE)
         SmartDashboard.putNumber("Arm peak forward torque current", ConstantValues.IntakeConstants.ARM_PEAK_FORWARD_TORQUE_CURRENT)
         SmartDashboard.putNumber("Arm peak reverse torque current", ConstantValues.IntakeConstants.ARM_PEAK_REVERSE_TORQUE_CURRENT)
-        ConstantValues.IntakeConstants.MAX_UP_ROTATION = SmartDashboard.putNumber("Max up rotation", ConstantValues.IntakeConstants.MAX_UP_ROTATION)
-        ConstantValues.IntakeConstants.MAX_UP_ROTATION = SmartDashboard.putNumber("Max up rotation", ConstantValues.IntakeConstants.MAX_UP_ROTATION)
+        SmartDashboard.putNumber("Max up rotation", ConstantValues.IntakeConstants.MAX_UP_ROTATION)
+        SmartDashboard.putNumber("Max up rotation", ConstantValues.IntakeConstants.MAX_UP_ROTATION)
+        SmartDashboard.putNumber("Sensor to mechanism ratio", ConstantValues.IntakeConstants.SENSOR_TO_MECHANISM_RATIO)
+
 
 
 
