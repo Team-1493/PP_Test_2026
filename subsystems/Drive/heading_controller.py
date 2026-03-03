@@ -32,17 +32,19 @@ class HeadingController(Subsystem):
 
 
     def get_rotation_state(self,stick_rot):
-        dir=self.driveTrain.get_operator_forward_direction().radians()
+        prev_state = self.state
         self.rotation = self.getRotation()
         if (abs(stick_rot) > 0):
-            self.targetRotation = self.rotation+dir
+            self.targetRotation = self.rotation
             self.state=0
             self.time1 = self.timer.get()
         elif self.state != 2 : 
             self.state = 1
-            if self.timer.get() - self.time1<0.1:
-                self.targetRotation = self.rotation+dir
-        return self.state,self.targetRotation
+            # Capture heading when transitioning from manual rotation to hold mode.
+            # This also handles first enable when no rotation has happened yet.
+            if prev_state == 0 or self.timer.get() - self.time1 < 0.1:
+                self.targetRotation = self.rotation
+        return self.state, self.targetRotation
 
 
     def setTargetRotation(self,angle : float):
@@ -82,7 +84,7 @@ class HeadingController(Subsystem):
     
     def setTargetRotationInt (self,b:bool):
         self.state=2
-        self.setTargetRotation(self.getRotation()+self.driveTrain.get_operator_forward_direction().radians())
+        self.setTargetRotation(self.getRotation())
 
     
     

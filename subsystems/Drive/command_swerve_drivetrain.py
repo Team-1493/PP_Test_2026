@@ -284,11 +284,14 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
         if not self._has_applied_operator_perspective or DriverStation.isDisabled():
             alliance_color = DriverStation.getAlliance()
             if alliance_color is not None:
+                self.alliance_color = alliance_color
                 self.set_operator_perspective_forward(
+#                self._BLUE_ALLIANCE_PERSPECTIVE_ROTATION
                     self._RED_ALLIANCE_PERSPECTIVE_ROTATION
                     if alliance_color == DriverStation.Alliance.kRed
                     else self._BLUE_ALLIANCE_PERSPECTIVE_ROTATION
                 )
+#                self.seed_field_centric(Rotation2d(self.get_rotation_rad()))
                 self._has_applied_operator_perspective = True
 
 #        self.operator_fwd_dir_deg = self.get_operator_forward_direction().degrptrees()    
