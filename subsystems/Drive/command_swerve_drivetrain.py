@@ -301,18 +301,20 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
                 self.previous_alliance_color = self.alliance_color
                 self.alliance_color = color
            
-                if (self.previous_alliance_color != self.alliance_color):
+                if (self.previous_alliance_color != self.alliance_color or not self._has_applied_operator_perspective):
 
                     if self.alliance_color == DriverStation.Alliance.kRed:
                         self.perspective_shift = 180
                         self.invert_controls = -1
                         self.set_operator_perspective_forward(self._RED_ALLIANCE_PERSPECTIVE_ROTATION)
-                        self.reset_pose(Pose2d(Translation2d(0,0),Rotation2d(math.pi)))
+#                        self.reset_pose(Pose2d(Translation2d(0,0),Rotation2d(math.pi)))
+                        print("************************ ",self.get_operator_forward_direction().degrees)
                     else:
                         self.perspective_shift = 0
                         self.invert_controls = 1
                         self.set_operator_perspective_forward(self._BLUE_ALLIANCE_PERSPECTIVE_ROTATION)
-                        self.reset_pose(Pose2d(Translation2d(0,0),Rotation2d(0)))                    
+ #                       self.reset_pose(Pose2d(Translation2d(0,0),Rotation2d(0)))       
+                        print("*************************** ",self.get_operator_forward_direction().degrees)             
 
                     self._has_applied_operator_perspective = True
 

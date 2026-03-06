@@ -5,6 +5,7 @@ from wpimath.trajectory import TrapezoidProfile
 from math import pi,hypot
 from Constants1 import ConstantValues
 from subsystems.Drive.drivetrain_generator import DrivetrainGenerator 
+from wpimath.geometry import Pose2d, Rotation2d
 
 #To Do - check if rotation not being controlled until first rotation
 
@@ -34,7 +35,7 @@ class HeadingController(Subsystem):
 
     def get_rotation_state(self,stick_rot):
         prev_state = self.state
-        self.rotation = self.getRotation()+self.driveTrain.get_operator_forward_direction().radians()
+        self.rotation = self.getRotation()-self.driveTrain.get_operator_forward_direction().radians()
         if (abs(stick_rot) > 0):
             self.targetRotation = self.rotation
             self.state=0
@@ -73,9 +74,10 @@ class HeadingController(Subsystem):
         self.driveTrain.drive_RC(0,0,0)
         self.rotation_offset += self.driveTrain.get_rotation_rad()
         self.state=0
-        self.driveTrain.seed_field_centric()
-        self.setTargetRotation(self.driveTrain.get_rotation_rad())
-
+        self.driveTrain.runOnce(self.driveTrain.set_operator_perspective_forward(
+                self.driveTrain.get_state().pose.rotation()))
+#        self.driveTrain.runOnce(self.driveTrain.seed_field_centric(
+#                self.driveTrain.get_state().pose.rotation()))
 
     def getRotation(self) -> float:
         return self.driveTrain.get_rotation_rad()
