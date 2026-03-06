@@ -9,7 +9,7 @@ from typing import Callable, overload
 from wpilib import DriverStation, Notifier, RobotController, SmartDashboard
 import wpilib
 from wpilib.sysid import SysIdRoutineLog
-from wpimath.geometry import Pose2d, Rotation2d
+from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from Constants1 import ConstantValues
 
 
@@ -150,12 +150,24 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
             self, drive_motor_type, steer_motor_type, encoder_type,
             drivetrain_constants, arg0, arg1, arg2, arg3
         )
-        self.rot_deg=0 
         self.reset_pose(Pose2d())
         self._sim_notifier: Notifier | None = None
         self._last_sim_time: units.second = 0.0
 
         self._has_applied_operator_perspective = False
+
+        # always use blue perspective
+        self.set_operator_perspective_forward(self._BLUE_ALLIANCE_PERSPECTIVE_ROTATION)
+        
+        # shift to apply when setting setting robot orientation for limelight
+        # blue = 0 shift, red = 180 shift
+        # shift is set in periodic()
+        self.perspective_shift=0
+        self.invert_controls = 1
+        self.previous_alliance_color = None
+        self.alliance_color = None        
+        #self.pigeon2.set_yaw(0)
+        
         """Keep track if we've ever applied the operator perspective before or not"""
         self.setup_swerve_requests()
         # Swerve requests to apply during SysId characterization
@@ -281,20 +293,29 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
         # This allows us to correct the perspective in case the robot code restarts mid-match.
         # Otherwise, only check and apply the operator perspective if the DS is disabled.
         # This ensures driving behavior doesn't change until an explicit disable event occurs during testing.nc
-        if not self._has_applied_operator_perspective or DriverStation.isDisabled():
-            alliance_color = DriverStation.getAlliance()
-            if alliance_color is not None:
-                self.alliance_color = alliance_color
-                self.set_operator_perspective_forward(
-#                self._BLUE_ALLIANCE_PERSPECTIVE_ROTATION
-                    self._RED_ALLIANCE_PERSPECTIVE_ROTATION
-                    if alliance_color == DriverStation.Alliance.kRed
-                    else self._BLUE_ALLIANCE_PERSPECTIVE_ROTATION
-                )
-#                self.seed_field_centric(Rotation2d(self.get_rotation_rad()))
-                self._has_applied_operator_perspective = True
 
-#        self.operator_fwd_dir_deg = self.get_operator_forward_direction().degrptrees()    
+        if not self._has_applied_operator_perspective or DriverStation.isDisabled():
+            color = DriverStation.getAlliance()
+           
+            if color is not None:
+                self.previous_alliance_color = self.alliance_color
+                self.alliance_color = color
+           
+                if (self.previous_alliance_color != self.alliance_color):
+
+                    if self.alliance_color == DriverStation.Alliance.kRed:
+                        self.perspective_shift = 180
+                        self.invert_controls = -1
+                        self.set_operator_perspective_forward(self._RED_ALLIANCE_PERSPECTIVE_ROTATION)
+                        self.reset_pose(Pose2d(Translation2d(0,0),Rotation2d(math.pi)))
+                    else:
+                        self.perspective_shift = 0
+                        self.invert_controls = 1
+                        self.set_operator_perspective_forward(self._BLUE_ALLIANCE_PERSPECTIVE_ROTATION)
+                        self.reset_pose(Pose2d(Translation2d(0,0),Rotation2d(0)))                    
+
+                    self._has_applied_operator_perspective = True
+
 
         pose =  self.get_pose()
         spd = self.get_speeds()

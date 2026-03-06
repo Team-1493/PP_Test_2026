@@ -1,3 +1,4 @@
+import math
 from typing import List
 from commands2 import Subsystem
 from phoenix6 import utils
@@ -9,6 +10,7 @@ from wpilib import SmartDashboard
 
 
 from subsystems.Drive.drivetrain_generator import DrivetrainGenerator
+from subsystems.Drive.heading_controller import HeadingController
 
 class LLsystem(Subsystem):
     instance = None
@@ -24,8 +26,9 @@ class LLsystem(Subsystem):
     def __init__(self):
         self.numCams = 1   # number of cameras on robot
 
- #       self.robotState = RobotState.getInstance()
+
         self.driveTrain = DrivetrainGenerator.getInstance()
+        self.headingController = HeadingController.getInstance()        
         self.constants =  ConstantValues.LimelightConstants
 
         self.max_value = 9999
@@ -38,13 +41,12 @@ class LLsystem(Subsystem):
 
     def periodic(self):
         self.currentPose = self.driveTrain.get_pose()
-        rot =  self.currentPose.rotation().degrees()
+        rot =  self.currentPose.rotation().degrees()+self.headingController.rotation_offset*math.pi/180.
+
         for i in range(self.numCams):    
             LimelightHelpers.set_robot_orientation(
                 self.constants.CAM_NAME[i],rot, 0, 0, 0, 0, 0)
 
-        self.writeToFile=False
-        self.openedFile=False
         self.update()
 
 

@@ -36,8 +36,8 @@ class DriveTeleopCommand(commands2.Command):
 
 
     def execute(self) -> None:
-        forw=self.forward()
-        sde=self.side()
+        forw=self.forward()#*self.drivetrain.invert_controls
+        sde=self.side()#*self.drivetrain.invert_controls
         rot = self.rotate()
 
         if rot<0.05 and rot>-0.05: rot=0
@@ -49,7 +49,8 @@ class DriveTeleopCommand(commands2.Command):
         rot = copysign(rot**2,rot)
 
         state, target_angle = self.headingController.get_rotation_state(rot*self._max_angular_rate)  
-          
+#        state = 0
+#        target_angle = rot*self._max_angular_rate         
 
         if state==0:
             self.drivetrain.drive_FC(

@@ -17,7 +17,6 @@ from telemetry import Telemetry
 from subsystems.Drive.heading_controller import HeadingController
 from subsystems.Vision.limelight_system import LLsystem
 from subsystems.laser_can import LaserCAN
-from Commands.seed_zero import SeedZero
 from Commands.drive_teleop_command import DriveTeleopCommand
 from Commands.auto_pilot_command import AutoPilotCommand
 from Commands.find_wheel_base import FindWheelBase
@@ -46,7 +45,6 @@ class RobotContainer:
         LaserCAN.getInstance()
         self.limelightSytem = LLsystem.getInstance()
         self._joystick = CommandXboxController(0)
-        self.seedZero = SeedZero(self.drivetrain,self.headingController)
 
         self._logger = Telemetry(TunerConstants.speed_at_12_volts)
 #        DataLogManager.start()
@@ -74,11 +72,10 @@ class RobotContainer:
 
 
 #        reset the field-centric heading on left bumper press
-        self._joystick.button(5).onTrue(self.seedZero)
+#        self._joystick.button(5).onTrue(self.seedZero)
+        self._joystick.button(5).onTrue(self.headingController.runOnce(lambda:
+            self.headingController.seed_field_centric()))
 
-        #reset pose to 0
-        self._joystick.button(6).onTrue(
-            self.drivetrain.runOnce(lambda:self.drivetrain.reset_pose(Pose2d())))
 
         
         self.drivetrain.register_telemetry(
@@ -100,7 +97,7 @@ class RobotContainer:
         
 
 #        self._joystick.button(7).whileTrue(FindkS())
-        self._joystick.button(7).whileTrue(FindSlipCurrent())
+#        self._joystick.button(7).whileTrue(FindSlipCurrent())
 #        self._joystick.button(7).whileTrue(FindWheelBase())        
 #        self._joystick.button(8).whileTrue(FindKP_MaxA())        
 
@@ -113,8 +110,8 @@ class RobotContainer:
 #            commands2.DeferredCommand(lambda:self.drive_path.drive_trench()).finallyDo
 #           (self.headingController.setTargetRotationInt))        
 
-        self._joystick.button(8).whileTrue(
-            AutoPilotCommand(26,-1.5,0,0).finallyDo((self.headingController.setTargetRotationInt)))
+#        self._joystick.button(8).whileTrue(
+#            AutoPilotCommand(26,-1.5,0,0).finallyDo((self.headingController.setTargetRotationInt)))
  
         self._joystick.button(9).onTrue(
               InstantCommand(lambda:self.update_constants()))

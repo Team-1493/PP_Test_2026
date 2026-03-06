@@ -28,12 +28,13 @@ class HeadingController(Subsystem):
         self.driveTrain = DrivetrainGenerator.getInstance()
         
         self.rotation = 0.0
-        self.targetRotation = 0.0
+        self.targetRotation = 0
+        self.rotation_offset = 0        
 
 
     def get_rotation_state(self,stick_rot):
         prev_state = self.state
-        self.rotation = self.getRotation()
+        self.rotation = self.getRotation()+self.driveTrain.get_operator_forward_direction().radians()
         if (abs(stick_rot) > 0):
             self.targetRotation = self.rotation
             self.state=0
@@ -56,7 +57,7 @@ class HeadingController(Subsystem):
         self.state=2
 
     def rotateTo90(self):
-        self.setTargetRotation(pi/2)
+        self.setTargetRotation(pi/2)    
         self.state=2
 
     def rotateTo180(self):
@@ -67,24 +68,26 @@ class HeadingController(Subsystem):
         self.setTargetRotation(3*pi/2)
         self.state=2        
 
-    def zeroStateAngle(self):
+
+    def seed_field_centric(self):
+        self.driveTrain.drive_RC(0,0,0)
+        self.rotation_offset += self.driveTrain.get_rotation_rad()
         self.state=0
-        self.setTargetRotation(0)
-        
+        self.driveTrain.seed_field_centric()
+        self.setTargetRotation(self.driveTrain.get_rotation_rad())
 
 
     def getRotation(self) -> float:
         return self.driveTrain.get_rotation_rad()
-    
-     #self.driveTrain.get_state().pose.rotation().radians()
-    
+        
 
     def setTargetRotationCommand(self,angle) -> Command:
         return  InstantCommand(lambda: self.setTargetRotation(angle))   
     
+
     def setTargetRotationInt (self,b:bool):
         self.state=2
-        self.setTargetRotation(self.getRotation())
+        self.setTargetRotation(self.getRotation()+self.driveTrain.get_operator_forward_direction().radians())
 
     
     
