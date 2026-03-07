@@ -1,7 +1,5 @@
-import math
 from typing import List
 from commands2 import Subsystem
-from phoenix6 import utils
 from Utilities.LLH import LimelightHelpers
 from Utilities.LLH import PoseEstimate
 from Utilities.LLH import RawFiducial
@@ -41,8 +39,8 @@ class LLsystem(Subsystem):
 
     def periodic(self):
         self.currentPose = self.driveTrain.get_pose()
-        rot =  self.currentPose.rotation().degrees()+self.headingController.rotation_offset*math.pi/180.
-
+#        rot =  self.currentPose.rotation().degrees()+self.headingController.rotation_offset*math.pi/180.
+        rot =  self.currentPose.rotation().degrees()
         for i in range(self.numCams):    
             LimelightHelpers.set_robot_orientation(
                 self.constants.CAM_NAME[i],rot, 0, 0, 0, 0, 0)
@@ -69,7 +67,6 @@ class LLsystem(Subsystem):
 
 
         if (shouldAccept):
-            
 
                 # read the pose estimate from each camera, and find the estimate
                 # with either the closest individual tag or 
@@ -160,7 +157,6 @@ class LLsystem(Subsystem):
 
 
 
-
     def pollLL(self,id,previousEstimate: PoseEstimate): 
         if (LimelightHelpers.get_tv(id)):
             if previousEstimate is not None:
@@ -181,6 +177,7 @@ class LLsystem(Subsystem):
 
         return previousEstimate,newEstimate         
         
+
 
     def configfureLimelights(self):
         for i in range(self.numCams):

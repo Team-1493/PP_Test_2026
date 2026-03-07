@@ -1,15 +1,14 @@
 from commands2 import Command, Subsystem
 from commands2.sysid import SysIdRoutine
 import math
-from phoenix6 import SignalLogger, swerve, units, utils, hardware, controls
-import phoenix6
+from phoenix6 import SignalLogger, swerve, units, utils, hardware
 from phoenix6.swerve.requests import ForwardPerspectiveValue
 from phoenix6.configs import Slot0Configs, Slot1Configs
 from typing import Callable, overload
 from wpilib import DriverStation, Notifier, RobotController, SmartDashboard
 import wpilib
 from wpilib.sysid import SysIdRoutineLog
-from wpimath.geometry import Pose2d, Rotation2d, Translation2d
+from wpimath.geometry import Pose2d, Rotation2d
 from Constants1 import ConstantValues
 
 
@@ -154,102 +153,20 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
         self._sim_notifier: Notifier | None = None
         self._last_sim_time: units.second = 0.0
 
+        """Keep track if we've ever applied the operator perspective before or not"""
         self._has_applied_operator_perspective = False
 
-        # always use blue perspective
         self.set_operator_perspective_forward(self._BLUE_ALLIANCE_PERSPECTIVE_ROTATION)
         
-        # shift to apply when setting setting robot orientation for limelight
-        # blue = 0 shift, red = 180 shift
-        # shift is set in periodic()
-        self.perspective_shift=0
-        self.invert_controls = 1
         self.previous_alliance_color = None
         self.alliance_color = None        
-        #self.pigeon2.set_yaw(0)
         
-        """Keep track if we've ever applied the operator perspective before or not"""
         self.setup_swerve_requests()
-        # Swerve requests to apply during SysId characterization
-        self._translation_characterization = swerve.requests.SysIdSwerveTranslation()
-        self._steer_characterization = swerve.requests.SysIdSwerveSteerGains()
-        self._rotation_characterization = swerve.requests.SysIdSwerveRotation()
 
-        self._sys_id_routine_translation = SysIdRoutine(
-            SysIdRoutine.Config(
-                # Use default ramp rate (1 V/s) and timeout (10 s)
-                # Reduce dynamic voltage to 4 V to prevent brownout
-                stepVoltage=4.0,
-                # Log state with SignalLogger class
-                recordState=lambda state: SignalLogger.write_string(
-                    "SysIdTranslation_State", SysIdRoutineLog.stateEnumToString(state)
-                ),
-            ),
-            SysIdRoutine.Mechanism(
-                lambda output: self.set_control(
-                    self._translation_characterization.with_volts(output)
-                ),
-                lambda log: None,
-                self,
-            ),
-        )
-        """SysId routine for characterizing translation. This is used to find PID gains for the drive motors."""
-
-        self._sys_id_routine_steer = SysIdRoutine(
-            SysIdRoutine.Config(
-                # Use default ramp rate (1 V/s) and timeout (10 s)
-                # Use dynamic voltage of 7 V
-                stepVoltage=7.0,
-                # Log state with SignalLogger class
-                recordState=lambda state: SignalLogger.write_string(
-                    "SysIdSteer_State", SysIdRoutineLog.stateEnumToString(state)
-                ),
-            ),
-            SysIdRoutine.Mechanism(
-                lambda output: self.set_control(
-                    self._steer_characterization.with_volts(output)
-                ),
-                lambda log: None,
-                self,
-            ),
-        )
-        """SysId routine for characterizing steer. This is used to find PID gains for the steer motors."""
-
-        self._sys_id_routine_rotation = SysIdRoutine(
-            SysIdRoutine.Config(
-                # This is in radians per second², but SysId only supports "volts per second"
-                rampRate=math.pi / 6,
-                # Use dynamic voltage of 7 V
-                stepVoltage=7.0,
-                # Use default timeout (10 s)
-                # Log state with SignalLogger class
-                recordState=lambda state: SignalLogger.write_string(
-                    "SysIdSteer_State", SysIdRoutineLog.stateEnumToString(state)
-                ),
-            ),
-            SysIdRoutine.Mechanism(
-                lambda output: (
-                    # output is actually radians per second, but SysId only supports "volts"
-                    self.set_control(
-                        self._rotation_characterization.with_rotational_rate(output)
-                    ),
-                    # also log the requested output for SysId
-                    SignalLogger.write_double("Rotational_Rate", output),
-                ),
-                lambda log: None,
-                self,
-            ),
-        )
-        """
-        SysId routine for characterizing rotation.
-        This is used to find PID gains for the FieldCentricFacingAngle HeadingController.
-        See the documentation of swerve.requests.SysIdSwerveRotation for info on importing the log to SysId.
-        """
-
-        self._sys_id_routine_to_apply = self._sys_id_routine_translation
-        """The SysId routine to test"""
         if utils.is_simulation():
             self._start_sim_thread()
+
+
     def apply_request(
         self, request: Callable[[], swerve.requests.SwerveRequest]
     ) -> Command:
@@ -263,29 +180,6 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
         """
         return self.run(lambda: self.set_control(request()))
 
-    def sys_id_quasistatic(self, direction: SysIdRoutine.Direction) -> Command:
-        """
-        Runs the SysId Quasistatic test in the given direction for the routine
-        specified by self.sys_id_routine_to_apply.
-
-        :param direction: Direction of the SysId Quasistatic test
-        :type direction: SysIdRoutine.Direction
-        :returns: Command to run
-        :rtype: Command
-        """
-        return self._sys_id_routine_to_apply.quasistatic(direction)
-
-    def sys_id_dynamic(self, direction: SysIdRoutine.Direction) -> Command:
-        """
-        Runs the SysId Dynamic test in the given direction for the routine
-        specified by self.sys_id_routine_to_apply.
-
-        :param direction: Direction of the SysId Dynamic test
-        :type direction: SysIdRoutine.Direction
-        :returns: Command to run
-        :rtype: Command
-        """
-        return self._sys_id_routine_to_apply.dynamic(direction)
 
     def periodic(self):
         # Periodically try to apply the operator perspective.
@@ -304,17 +198,11 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
                 if (self.previous_alliance_color != self.alliance_color or not self._has_applied_operator_perspective):
 
                     if self.alliance_color == DriverStation.Alliance.kRed:
-                        self.perspective_shift = 180
-                        self.invert_controls = -1
                         self.set_operator_perspective_forward(self._RED_ALLIANCE_PERSPECTIVE_ROTATION)
 #                        self.reset_pose(Pose2d(Translation2d(0,0),Rotation2d(math.pi)))
-                        print("************************ ",self.get_operator_forward_direction().degrees)
                     else:
-                        self.perspective_shift = 0
-                        self.invert_controls = 1
                         self.set_operator_perspective_forward(self._BLUE_ALLIANCE_PERSPECTIVE_ROTATION)
  #                       self.reset_pose(Pose2d(Translation2d(0,0),Rotation2d(0)))       
-                        print("*************************** ",self.get_operator_forward_direction().degrees)             
 
                     self._has_applied_operator_perspective = True
 

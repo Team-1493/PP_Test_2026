@@ -5,9 +5,7 @@
 
 from commands2 import DeferredCommand, InstantCommand
 import commands2
-from commands2.button import CommandXboxController, Trigger
-from commands2.sysid import SysIdRoutine
-from wpimath.geometry import Pose2d
+from commands2.button import CommandXboxController
 from wpilib import DataLogManager, SmartDashboard, Timer
 
 from Constants1 import ConstantValues
@@ -35,11 +33,11 @@ class RobotContainer:
         self.timer.start()
 
         self.constants = ConstantValues.getInstance()  
-        while self.timer.get()<0.1:
-            ""#print("Waiting for Warmup",round(self.timer.get(),0))
+        while self.timer.get()<1:
+            "" 
         self.drivetrain = DrivetrainGenerator.getInstance()
- #       while self.timer.get()<5:""
-#            print("Creating CAN Devices",round(self.timer.get(),0))
+        while self.timer.get()<4:
+            ""
 
         self.headingController = HeadingController.getInstance()        
         LaserCAN.getInstance()
@@ -59,29 +57,16 @@ class RobotContainer:
         self.configureButtonBindings()
 
 
+
     def configureButtonBindings(self) -> None:
 
         self.drivetrain.setDefaultCommand(self.drive_teleop_command)
-       
-        # Idle while the robot is disabled. This ensures the configured
-        # neutral mode is applied to the drive motors while disabled.
-#        idle = swerve.requests.Idle()
-##        Trigger(DriverStation.isDisabled).whileTrue(
-#            self.drivetrain.apply_request(lambda: idle).ignoringDisable(True)
-#        )
 
+        self.drivetrain.register_telemetry(lambda state: self._logger.telemeterize(state))
 
-#        reset the field-centric heading on left bumper press
-#        self._joystick.button(5).onTrue(self.seedZero)
         self._joystick.button(5).onTrue(self.headingController.runOnce(lambda:
-            self.headingController.seed_field_centric()))
+            self.headingController.set_forward_direction()))
 
-
-        
-        self.drivetrain.register_telemetry(
-            lambda state: self._logger.telemeterize(state)
-        )
-        
         self._joystick.button(4).onTrue(
             self.headingController.runOnce(lambda:self.headingController.rotateToZero()))
         
@@ -117,10 +102,12 @@ class RobotContainer:
               InstantCommand(lambda:self.update_constants()))
 
 
+
     def getAutonomousCommand(self):
         return  self.autoChooser.getSelected()
 
     
+
     def setHeadingControlToCurrentrHeading(self):
         self.headingController.setTargetRotationInt(True)  
     
@@ -129,7 +116,7 @@ class RobotContainer:
     def update_constants(self):
         # transfer constants from smartdashbaord to constants class        
         self.constants.update_constants()
-        # update limelight, autobuilder, and heading controller constants  
+        # update systems 
         self.limelightSytem.configfureLimelights()
         self.autoGenerator.update()
         self.drivetrain.update()
