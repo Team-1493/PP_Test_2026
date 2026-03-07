@@ -19,19 +19,16 @@ class ConstantValues():
         # modify these in tuner_constants also!
         TELEOP_kP = 5.5 #TunerConstants._drive_gains.k_p
         TELEOP_kS = 2 #TunerConstants._drive_gains.k_s
-        TELEOP_kV = 0 # TunerConstants._drive_gains.k_v
-        TELEOP_kA = 0 # TunerConstants._drive_gains.k_a
-        TELEOP_DEADBAND = 0.0025
+
+        TELEOP_DEADBAND = 0.01  #0.0025
+        TELEOP_DEADBAND_ROT = 0.05        
         TELEOP_MAX_ANGULAR_RATE = 1
         TELEOP_SCALE_FACTOR_XY = 0.3
         TELEOP_SCALE_FACTOR_ROT = 0.3
         SPEED_AT_12_VOLTS = 3.6#TunerConstants.speed_at_12_volts 
 
-
         AUTO_kP = 3.45
-        AUTO_kS = 0
-        AUTO_kV = 0
-        AUTO_kA = 0    
+        AUTO_kS = 2
 
         
 
@@ -54,14 +51,14 @@ class ConstantValues():
         CAM_THETA_Z_OFFSET[0] = 0 # yaw
 
         CAM_NAME[1] =  "limelight-c"
-        CAM_X_OFFSET[1] = 0 # forward positive
+        CAM_X_OFFSET[1] = 0 # forward positiv
         CAM_Y_OFFSET[1] = 0 # right positive
         CAM_Z_OFFSET[1] = .85 # up positive
         CAM_THETA_X_OFFSET[1] = 0 # roll
         CAM_THETA_Y_OFFSET[1] = 0 # pitch
-        CAM_THETA_Z_OFFSET[1] = 0 # yaw
+        CAM_THETA_Z_OFFSET[1] = 180 # yaw
 
-        CAM_NAME[2] =  "limelight-a"
+        CAM_NAME[2] =  "limelight-b"
         CAM_X_OFFSET[2] = 0 # forward positive
         CAM_Y_OFFSET[2] = 0 # right positive
         CAM_Z_OFFSET[2] = 0 # up positive
@@ -69,11 +66,13 @@ class ConstantValues():
         CAM_THETA_Y_OFFSET[2] = 0 # pitch
         CAM_THETA_Z_OFFSET[2] = 0 # yaw
 
-        STD_DEV_COEFF_XY = .1 #0.05
+        STD_DEV_COEFF_XY_1 = .1 #0.05
+        STD_DEV_COEFF_XY_2 = .1 #0.05        
         STD_DEV_COEFF_THETA = 999 #0.04 or self,max_value
 
-        CAMERA_CUTOFF_DISTANCE = 3 # meters, above this distance std's set to max        
-
+        CAMERA_CUTOFF_DISTANCE_1 = 8 # meters, above this distance std's set to max 
+        CAMERA_CUTOFF_DISTANCE_2 = 8 # meters, above this distance std's set to max                
+        CAMERA_CUTOFF_DIFFERENCE = 8 # meters, above this distance std's set to max                
 
     class AutoBuilderConstants():
         AUTOBUILDER_XY_kP = 8        
@@ -85,10 +84,7 @@ class ConstantValues():
         
         HEADINGCONTROLLER_KP = 2.5
         HEADINGCONTROLLER_KD = 0.0
-        HEADINGCONTROLLER_VMAX = 2.0
-        HEADINGCONTROLLER_AMAX = 3.0 
-        HEADINGCONTROLLER_TOLERANCE = 0.017
-        HEADINGCONTROLLER_RATE_TOLERANCE = 0.03                 
+        HEADINGCONTROLLER_VMAX = 4.0
     
     class DriveToGoalCameraConstants():
         kLateralTolerance = .5
@@ -195,7 +191,7 @@ class ConstantValues():
         tag14.pose = Pose3d(Translation3d(16.533, 6.972, 0.552), Rotation3d(0.000, 0.000, 3.142))
         tag15.pose = Pose3d(Translation3d(16.533, 4.324, 0.552), Rotation3d(0.000, 0.000, 3.142))
         tag16.pose = Pose3d(Translation3d(16.533, 3.892, 0.552), Rotation3d(0.000, 0.000, 3.142))
-        tag17.pose = Pose3d(Translation3d(4.663, 0.644, 0.889), Rotation3d(0.000, 0.000, 0.000))
+        tag17.pose = Pose3d(Translation3d(4.663, 0.644, 5.889), Rotation3d(0.000, 0.000, 0.000))
         tag18.pose = Pose3d(Translation3d(4.626, 3.431, 1.124), Rotation3d(0.000, 0.000, 4.712))
         tag19.pose = Pose3d(Translation3d(5.229, 3.679, 1.124), Rotation3d(0.000, 0.000, 0.000))
         tag20.pose = Pose3d(Translation3d(5.229, 4.035, 1.124), Rotation3d(0.000, 0.000, 0.000))
@@ -206,7 +202,8 @@ class ConstantValues():
         tag25.pose = Pose3d(Translation3d(4.022, 4.390, 1.124), Rotation3d(0.000, 0.000, 3.142))
         tag26.pose = Pose3d(Translation3d(4.022, 4.035, 1.124), Rotation3d(0.000, 0.000, 3.142))
         tag27.pose = Pose3d(Translation3d(4.270, 3.431, 1.124), Rotation3d(0.000, 0.000, 4.712))
-        tag28.pose = Pose3d(Translation3d(4.588, 0.644, 0.889), Rotation3d(0.000, 0.000, 3.142))
+#  this is actual field:        tag28.pose = Pose3d(Translation3d(4.588, 0.644, 0.889), Rotation3d(0.000, 0.000, 3.142))
+        tag28.pose = Pose3d(Translation3d(4.638, 0.644, 0.889), Rotation3d(0.000, 0.000, 3.142))        
         tag29.pose = Pose3d(Translation3d(0.008, 0.666, 0.552), Rotation3d(0.000, 0.000, 0.000))
         tag30.pose = Pose3d(Translation3d(0.008, 1.098, 0.552), Rotation3d(0.000, 0.000, 0.000))
         tag31.pose = Pose3d(Translation3d(0.008, 3.746, 0.552), Rotation3d(0.000, 0.000, 0.000))
@@ -236,14 +233,11 @@ class ConstantValues():
        ### Update Constants for Drive
         ConstantValues.DriveConstants.TELEOP_kP = SmartDashboard.getNumber("Drive Teleop kP",ConstantValues.DriveConstants.TELEOP_kP)
         ConstantValues.DriveConstants.TELEOP_kS = SmartDashboard.getNumber("Drive Teleop kS",ConstantValues.DriveConstants.TELEOP_kS) 
-        ConstantValues.DriveConstants.TELEOP_kV = SmartDashboard.getNumber("Drive Teleop kV",ConstantValues.DriveConstants.TELEOP_kV)
-        ConstantValues.DriveConstants.TELEOP_kA = SmartDashboard.getNumber("Drive Teleop kA",ConstantValues.DriveConstants.TELEOP_kA)                           
         ConstantValues.DriveConstants.AUTO_kP = SmartDashboard.getNumber("Drive Auto kP",ConstantValues.DriveConstants.AUTO_kP)
         ConstantValues.DriveConstants.AUTO_kS = SmartDashboard.getNumber("Drive Auto kS",ConstantValues.DriveConstants.AUTO_kS)
-        ConstantValues.DriveConstants.AUTO_kV = SmartDashboard.getNumber("Drive Auto kV",ConstantValues.DriveConstants.AUTO_kV)
-        ConstantValues.DriveConstants.AUTO_kA = SmartDashboard.getNumber("Drive Auto kA",ConstantValues.DriveConstants.AUTO_kA)                         
 
         ConstantValues.DriveConstants.TELEOP_DEADBAND = SmartDashboard.getNumber("Drive Teleop Deadband",ConstantValues.DriveConstants.TELEOP_DEADBAND)                         
+        ConstantValues.DriveConstants.TELEOP_DEADBAND_ROT = SmartDashboard.getNumber("Drive Teleop Deadband Rot",ConstantValues.DriveConstants.TELEOP_DEADBAND_ROT)
         ConstantValues.DriveConstants.TELEOP_MAX_ANGULAR_RATE = SmartDashboard.getNumber("Drive Teleop MaxAngRate",ConstantValues.DriveConstants.TELEOP_MAX_ANGULAR_RATE)
         ConstantValues.DriveConstants.TELEOP_SCALE_FACTOR_XY = SmartDashboard.getNumber("Drive Teleop Scale XY",ConstantValues.DriveConstants.TELEOP_SCALE_FACTOR_XY)
         ConstantValues.DriveConstants.TELEOP_SCALE_FACTOR_ROT = SmartDashboard.getNumber("Drive Teleop Scale Rot",ConstantValues.DriveConstants.TELEOP_SCALE_FACTOR_ROT)                                 
@@ -287,9 +281,11 @@ class ConstantValues():
         ConstantValues.LimelightConstants.CAM_THETA_X_OFFSET[1] = SmartDashboard.getNumber("LL CAM1 thetaX_offset",ConstantValues.LimelightConstants.CAM_THETA_X_OFFSET[1])
         ConstantValues.LimelightConstants.CAM_THETA_Y_OFFSET[1] = SmartDashboard.getNumber("LL CAM1 thetaY_offset",ConstantValues.LimelightConstants.CAM_THETA_Y_OFFSET[1])
         ConstantValues.LimelightConstants.CAM_THETA_Z_OFFSET[1] = SmartDashboard.getNumber("LL CAM1 thetaZ_offset",ConstantValues.LimelightConstants.CAM_THETA_Z_OFFSET[1])                 
-        ConstantValues.LimelightConstants.STD_DEV_COEFF_XY = SmartDashboard.getNumber("LL StdDevCoeff_xy",ConstantValues.LimelightConstants.STD_DEV_COEFF_XY)
+        ConstantValues.LimelightConstants.STD_DEV_COEFF_XY_1 = SmartDashboard.getNumber("LL StdDevCoeff_xy",ConstantValues.LimelightConstants.STD_DEV_COEFF_XY_1)
+        ConstantValues.LimelightConstants.STD_DEV_COEFF_XY_2 = SmartDashboard.getNumber("LL StdDevCoeff_xy",ConstantValues.LimelightConstants.STD_DEV_COEFF_XY_2)        
         ConstantValues.LimelightConstants.STD_DEV_COEFF_THETA = SmartDashboard.getNumber("LL StdDevCoeff_theta",ConstantValues.LimelightConstants.STD_DEV_COEFF_THETA)
-        ConstantValues.LimelightConstants.CAMERA_CUTOFF_DISTANCE = SmartDashboard.getNumber("LL CutoffDist",ConstantValues.LimelightConstants.CAMERA_CUTOFF_DISTANCE)
+        ConstantValues.LimelightConstants.CAMERA_CUTOFF_DISTANCE_1 = SmartDashboard.getNumber("LL CutoffDist",ConstantValues.LimelightConstants.CAMERA_CUTOFF_DISTANCE_1)
+        ConstantValues.LimelightConstants.CAMERA_CUTOFF_DISTANCE_2 = SmartDashboard.getNumber("LL CutoffDist",ConstantValues.LimelightConstants.CAMERA_CUTOFF_DISTANCE_2)        
         
         # Update values for autobuilder
         ConstantValues.AutoBuilderConstants.AUTOBUILDER_XY_kP=  SmartDashboard.getNumber("AutoBuilder XY_kP",ConstantValues.AutoBuilderConstants.AUTOBUILDER_XY_kP)
@@ -301,10 +297,6 @@ class ConstantValues():
         ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_KP =  SmartDashboard.getNumber("HeadingController kP",ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_KP)
         ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_KD =  SmartDashboard.getNumber("HeadingController kD",ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_KD)
         ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_VMAX =  SmartDashboard.getNumber("HeadingController Vmax",ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_VMAX) 
-        ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_AMAX =  SmartDashboard.getNumber("HeadingController Amax",ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_AMAX)                               
-        ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_TOLERANCE =  SmartDashboard.getNumber("HeadingController Tol",ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_TOLERANCE)
-        ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_RATE_TOLERANCE =  SmartDashboard.getNumber("HeadingController Rate Tol",ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_RATE_TOLERANCE)
-
 
  
     @staticmethod
@@ -312,14 +304,11 @@ class ConstantValues():
         
         SmartDashboard.putNumber("Drive Teleop kP",ConstantValues.DriveConstants.TELEOP_kP)
         SmartDashboard.putNumber("Drive Teleop kS",ConstantValues.DriveConstants.TELEOP_kS) 
-        SmartDashboard.putNumber("Drive Teleop kV",ConstantValues.DriveConstants.TELEOP_kV)
-        SmartDashboard.putNumber("Drive Teleop kA",ConstantValues.DriveConstants.TELEOP_kA)                           
         SmartDashboard.putNumber("Drive Auto kP",ConstantValues.DriveConstants.AUTO_kP)
         SmartDashboard.putNumber("Drive Auto kS",ConstantValues.DriveConstants.AUTO_kS)
-        SmartDashboard.putNumber("Drive Auto kV",ConstantValues.DriveConstants.AUTO_kV)
-        SmartDashboard.putNumber("Drive Auto kA",ConstantValues.DriveConstants.AUTO_kA)    
 
-        SmartDashboard.putNumber("Drive Teleop Deadband",ConstantValues.DriveConstants.TELEOP_DEADBAND)                         
+        SmartDashboard.putNumber("Drive Teleop Deadband",ConstantValues.DriveConstants.TELEOP_DEADBAND)
+        SmartDashboard.putNumber("Drive Teleop Deadband Rot",ConstantValues.DriveConstants.TELEOP_DEADBAND_ROT)                                 
         SmartDashboard.putNumber("Drive Teleop MaxAngRate",ConstantValues.DriveConstants.TELEOP_MAX_ANGULAR_RATE)
         SmartDashboard.putNumber("Drive Teleop Scale XY",ConstantValues.DriveConstants.TELEOP_SCALE_FACTOR_XY)
         SmartDashboard.putNumber("Drive Teleop Scale Rot",ConstantValues.DriveConstants.TELEOP_SCALE_FACTOR_ROT)                                 
@@ -359,10 +348,12 @@ class ConstantValues():
         SmartDashboard.putNumber("LL CAM1 z_offset",ConstantValues.LimelightConstants.CAM_Z_OFFSET[1]) 
         SmartDashboard.putNumber("LL CAM1 thetaX_offset",ConstantValues.LimelightConstants.CAM_THETA_X_OFFSET[1])
         SmartDashboard.putNumber("LL CAM1 thetaY_offset",ConstantValues.LimelightConstants.CAM_THETA_Y_OFFSET[1])
-        SmartDashboard.putNumber("LL CAM1 thetaZ_offset",ConstantValues.LimelightConstants.CAM_THETA_Z_OFFSET[1])                 
-        SmartDashboard.putNumber("LL StdDevCoeff_xy",ConstantValues.LimelightConstants.STD_DEV_COEFF_XY)
+        SmartDashboard.putNumber("LL CAM1 thetaZ_offset",ConstantValues.LimelightConstants.CAM_THETA_Z_OFFSET[1])   
+        SmartDashboard.putNumber("LL StdDevCoeff_xy_1",ConstantValues.LimelightConstants.STD_DEV_COEFF_XY_1)
+        SmartDashboard.putNumber("LL StdDevCoeff_xy_2",ConstantValues.LimelightConstants.STD_DEV_COEFF_XY_2)
         SmartDashboard.putNumber("LL StdDevCoeff_theta",ConstantValues.LimelightConstants.STD_DEV_COEFF_THETA)
-        SmartDashboard.putNumber("LL CutoffDist",ConstantValues.LimelightConstants.CAMERA_CUTOFF_DISTANCE)
+        SmartDashboard.putNumber("LL CutoffDist_1",ConstantValues.LimelightConstants.CAMERA_CUTOFF_DISTANCE_1)
+        SmartDashboard.putNumber("LL CutoffDist_2",ConstantValues.LimelightConstants.CAMERA_CUTOFF_DISTANCE_2)
 
 
         SmartDashboard.putNumber("AutoBuilder XY_kP",ConstantValues.AutoBuilderConstants.AUTOBUILDER_XY_kP)
@@ -374,8 +365,4 @@ class ConstantValues():
         SmartDashboard.putNumber("HeadingController kP",ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_KP)
         SmartDashboard.putNumber("HeadingController kD",ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_KD)
         SmartDashboard.putNumber("HeadingController Vmax",ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_VMAX) 
-        SmartDashboard.putNumber("HeadingController Amax",ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_AMAX)                               
-        SmartDashboard.putNumber("HeadingController Tol",ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_TOLERANCE)
-        SmartDashboard.putNumber("HeadingController Rate Tol",ConstantValues.HeadingControllerConstants.HEADINGCONTROLLER_RATE_TOLERANCE)
-
 

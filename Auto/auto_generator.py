@@ -22,21 +22,28 @@ class AutoGenerator():
         self.driveTrain = DrivetrainGenerator.getInstance()
         self.driveRC=  swerve.requests.ApplyRobotSpeeds().with_drive_request_type(
             swerve.SwerveModule.DriveRequestType.VELOCITY)
+        
+        autoXY_kP = self.constants.AUTOBUILDER_XY_kP
+        autoXY_kD = self.constants.AUTOBUILDER_XY_kD
+        autoTHETA_kP = self.constants.AUTOBUILDER_THETA_kP
+        autoTHETA_kD = self.constants.AUTOBUILDER_THETA_kD
+       
+        self.controller = PPHolonomicDriveController( 
+                PIDConstants(autoXY_kP, 0.0, autoXY_kD), # Translation PID constants
+                PIDConstants(autoTHETA_kP, 0.0, autoTHETA_kD)) # Rotation PID constants
+
+
         self.configAutoBuilder()
         self.create_named_commands()
 
 
 
     def create_named_commands(self):
-        NamedCommands.registerCommand('DriveToGoalCam', GoalCamCommand(-1,0))
+        NamedCommands.registerCommand('DriveToGoalCam', StopDrive())
         NamedCommands.registerCommand('StopDrive', StopDrive())        
 
 
     def configAutoBuilder(self):
-        autoXY_kP = self.constants.AUTOBUILDER_XY_kP
-        autoXY_kD = self.constants.AUTOBUILDER_XY_kD
-        autoTHETA_kP = self.constants.AUTOBUILDER_THETA_kP
-        autoTHETA_kD = self.constants.AUTOBUILDER_THETA_kD
         config = RobotConfig.fromGUISettings()
 
         AutoBuilder.configure(
@@ -48,15 +55,21 @@ class AutoGenerator():
             lambda speeds, feedforwards: self.driveTrain.set_control(
                 self.driveRC.with_speeds(speeds)
                 ),
-            PPHolonomicDriveController( # PPHolonomicController is the built in path following controller for holonomic drive trains
-                PIDConstants(autoXY_kP, 0.0, autoXY_kD), # Translation PID constants
-                PIDConstants(autoTHETA_kP, 0.0, autoTHETA_kD) # Rotation PID constants
-            ),
+            self.controller, # The PPHolonomicDriveController that will be used to follow the path
             config, # The robot configuration
             self.shouldFlipPath, # Supplier to control path flipping based on alliance color
             self.driveTrain # Reference to this subsystem to set requirements
     )
         
+    def update(self):
+
+        autoXY_kP = self.constants.AUTOBUILDER_XY_kP
+        autoXY_kD = self.constants.AUTOBUILDER_XY_kD
+        autoTHETA_kP = self.constants.AUTOBUILDER_THETA_kP
+        autoTHETA_kD = self.constants.AUTOBUILDER_THETA_kD
+        self.controller._xController.setPID(autoXY_kP, 0.0, autoXY_kD)
+        self.controller._yController.setPID(autoXY_kP, 0.0, autoXY_kD)
+        self.controller._rotationController.setPID(autoTHETA_kP, 0.0, autoTHETA_kD)    
 
     def shouldFlipPath(self):
         # Boolean supplier that controls when the path will be mirrored for the red alliance
