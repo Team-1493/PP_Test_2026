@@ -2,8 +2,18 @@
   "robotWidth": 0.9,
   "robotLength": 0.9,
   "holonomicMode": true,
-  "pathFolders": [],
-  "autoFolders": [],
+  "pathFolders": [
+    "Auto1",
+    "OutBack",
+    "Test1",
+    "CenterFromLeft",
+    "New New New New Folder",
+    "Squaers"
+  ],
+  "autoFolders": [
+    "OutBack",
+    "Squares"
+  ],
   "defaultMaxVel": 1.0,
   "defaultMaxAccel": 2.0,
   "defaultMaxAngVel": 540.0,

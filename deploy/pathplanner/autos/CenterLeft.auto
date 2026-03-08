@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "outback_2"
+            "pathName": "CenterLeft_1"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "OutBack",
+  "folder": null,
   "choreoAuto": false
 }

@@ -79,7 +79,8 @@ class RobotContainer:
         self._joystick.button(2).onTrue(
             self.headingController.runOnce(lambda:self.headingController.rotateTo270()))
 
-        
+        self._joystick.button(7).onTrue(
+            InstantCommand(lambda: self.limelightSytem.write_camera0_pose_to_file()))
 
 #        self._joystick.button(7).whileTrue(FindkS())
 #        self._joystick.button(7).whileTrue(FindSlipCurrent())

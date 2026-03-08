@@ -27,7 +27,7 @@ class ConstantValues():
         TELEOP_SCALE_FACTOR_ROT = 0.3
         SPEED_AT_12_VOLTS = 3.6#TunerConstants.speed_at_12_volts 
 
-        AUTO_kP = 3.45
+        AUTO_kP = 3.45  # make 5.5 ?
         AUTO_kS = 2
 
         

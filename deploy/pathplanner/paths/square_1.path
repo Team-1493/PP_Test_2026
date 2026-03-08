@@ -20,7 +20,7 @@
         "y": 1.5
       },
       "prevControl": {
-        "x": 4.952761358805132e-17,
+        "x": 1.8911443609367487e-17,
         "y": 1.1911526879009626
       },
       "nextControl": null,
@@ -45,7 +45,7 @@
     "rotation": 90.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Squaers",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

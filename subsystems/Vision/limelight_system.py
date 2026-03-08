@@ -6,9 +6,10 @@ from Utilities.LLH import RawFiducial
 from  Constants1 import ConstantValues
 from wpilib import SmartDashboard
 
-
 from subsystems.Drive.drivetrain_generator import DrivetrainGenerator
 from subsystems.Drive.heading_controller import HeadingController
+
+
 
 class LLsystem(Subsystem):
     instance = None
@@ -25,6 +26,7 @@ class LLsystem(Subsystem):
         self.numCams = 1   # number of cameras on robot
 
 
+
         self.driveTrain = DrivetrainGenerator.getInstance()
         self.headingController = HeadingController.getInstance()        
         self.constants =  ConstantValues.LimelightConstants
@@ -36,6 +38,9 @@ class LLsystem(Subsystem):
         SmartDashboard.putBoolean("Vision Active",False)
         for i in range(self.numCams):
                 self.cam_label[i]="LL Cam "+str(i)+" "
+
+        SmartDashboard.putNumber("X actual",0)
+        SmartDashboard.putNumber("Y actual",0)
 
     def periodic(self):
         self.currentPose = self.driveTrain.get_pose()
@@ -113,7 +118,6 @@ class LLsystem(Subsystem):
 
 
                     label=self.cam_label[i]
-
                     SmartDashboard.putNumber(label+"closest Tag ID ",closestTagID[i])    
                     SmartDashboard.putNumber(label+"closest Dist",round(closestTagDist[i],3))                                    
                     SmartDashboard.putNumber(label+"Num Targ",current_estimate[i].tag_count)                
@@ -218,5 +222,35 @@ class LLsystem(Subsystem):
 # do this on a specified camera since it mayu differ by camera
     def set_priority_tag(self,cam_number,id):
         LimelightHelpers.set_priority_tag_id(self.constants.CAM_NAME[cam_number],id)     
+
+
+
+    def write_camera0_pose_to_file(self):
+        if self.numCams < 1:
+            return
+
+        cam_name = self.constants.CAM_NAME[0]
+        estimate = LimelightHelpers.get_botpose_estimate_wpiblue_megatag2(cam_name)
+
+        if estimate is None or estimate.tag_count <= 0:
+            return
+
+        closest_tag_id = 0
+        closest_tag_distance = 0.0
+        if estimate.raw_fiducials is not None and len(estimate.raw_fiducials) > 0:
+            closest_tag_id, closest_tag_distance = self.minDist(estimate.raw_fiducials)
+
+        pose_x = estimate.pose.translation().X()
+        pose_y = estimate.pose.translation().Y()
+        pose_rot = estimate.pose.rotation().degrees()
+        x_act = SmartDashboard.getNumber("X actual", 0)
+        y_act = SmartDashboard.getNumber("Y actual", 0) 
+
+        with open("limelight_camera0_pose_log.txt", "a", encoding="utf-8") as pose_file:
+            pose_file.write(
+                f"{x_act:.3f}	{y_act:.3f} {pose_x:.3f}	{pose_y:.3f}	"
+                f"{pose_rot:.3f}	{closest_tag_id}	{closest_tag_distance:.3f}	"
+                f"{estimate.tag_count}\n"
+            )
 
  
