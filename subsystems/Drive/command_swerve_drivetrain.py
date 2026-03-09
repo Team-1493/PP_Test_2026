@@ -8,7 +8,7 @@ from typing import Callable, overload
 from wpilib import DriverStation, Notifier, RobotController, SmartDashboard
 import wpilib
 from wpilib.sysid import SysIdRoutineLog
-from wpimath.geometry import Pose2d, Rotation2d
+from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from Constants1 import ConstantValues
 
 
@@ -189,21 +189,23 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
         # This ensures driving behavior doesn't change until an explicit disable event occurs during testing.nc
 
         if not self._has_applied_operator_perspective or DriverStation.isDisabled():
-            color = DriverStation.getAlliance()
-           
-            if color is not None:
-                self.previous_alliance_color = self.alliance_color
-                self.alliance_color = color
-           
-                if (self.previous_alliance_color != self.alliance_color or not self._has_applied_operator_perspective):
+            self.previous_alliance_color = self.alliance_color    
+            self.alliance_color = DriverStation.getAlliance()
+            
+            if self.alliance_color is not None:
+           #     print("11111111111111111111111111111111 ", self.alliance_color)
+                if (True):
 
-                    if self.alliance_color == DriverStation.Alliance.kRed:
+                    if self.alliance_color.value == 0:#DriverStation.Alliance.kRed:
+            #            print("22222222222222222222222222222 ", self.alliance_color)
                         self.set_operator_perspective_forward(self._RED_ALLIANCE_PERSPECTIVE_ROTATION)
-#                        self.reset_pose(Pose2d(Translation2d(0,0),Rotation2d(math.pi)))
+                        self.reset_pose(Pose2d(Translation2d(0,0),Rotation2d(math.pi)))
+                        self.seed_field_centric(Rotation2d())
                     else:
+            #            print("333333333333333333333333333333 ", self.alliance_color)                        
                         self.set_operator_perspective_forward(self._BLUE_ALLIANCE_PERSPECTIVE_ROTATION)
- #                       self.reset_pose(Pose2d(Translation2d(0,0),Rotation2d(0)))       
-
+                        self.reset_pose(Pose2d(Translation2d(0,0),Rotation2d(0)))       
+                        self.seed_field_centric(Rotation2d())                               
                     self._has_applied_operator_perspective = True
 
 

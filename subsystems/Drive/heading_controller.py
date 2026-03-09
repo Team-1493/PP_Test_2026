@@ -91,7 +91,7 @@ class HeadingController(Subsystem):
 # The boolean indicates if the command was interrupted or ended naturally
     def setTargetRotationInt (self,b:bool):
         self.state=2
-        self.setTargetRotation(self.getRotation()+self.driveTrain.get_operator_forward_direction().radians())
+        self.setTargetRotation(self.getRotation()-self.driveTrain.get_operator_forward_direction().radians())
 
     
     
