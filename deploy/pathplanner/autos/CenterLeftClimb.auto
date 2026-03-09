@@ -19,13 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "CenterLeft_2"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "CenterLeft_3"
+            "pathName": "CenterLeft_Climb"
           }
         }
       ]

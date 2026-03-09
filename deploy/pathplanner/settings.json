@@ -4,17 +4,17 @@
   "holonomicMode": true,
   "pathFolders": [
     "Auto1",
+    "CenterLeft",
+    "CenterLeft3",
     "OutBack",
-    "Test1",
-    "CenterFromLeft",
-    "New New New New Folder",
-    "Squaers"
+    "Squaers",
+    "Test1"
   ],
   "autoFolders": [
     "OutBack",
     "Squares"
   ],
-  "defaultMaxVel": 1.0,
+  "defaultMaxVel": 1.75,
   "defaultMaxAccel": 2.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,

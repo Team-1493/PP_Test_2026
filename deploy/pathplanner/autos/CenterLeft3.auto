@@ -7,25 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "CenterLeft_1"
+            "pathName": "CenterLeft3_1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterLeft3_2"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 2.5
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "CenterLeft_2"
+            "pathName": "CenterLeft3_3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "CenterLeft_3"
+            "pathName": "CenterLeft3_4"
           }
         }
       ]

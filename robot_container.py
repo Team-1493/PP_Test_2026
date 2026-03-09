@@ -64,9 +64,6 @@ class RobotContainer:
 
         self.drivetrain.register_telemetry(lambda state: self._logger.telemeterize(state))
 
-        self._joystick.button(5).onTrue(self.headingController.runOnce(lambda:
-            self.headingController.set_forward_direction()))
-
         self._joystick.button(4).onTrue(
             self.headingController.runOnce(lambda:self.headingController.rotateToZero()))
         
@@ -79,8 +76,19 @@ class RobotContainer:
         self._joystick.button(2).onTrue(
             self.headingController.runOnce(lambda:self.headingController.rotateTo270()))
 
-        self._joystick.button(7).onTrue(
-            InstantCommand(lambda: self.limelightSytem.write_camera0_pose_to_file()))
+
+        self._joystick.button(5).onTrue(self.headingController.runOnce(lambda:
+            self.headingController.set_forward_direction()))
+        
+        self._joystick.button(6).onTrue(InstantCommand(lambda:
+            self.drive_teleop_command.slow_mode_on()))
+        
+        self._joystick.button(6).onFalse(InstantCommand(lambda:
+            self.drive_teleop_command.slow_mode_off()))
+        
+
+#        self._joystick.button(7).onTrue(
+#            InstantCommand(lambda: self.limelightSytem.write_camera0_pose_to_file()))
 
 #        self._joystick.button(7).whileTrue(FindkS())
 #        self._joystick.button(7).whileTrue(FindSlipCurrent())
@@ -99,8 +107,8 @@ class RobotContainer:
 #        self._joystick.button(8).whileTrue(
 #            AutoPilotCommand(26,-1.5,0,0).finallyDo((self.headingController.setTargetRotationInt)))
  
-        self._joystick.button(9).onTrue(
-              InstantCommand(lambda:self.update_constants()))
+#        self._joystick.button(9).onTrue(
+#              InstantCommand(lambda:self.update_constants()))
 
 
 
