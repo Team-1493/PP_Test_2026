@@ -13,7 +13,7 @@ from Commands.drive_path_generator import DrivePathGenerator
 
 class arcDrive(commands2.Command):
     def __init__(self,
-                _driveTrain:CommandSwerveDrivetrain
+                _driveTrain:DrivetrainGenerator,
                 # _targetPose: typing.Callable[[], Pose2d],
                 ) -> None:
         super().__init__()
@@ -27,7 +27,6 @@ class arcDrive(commands2.Command):
         # self.targetPose = _targetPose
         # self.addRequirements([self.driveTrain])
         self.isFinishedFlag = False
-        self.addRequirements(self.driveTrain)
 
     def execute(self):
         currentPose = self.driveTrain.get_state().pose
@@ -37,7 +36,8 @@ class arcDrive(commands2.Command):
         deltaY = 4 - (currentPose.Y() + 0*(0.05 * self.driveTrain.get_state().speeds.vy))
 
         angleToTarget = Rotation2d(wpimath.units.degrees(math.atan2(deltaY, deltaX)))
-#        print(deltaX, deltaY, angleToTarget.degrees())
+
+        print(deltaX, deltaY, angleToTarget.degrees())
         SmartDashboard.putNumber("Delta X", deltaX)
         SmartDashboard.putNumber("Delta Y", deltaY)
         SmartDashboard.putNumber("Angle to Target", angleToTarget.degrees())
@@ -45,17 +45,16 @@ class arcDrive(commands2.Command):
         if distanceToTarget < radius - 0.02:
             omega = 1
             print(distanceToTarget)
-        elif distanceToTarget > radius + 0.02:
+        if distanceToTarget > radius + 0.02:
             omega = -1
         else:
             omega = 0
             print(distanceToTarget)
-        print(omega*2)
+
         self.driveTrain.set_control(
             swerve.requests.FieldCentricFacingAngle()
             .with_velocity_x(omega * 2)
             .with_velocity_y(omega * 2)
             .with_target_direction(angleToTarget)
-            .with_heading_pid(3,0,0)
         )
         
