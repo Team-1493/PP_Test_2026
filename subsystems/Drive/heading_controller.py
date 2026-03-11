@@ -93,5 +93,8 @@ class HeadingController(Subsystem):
         self.state=2
         self.setTargetRotation(self.getRotation()-self.driveTrain.get_operator_forward_direction().radians())
 
+#  Returns a command for setting target rotation, for use in auto command sequences and button bindings
+    def setTargetRotationToSelfCommand(self) -> Command:
+        return  InstantCommand(lambda: self.setTargetRotationInt(True))   
     
     

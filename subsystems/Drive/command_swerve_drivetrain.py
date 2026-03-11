@@ -194,15 +194,15 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
             
             if self.alliance_color is not None:
            #     print("11111111111111111111111111111111 ", self.alliance_color)
-                if (True):
+                if (self.alliance_color != self.previous_alliance_color):
 
                     if self.alliance_color.value == 0:#DriverStation.Alliance.kRed:
-            #            print("22222222222222222222222222222 ", self.alliance_color)
+                        print("22222222222222222222222222222 ", self.alliance_color)
                         self.set_operator_perspective_forward(self._RED_ALLIANCE_PERSPECTIVE_ROTATION)
                         self.reset_pose(Pose2d(Translation2d(0,0),Rotation2d(math.pi)))
                         self.seed_field_centric(Rotation2d())
                     else:
-            #            print("333333333333333333333333333333 ", self.alliance_color)                        
+                        print("333333333333333333333333333333 ", self.alliance_color)                        
                         self.set_operator_perspective_forward(self._BLUE_ALLIANCE_PERSPECTIVE_ROTATION)
                         self.reset_pose(Pose2d(Translation2d(0,0),Rotation2d(0)))       
                         self.seed_field_centric(Rotation2d())                               
@@ -226,6 +226,10 @@ class CommandSwerveDrivetrain(Subsystem, swerve.SwerveDrivetrain[hardware.TalonF
         SmartDashboard.putNumber("Rot: ",round(rot,3))
         SmartDashboard.putNumber("X_in: ",round(x_in,3))
         SmartDashboard.putNumber("y_in: ",round(y_in,3))
+        SmartDashboard.putNumber("roll: ",round(self.pigeon2.get_roll().value_as_double,3) )
+        SmartDashboard.putNumber("pitch: ",round(self.pigeon2.get_pitch().value_as_double,3))
+        SmartDashboard.putNumber("roll: ",round(self.pigeon2.get_roll().value_as_double,3) )
+        SmartDashboard.putNumber("yaw: ",round(self.pigeon2.get_yaw().value_as_double,3))                                
 
 
 

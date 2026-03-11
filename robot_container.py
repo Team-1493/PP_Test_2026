@@ -21,6 +21,7 @@ from Commands.find_wheel_base import FindWheelBase
 from Commands.find_ks import FindkS
 from Commands.find_slipCurrent import FindSlipCurrent
 from Commands.findkP_maxA import FindKP_MaxA
+from Commands.arc_drive import arcDrive
 
 
 class RobotContainer:
@@ -53,6 +54,7 @@ class RobotContainer:
                 lambda: -self._joystick.getRawAxis(1),
                 lambda: -self._joystick.getRawAxis(0),
                 lambda: -self._joystick.getRawAxis(4))
+#        self.arcdrive = arcDrive(self.drivetrain)
         self.createPPStuff()
         self.configureButtonBindings()
 
@@ -87,8 +89,11 @@ class RobotContainer:
             self.drive_teleop_command.slow_mode_off()))
         
 
-#        self._joystick.button(7).onTrue(
-#            InstantCommand(lambda: self.limelightSytem.write_camera0_pose_to_file()))
+#        self._joystick.button(7).whileTrue(arcDrive(self.drivetrain))
+
+
+        self._joystick.button(7).onTrue(
+            InstantCommand(lambda: self.limelightSytem.write_camera0_pose_to_file()))
 
 #        self._joystick.button(7).whileTrue(FindkS())
 #        self._joystick.button(7).whileTrue(FindSlipCurrent())

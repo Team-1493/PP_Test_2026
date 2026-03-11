@@ -27,6 +27,12 @@
           "data": {
             "pathName": "CenterLeft_3"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SetHeadingToCurrent"
+          }
         }
       ]
     }

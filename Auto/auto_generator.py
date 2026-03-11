@@ -10,6 +10,8 @@ from wpilib import DriverStation
 
 from Constants1 import ConstantValues
 from subsystems.Drive.drivetrain_generator import DrivetrainGenerator
+from subsystems.Drive.heading_controller import HeadingController
+
 from Commands.stop_drive import StopDrive
 from Commands.goal_cam_command import GoalCamCommand
 
@@ -20,6 +22,7 @@ class AutoGenerator():
     def __init__(self):
         self.constants = ConstantValues.AutoBuilderConstants
         self.driveTrain = DrivetrainGenerator.getInstance()
+        self.heading_controller = HeadingController.getInstance()        
         self.driveRC=  swerve.requests.ApplyRobotSpeeds().with_drive_request_type(
             swerve.SwerveModule.DriveRequestType.VELOCITY)
         
@@ -40,7 +43,8 @@ class AutoGenerator():
 
     def create_named_commands(self):
         NamedCommands.registerCommand('DriveToGoalCam', StopDrive())
-        NamedCommands.registerCommand('StopDrive', StopDrive())        
+        NamedCommands.registerCommand('StopDrive', StopDrive())
+        NamedCommands.registerCommand('SetHeadingToCurrent', self.heading_controller.setTargetRotationToSelfCommand())                
 
 
     def configAutoBuilder(self):
