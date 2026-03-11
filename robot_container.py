@@ -54,7 +54,7 @@ class RobotContainer:
                 lambda: -self._joystick.getRawAxis(1),
                 lambda: -self._joystick.getRawAxis(0),
                 lambda: -self._joystick.getRawAxis(4))
-#        self.arcdrive = arcDrive(self.drivetrain)
+        self.arcdrive = arcDrive(self.drivetrain)
         self.createPPStuff()
         self.configureButtonBindings()
 
@@ -89,11 +89,13 @@ class RobotContainer:
             self.drive_teleop_command.slow_mode_off()))
         
 
-#        self._joystick.button(7).whileTrue(arcDrive(self.drivetrain))
+        self._joystick.button(7).whileTrue(self.arcdrive
+        .finallyDo(self.headingController.setTargetRotationInt) ) 
 
 
-        self._joystick.button(7).onTrue(
-            InstantCommand(lambda: self.limelightSytem.write_camera0_pose_to_file()))
+
+#        self._joystick.button(7).onTrue(
+#            InstantCommand(lambda: self.limelightSytem.write_camera0_pose_to_file()))
 
 #        self._joystick.button(7).whileTrue(FindkS())
 #        self._joystick.button(7).whileTrue(FindSlipCurrent())
