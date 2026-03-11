@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.628744650499286,
-        "y": 4.028530670470756
+        "x": 4.000242510699001,
+        "y": -0.00833095577746007
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9947503566333809,
-        "y": 4.882482168330956
+        "x": 5.000242510699002,
+        "y": -0.00833095577746007
       },
       "isLocked": false,
-      "linkedName": "A"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.7,
-        "y": 5.930513552068473
+        "x": 4.000242510699001,
+        "y": 6.448059914407988
       },
       "prevControl": {
-        "x": 2.502196861626248,
-        "y": 4.843666191155493
+        "x": 3.0002425106990014,
+        "y": 6.448059914407988
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "B"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.25,
-    "maxAcceleration": 2.75,
+    "maxVelocity": 1.5,
+    "maxAcceleration": 2.25,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Test1",
+  "folder": "Left_Depot_Out",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

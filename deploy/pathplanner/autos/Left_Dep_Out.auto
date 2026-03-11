@@ -7,31 +7,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "test1_1"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.0
+            "pathName": "LDO_1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "test1_2"
+            "pathName": "LDO_2"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 1.5
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "test1_3"
+            "pathName": "LDO_3"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SetHeadingToCurrent"
           }
         }
       ]

@@ -88,14 +88,13 @@ class RobotContainer:
         self._joystick.button(6).onFalse(InstantCommand(lambda:
             self.drive_teleop_command.slow_mode_off()))
         
+        self._joystick.button(7).onTrue(
+            InstantCommand(lambda: self.limelightSytem.write_camera0_pose_to_file()))
 
-        self._joystick.button(7).whileTrue(self.arcdrive
+        self._joystick.button(8).whileTrue(self.arcdrive
         .finallyDo(self.headingController.setTargetRotationInt) ) 
 
 
-
-#        self._joystick.button(7).onTrue(
-#            InstantCommand(lambda: self.limelightSytem.write_camera0_pose_to_file()))
 
 #        self._joystick.button(7).whileTrue(FindkS())
 #        self._joystick.button(7).whileTrue(FindSlipCurrent())

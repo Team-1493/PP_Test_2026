@@ -30,8 +30,8 @@ class arcDrive(commands2.Command):
 
         self.isFinishedFlag = False
         self.addRequirements(self.driveTrain)
-        self.kTranslationPID = PIDConstants(5.0,0,0)
-        self.kRotationPID = PIDConstants(5.0,0,0)
+        self.kTranslationPID = PIDConstants(4.0,0,0)
+        self.kRotationPID = PIDConstants(4.0,0,0)
         self.controller = PPHolonomicDriveController(
             self.kTranslationPID, self.kRotationPID)
 

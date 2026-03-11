@@ -68,8 +68,8 @@ class LLsystem(Subsystem):
 
         # check if we are moving too fast for an accurate camera measurement
         shouldAccept = (abs(self.driveTrain.get_omega_rps())<2 and 
-                abs(self.driveTrain.pigeon2.get_roll().value_as_double)<2 and 
-                abs(self.driveTrain.pigeon2.get_pitch().value_as_double)<2)
+                abs(self.driveTrain.pigeon2.get_roll().value_as_double)<4 and 
+                abs(self.driveTrain.pigeon2.get_pitch().value_as_double)<4)
         SmartDashboard.putBoolean("LL accept",shouldAccept)
 
 
@@ -248,8 +248,8 @@ class LLsystem(Subsystem):
         x_act = SmartDashboard.getNumber("X actual", 0)*12
         y_act = SmartDashboard.getNumber("Y actual", 0)*12
 
-#        with open("/home/lvuser/limelight_camera0_pose_log.txt", "a", encoding="utf-8") as pose_file:
-        with open("limelight_camera0_pose_log.txt", "a", encoding="utf-8") as pose_file:
+        with open("/home/lvuser/limelight_camera0_pose_log.txt", "a", encoding="utf-8") as pose_file:
+#        with open("limelight_camera0_pose_log.txt", "a", encoding="utf-8") as pose_file:
             pose_file.write(
                 f"{x_act:.3f}\t{y_act:.3f}\t{pose_x:.3f}\t{pose_y:.3f}\t"
                 f"{pose_rot:.3f}\t{closest_tag_id}\t{closest_tag_distance:.3f}\t"

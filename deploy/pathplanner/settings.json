@@ -6,16 +6,16 @@
     "Auto1",
     "CenterLeft",
     "CenterLeft3",
+    "Left_Depot_Out",
     "OutBack",
-    "Squaers",
-    "Test1"
+    "Squaers"
   ],
   "autoFolders": [
     "OutBack",
     "Squares"
   ],
-  "defaultMaxVel": 2.25,
-  "defaultMaxAccel": 2.75,
+  "defaultMaxVel": 1.5,
+  "defaultMaxAccel": 2.25,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "defaultNominalVoltage": 12.0,
