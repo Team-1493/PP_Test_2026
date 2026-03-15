@@ -2,7 +2,7 @@ import math
 from typing import override
 import typing
 import commands2
-from wpilib import SmartDashboard
+from wpilib import DriverStation, SmartDashboard
 import wpimath
 from Commands.stop_drive import StopDrive
 from subsystems.Drive.command_swerve_drivetrain import CommandSwerveDrivetrain
@@ -24,9 +24,8 @@ class arcDrive(commands2.Command):
                 ) -> None:
         super().__init__()
         self.driveTrain = _driveTrain
-        self.xh = 4.644
-        self.yh= 4.030
         self.radius = 3
+        self.m=2.0#max speed
 
         self.isFinishedFlag = False
         self.addRequirements(self.driveTrain)
@@ -44,6 +43,26 @@ class arcDrive(commands2.Command):
         currentPose = self.driveTrain.get_state().pose
         xr = currentPose.X()
         yr = currentPose.Y()
+
+        self.validLocation=True
+
+        # Set correct hub location for alliance
+        if DriverStation.getAlliance()==DriverStation.Alliance.kBlue:
+            self.xh = 4.644
+            self.yh= 4.030
+            if xr>4:
+                self.validLocation=False
+            if xr>3.3:
+                xr = 3
+
+        else:
+            self.xh = 11.92
+            self.yh= 4.041
+            if xr<12.7:
+                self.validLocation=False
+            if xr<13.4:
+                xr=13.7
+
         xr1=(self.xh - xr)
         yr1 = self.yh - yr
 
@@ -67,14 +86,18 @@ class arcDrive(commands2.Command):
         speeds =self.controller.calculateRobotRelativeSpeeds(
             self.driveTrain.get_pose(), self.goalState)
 
-        speeds = ChassisSpeeds(min(speeds.vx, 2.0),min(speeds.vy, 2.0),
+        speeds = ChassisSpeeds(math.sqrt(self.m)*(speeds.vx/(math.sqrt(speeds.vx**2 + speeds.vy**2))),math.sqrt(self.m)*(speeds.vy/(math.sqrt(speeds.vx**2 + speeds.vy**2))),
                 speeds.omega)
 
-        self.driveTrain.drive_RC(speeds.vx,speeds.vy,speeds.omega)
+        if self.validLocation:
+            self.driveTrain.drive_RC(speeds.vx,speeds.vy,speeds.omega)
 
 
     @override
     def isFinished(self):
+        if self.validLocation is False:
+            return True
+
         current = self.driveTrain.get_pose()
         xyErr =math.hypot(current.X() - self.x_goal,current.Y() - self.y_goal) 
         okXY = xyErr <= .04
@@ -90,3 +113,4 @@ class arcDrive(commands2.Command):
     def end(self,interrupted:bool):
         self.driveTrain.drive_RC(0,0,0)
         print("done with arcDrive")
+
