@@ -64,8 +64,7 @@ class LLsystem(Subsystem):
         canNum_best=-1
         stdXY = [self.max_value]*4
         stdRot = [self.max_value]*4
-        best_stdXY=self.max_value
-
+        best_stdXY=self.max_value 
         # check if we are moving too fast for an accurate camera measurement
         shouldAccept = (abs(self.driveTrain.get_omega_rps())<2 and 
                 abs(self.driveTrain.pigeon2.get_roll().value_as_double)<4 and 
@@ -153,13 +152,15 @@ class LLsystem(Subsystem):
         minID=0
         iMax=len(rf)
         i=0
+        ambMin=0
 
         while i<iMax:
             if rf[i].dist_to_camera<minD:
                 minID=i
-                minD=rf[i].dist_to_camera         
+                minD=rf[i].dist_to_camera
+                ambMin=rf[i].ambiguity         
             i=i+1
-        return rf[minID].id,minD
+        return rf[minID].id,minD,ambMin
 
 
 
@@ -240,7 +241,7 @@ class LLsystem(Subsystem):
         closest_tag_id = 0
         closest_tag_distance = 0.0
         if estimate.raw_fiducials is not None and len(estimate.raw_fiducials) > 0:
-            closest_tag_id, closest_tag_distance = self.minDist(estimate.raw_fiducials)
+            closest_tag_id, closest_tag_distance,ambiguity = self.minDist(estimate.raw_fiducials)
 
         pose_x = estimate.pose.translation().X()*39.37  
         pose_y = estimate.pose.translation().Y()*39.37
@@ -253,7 +254,7 @@ class LLsystem(Subsystem):
             pose_file.write(
                 f"{x_act:.3f}\t{y_act:.3f}\t{pose_x:.3f}\t{pose_y:.3f}\t"
                 f"{pose_rot:.3f}\t{closest_tag_id}\t{closest_tag_distance:.3f}\t"
-                f"{estimate.tag_count}\n"
+                f"{ambiguity}\t{estimate.tag_count}\n"
             )
 
  
