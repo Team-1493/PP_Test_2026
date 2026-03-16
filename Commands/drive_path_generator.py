@@ -68,14 +68,12 @@ class DrivePathGenerator():
             2*pi,
             4*pi)
 
-        iss =  IdealStartingState(
-        -0.75, self.robotPose.rotation())
 
-#        iss =  IdealStartingState(
-#        self.getVelocityMagnitude(self.getFieldVelocity()), self.robotPose.rotation())
-        rotTarget=[]
+        iss =  IdealStartingState(
+        self.getVelocityMagnitude(self.getFieldVelocity()), self.robotPose.rotation())
+        rotTarget=[] 
         # complete the rotatation at the halfway point so all rotation is done
-        # well ahead of handover to the next stage
+        # well ahead of handover to the next stage 
         rotTarget.append(RotationTarget(0.5,self.targetPose.rotation()))
         self.path =  PathPlannerPath(
             self.waypoints, 
